@@ -1,3 +1,4 @@
+
 import java.io.IOException;
 import java.net.ServerSocket;
 
@@ -22,7 +23,8 @@ public class Server {
 		try {
 			serverSocket = new ServerSocket(port);
 
-			// Lyssnar på anslutningar och skapar en ny tråd per anslutning så
+			// Lyssnar på anslutningar och skapar en ny tråd per anslutning
+			// så
 			// länge servern lyssnar efter anslutningar
 			while (listening) {
 				new MultiServerThread(serverSocket.accept()).start();
