@@ -49,11 +49,11 @@ public class MultiServerThread extends Thread {
 			inputLine = input.readLine();
 
 			// Trace: Ett meddelande/assingment/kontakt har tagits emot.
-			System.out.println("Inkommande flygpost");
+			System.out.println(socket.getInetAddress() + ": " + inputLine);
 
 			// Bestämmer vilken typ av input som kommer in. När det avgjorts
 			// sparas och/eller skickas input:en vidare.
-			handleTypeOfInput(input);
+			handleTypeOfInput(inputLine);
 
 			// Stänger buffern
 			input.close();
@@ -72,9 +72,8 @@ public class MultiServerThread extends Thread {
 	 * @param br
 	 *            Den buffrade strängen.
 	 */
-	private void handleTypeOfInput(BufferedReader br) {
+	private void handleTypeOfInput(String input) {
 
-		String input = br.toString();
 		String inputType = input.substring(27, 34);
 		Database db = new Database();
 
