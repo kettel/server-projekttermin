@@ -9,6 +9,7 @@ import model.Contact;
 import model.MessageModel;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 
 import database.Database;
 
@@ -74,10 +75,11 @@ public class MultiServerThread extends Thread {
 	 */
 	private void handleTypeOfInput(String input) {
 
-		String inputType = input.substring(27, 34);
+		//String inputType = input.substring(27, 34);
+		
 		Database db = new Database();
 
-		if (inputType.equals("message")) {
+		if (input.contains("\"databaseRepresentation\":\"message\"")) {
 			System.out
 					.println("Sending message to database and/or forwarding it.");
 
@@ -87,9 +89,9 @@ public class MultiServerThread extends Thread {
 			// Lägger in meddelandet i databasen
 			db.addToDB(msg);
 
-		} else if (inputType.equals("contact")) {
+		} else if (input.contains("\"databasetRepresentation\":\"assignment\"")) {
 			// Spara och/eller skicka vidare uppdraget.
-
+			
 			// Gson konverterar json-strängen till Assignment-objektet igen.
 			Assignment assignmentFromJson = (new Gson()).fromJson(input,
 					Assignment.class);
@@ -97,7 +99,7 @@ public class MultiServerThread extends Thread {
 			db.addToDB(assignmentFromJson);
 
 			// *****Skicka vidare till enhet och databas!***********
-		} else if (inputType.equals("assignm")) {
+		} else if (input.contains("\"databasetRepresentation\":\"contact\"")) {
 			// Spara och/eller skicka vidare uppdraget.
 
 			// Gson konverterar json-strängen till MessageModel-objektet igen.
