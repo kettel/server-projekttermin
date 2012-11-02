@@ -7,7 +7,7 @@ public class MessageModel implements ModelInterface {
 	private String databaseRepresentation = "message";
 	private String messageContent;
 	private String reciever;
-	private Calendar messageTimeStamp;
+	private long messageTimeStamp;
 
 	public MessageModel() {
 
@@ -17,11 +17,11 @@ public class MessageModel implements ModelInterface {
 	public MessageModel(CharSequence messageContent, CharSequence reciever) {
 		this.messageContent = (String) messageContent;
 		this.reciever = (String) reciever;
-		this.messageTimeStamp = Calendar.getInstance();
+		this.messageTimeStamp = Calendar.getInstance().getTimeInMillis();
 	}
 
 	public MessageModel(CharSequence messageContent, CharSequence reciever,
-			Calendar timeStamp) {
+			long timeStamp) {
 		this.messageContent = (String) messageContent;
 		this.reciever = (String) reciever;
 		this.messageTimeStamp = timeStamp;
@@ -35,7 +35,7 @@ public class MessageModel implements ModelInterface {
 		return (CharSequence) reciever;
 	}
 
-	public Calendar getMessageTimeStamp() {
+	public long getMessageTimeStamp() {
 		return messageTimeStamp;
 	}
 
