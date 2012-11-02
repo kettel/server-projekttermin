@@ -25,6 +25,7 @@ public class Database {
 			dhc.addContact((Contact)m);
 		}
 		else if(dbRep.equalsIgnoreCase("message")){
+			System.out.println("Försöker lägga till ett meddelande...");
 			DatabaseHandlerMessages dhm = new DatabaseHandlerMessages();
 			dhm.addMessage((MessageModel)m);
 		}
