@@ -1,13 +1,13 @@
 package model;
 
-import java.util.Date;
+import java.util.Calendar;
 
 public class MessageModel implements ModelInterface {
 
 	private String databaseRepresentation = "message";
 	private String messageContent;
 	private String reciever;
-	private Date messageTimeStamp;
+	private Calendar messageTimeStamp;
 
 	public MessageModel() {
 
@@ -17,11 +17,11 @@ public class MessageModel implements ModelInterface {
 	public MessageModel(CharSequence messageContent, CharSequence reciever) {
 		this.messageContent = (String) messageContent;
 		this.reciever = (String) reciever;
-		messageTimeStamp = new Date();
+		this.messageTimeStamp = Calendar.getInstance();
 	}
 
 	public MessageModel(CharSequence messageContent, CharSequence reciever,
-			Date timeStamp) {
+			Calendar timeStamp) {
 		this.messageContent = (String) messageContent;
 		this.reciever = (String) reciever;
 		this.messageTimeStamp = timeStamp;
@@ -35,7 +35,7 @@ public class MessageModel implements ModelInterface {
 		return (CharSequence) reciever;
 	}
 
-	public Date getMessageTimeStamp() {
+	public Calendar getMessageTimeStamp() {
 		return messageTimeStamp;
 	}
 
