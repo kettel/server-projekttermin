@@ -6,10 +6,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-import com.sun.tools.javac.util.Version;
 
 import model.MessageModel;
 import model.ModelInterface;
@@ -34,8 +31,6 @@ public class DatabaseHandlerMessages {
             }
 
         } catch (SQLException ex) {
-        	Logger lgr = Logger.getLogger(Version.class.getName());
-            lgr.log(Level.SEVERE, ex.getMessage(), ex);
 
         } finally {
             try {
@@ -50,8 +45,6 @@ public class DatabaseHandlerMessages {
                 }
 
             } catch (SQLException ex) {
-                Logger lgr = Logger.getLogger(Version.class.getName());
-                lgr.log(Level.WARNING, ex.getMessage(), ex);
             }
         }
 	}
