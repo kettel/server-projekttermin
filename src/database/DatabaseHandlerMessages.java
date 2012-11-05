@@ -57,9 +57,11 @@ public class DatabaseHandlerMessages extends DatabaseHandler{
 		try {
             con = DriverManager.getConnection(url, user, password);
             pst = con.prepareStatement("SELECT * FROM " + m.getDatabaseRepresentation());
+            System.out.println("inte rikigt utfört frågan än..");
             rs = pst.executeQuery();
-
+            
             while (rs.next()) {
+            	System.out.println("Nu ska jag hämta ett meddelande..");
             	returnList.add((ModelInterface) new MessageModel(rs.getInt(0),
             						rs.getString(1),
             						rs.getString(2),
