@@ -52,8 +52,7 @@ public class Contact implements ModelInterface {
 	public Contact(long id, String contactName, Long contactPhoneNumber,
 			String contactEmail, String contactClearanceLevel,
 			String contactClassification, String contactComment,
-			String inetAdress) {
-		super();
+			String inetAddress) {
 		this.id = id;
 		this.contactName = contactName;
 		this.contactPhoneNumber = contactPhoneNumber;

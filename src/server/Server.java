@@ -1,15 +1,6 @@
 package server;
 import java.io.IOException;
 import java.net.ServerSocket;
-import java.util.List;
-
-import model.Assignment;
-import model.Contact;
-import model.MessageModel;
-import model.ModelInterface;
-
-import database.Database;
-
 
 /**
  * Servern som hanterar anslutningar mellan olika klienter
@@ -29,7 +20,7 @@ public class Server {
 	private static boolean listening = true;
 
 	public static void main(String[] args) {
-		/*try {
+		try {
 			serverSocket = new ServerSocket(port);
 			
 			// Skapar en ny tråd som lyssnar på kommandon
@@ -43,49 +34,7 @@ public class Server {
 			serverSocket.close();
 		} catch (IOException e) {
 			System.out.println(e);
-		}*/
-		Database db = new Database();
-		// Testa att lägga till i DB
-		db.addToDB(new Contact("Nise",Long.valueOf("0130123"),"nisse@gdsasdf","s","A","Skön lirare","192.168.1.1"));
-		byte[] fakeImage = null;
-		db.addToDB(new Assignment("Katt i träd", Long.valueOf("12423423"),Long.valueOf("23423425"),"Kalle", "Nisse", "En katt i ett träd", "2 dagar", "Ej påbörjat", fakeImage, "Alstättersgata", "Lekplats"));
-		db.addToDB(new MessageModel("Hejsan svejsan jättemycket!!!", "Kalle"));
-		
-		// Testa att hämta från databasen
-		List<ModelInterface> testList = db.getAllFromDB(new MessageModel());
-		for (ModelInterface m : testList) {
-			// Hämta gammalt meddelande
-			MessageModel mess = (MessageModel) m;
-			
-			// Skapa ett uppdaterat meddelande
-			MessageModel messUpdate = new MessageModel(mess.getId(), "mjuhu","höns",mess.getMessageTimeStamp());
-			
-			// Skriv det uppdaterade objektet till databasen
-			db.updateModel(messUpdate);
 		}
-		
-		testList = db.getAllFromDB(new Contact());
-		for (ModelInterface m : testList) {
-			Contact cont = (Contact) m;
-			
-			Contact contUpd = new Contact(cont.getId(),"Nise",Long.valueOf("0130123"),"nisse@gdsasdf","s","A","Dålig lirare","192.168.1.1");
-			db.updateModel(contUpd);
-		}
-		
-		
-		testList = db.getAllFromDB(new Assignment());
-		for (ModelInterface m : testList) {
-			Assignment ass = (Assignment) m;
-			
-			Assignment assUpd = new Assignment(ass.getId(),"Katt i hav", Long.valueOf("12423423"),Long.valueOf("23423425"),"Kalle", "Nisse", "En katt i ett träd", "2 dagar", "Ej påbörjat", fakeImage, "Alstättersgata", "Lekplats");
-			
-			db.updateModel(assUpd);
-		}
-		
-		System.out.println("Antal meddelanden: " + db.getDBCount(new MessageModel()));
-		System.out.println("Antal kontakter: " + db.getDBCount(new Contact()));
-		System.out.println("Antal uppdrag: " + db.getDBCount(new Assignment()));
-		
 		
 	}
 }
