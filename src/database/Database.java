@@ -90,7 +90,7 @@ public class Database {
 			dhc.removeModel(m.getDatabaseRepresentation(), Long.toString(m.getId()));
 		}
 		else if(dbRep.equalsIgnoreCase("message")){
-			System.out.println("Ska ta bort meddelande "+m.getId());
+			System.out.println("Ska ta bort meddelande "+m.getId() + ". Från " + m.getDatabaseRepresentation());
 			DatabaseHandlerMessages dhm = new DatabaseHandlerMessages();
 			dhm.removeModel(m.getDatabaseRepresentation(), Long.toString(m.getId()));
 		}
