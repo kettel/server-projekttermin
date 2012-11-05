@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import model.Contact;
-import model.MessageModel;
 import model.ModelInterface;
 
 public class DatabaseHandlerContacts extends DatabaseHandler{
@@ -62,10 +61,15 @@ public class DatabaseHandlerContacts extends DatabaseHandler{
             rs = pst.executeQuery();
 
             while (rs.next()) {
-            	returnList.add((ModelInterface) new MessageModel(rs.getInt(0),
+            	// Hämta och skapa ett nytt Contact-objekt samt lägg
+            	// till det i returnList
+            	returnList.add((ModelInterface) new Contact(rs.getInt(0),
             						rs.getString(1),
+            						Long.valueOf(rs.getString(2)),
             						rs.getString(2),
-            						Long.valueOf(rs.getString(3))));
+            						rs.getString(3),
+            						rs.getString(4),
+            						rs.getString(5)));
             }
 
         } catch (SQLException ex) {
@@ -86,5 +90,50 @@ public class DatabaseHandlerContacts extends DatabaseHandler{
             }
         }
 		return returnList;
+	}
+
+	@Override
+	public void updateModel(ModelInterface m) {
+		try {
+			// Casta ModelInterface m till MessageModel
+			Contact contact= (Contact)m;
+			
+			con = DriverManager.getConnection(url, user, password);
+            st = con.createStatement();
+            
+            // Sätt autocommit till falskt
+            con.setAutoCommit(false);
+            
+            // Sätt in rätt värden till rätt plats i frågan och uppdatera dessa
+            st.executeUpdate("UPDATE " + contact.getDatabaseRepresentation() + 
+            		" SET Name = " + contact.getContactName() +
+            		", PhoneNumber = " + contact.getContactPhoneNumber() + 
+            		", Email = " + contact.getContactEmail() + 
+            		", ClearanceLevel = " + contact.getContactClearanceLevel() + 
+            		", Classification = " + contact.getContactClassification() + 
+            		", Comment = " + contact.getContactComment() +
+            		" WHERE Id = " + contact.getId());
+            
+            // Commita db-uppdateringarna (?)
+            con.commit();
+            
+        } catch (SQLException ex) {
+        	System.out.println("Fel: " + ex);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (st != null) {
+                    st.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
+
+            } catch (SQLException ex) {
+            }
+        }
+		
 	}
 }

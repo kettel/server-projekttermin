@@ -24,7 +24,7 @@ public class DatabaseHandlerMessages extends DatabaseHandler{
             pst = con.prepareStatement("INSERT INTO message(Content, Receiver, MessageTimestamp) VALUES(?,?,?)");
             
             // Sätt in rätt värden till rätt plats i frågan
-            pst.setString(1,message.getMessageContent().toString());
+            pst.setString(1, message.getMessageContent().toString());
             pst.setString(2, message.getReciever().toString());
             pst.setString(3, Long.toString(message.getMessageTimeStamp()));
            
@@ -95,6 +95,9 @@ public class DatabaseHandlerMessages extends DatabaseHandler{
 			con = DriverManager.getConnection(url, user, password);
             st = con.createStatement();
             
+            // Sätt autocommit till falskt
+            con.setAutoCommit(false);
+            
             // Sätt in rätt värden till rätt plats i frågan och uppdatera dessa
             st.executeUpdate("UPDATE " + message.getDatabaseRepresentation() + 
             		" SET Content = " + message.getMessageContent() +
@@ -103,9 +106,8 @@ public class DatabaseHandlerMessages extends DatabaseHandler{
             		//", MessageTimestamp = " + Long.toString(message.getMessageTimeStamp()) + 
             		" WHERE Id = " + message.getId());
             				
-            
-            // Utför frågan och lägg till objektet i databasen
-            pst.executeUpdate();
+            // Commita db-uppdateringarna (?)
+            con.commit();
 
         } catch (SQLException ex) {
         	System.out.println("Fel: " + ex);
