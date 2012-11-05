@@ -37,7 +37,7 @@ public abstract class DatabaseHandler {
 		try {
             con = DriverManager.getConnection(url, user, password);
             pst = con.prepareStatement("DELETE FROM " + table +" WHERE Id="+id);
-            pst.executeQuery();
+            pst.executeUpdate();
 
         } catch (SQLException ex) {
 
