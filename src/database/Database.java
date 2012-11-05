@@ -67,7 +67,6 @@ public class Database {
 			returnList = dhc.getAllModels(m);
 		}
 		else if(dbRep.equalsIgnoreCase("message")){
-			System.out.println("Ska hämta allt från meddelanden...");
 			DatabaseHandlerMessages dhm = new DatabaseHandlerMessages();
 			returnList = dhm.getAllModels(m);
 		}
