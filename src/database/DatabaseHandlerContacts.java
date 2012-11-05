@@ -13,7 +13,7 @@ public class DatabaseHandlerContacts extends DatabaseHandler{
 	@Override
 	public void addModel(ModelInterface m) {
 		try {
-			// Casta ModelInterface m till MessageModel
+			// Casta ModelInterface m till Contact
 			Contact contact = (Contact)m;
 			
 			// Initiera en anslutning till databasen
@@ -57,7 +57,7 @@ public class DatabaseHandlerContacts extends DatabaseHandler{
 		List<ModelInterface> returnList = new ArrayList<ModelInterface>();
 		try {
             con = DriverManager.getConnection(url, user, password);
-            pst = con.prepareStatement("SELECT * FROM Messages");
+            pst = con.prepareStatement("SELECT * FROM "+m.getDatabaseRepresentation());
             rs = pst.executeQuery();
 
             while (rs.next()) {

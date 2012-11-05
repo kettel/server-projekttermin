@@ -4,9 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import model.ModelInterface;
-import model.Assignment;
-import model.Contact;
-import model.MessageModel;
 
 public class Database {
 	
@@ -97,6 +94,10 @@ public class Database {
 		}
 	}
 	
+	/**
+	 * Uppdatera ett objekt i databasen
+	 * @param m
+	 */
 	public void updateModel(ModelInterface m){
 		String dbRep = m.getDatabaseRepresentation();
 		if (dbRep.equalsIgnoreCase("assignment")) {
