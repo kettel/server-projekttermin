@@ -56,16 +56,16 @@ public class DatabaseHandlerMessages extends DatabaseHandler{
 		List<ModelInterface> returnList = new ArrayList<ModelInterface>();
 		try {
             con = DriverManager.getConnection(url, user, password);
-            pst = con.prepareStatement("SELECT * FROM " + m.getDatabaseRepresentation());
-            System.out.println("inte rikigt utfört frågan än..");
+            pst = con.prepareStatement("SELECT * FROM message");
             rs = pst.executeQuery();
             
             while (rs.next()) {
-            	System.out.println("Lägger till: " + rs.getInt(0)+rs.getString(1)+rs.getString(2));
-            	returnList.add((ModelInterface) new MessageModel(rs.getInt(0),
-            						rs.getString(1),
-            						rs.getString(2),
-            						Long.valueOf(rs.getString(3))));
+            	MessageModel tempMess = new MessageModel(rs.getInt(0),
+						rs.getString(1),
+						rs.getString(2),
+						Long.valueOf(rs.getString(3)));
+            	System.out.println("Meddelande: "+ tempMess.getId());
+            	returnList.add((ModelInterface) tempMess);
             }
 
         } catch (SQLException ex) {
