@@ -9,4 +9,6 @@ public interface ModelInterface {
 	 */
 	
 	public String getDatabaseRepresentation();
+
+	public long getId();
 }

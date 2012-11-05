@@ -3,6 +3,8 @@ package model;
 public class Contact implements ModelInterface {
 
 	private String databasetRepresentation = "contact";
+	private long id = -1;
+	
 	private String contactName;
 	private Long contactPhoneNumber;
 	private String contactEmail;
@@ -14,6 +16,15 @@ public class Contact implements ModelInterface {
 
 	}
 
+	/**
+	 * Konstruktor för att skapa en ny kontakt som inte finns i databasen.
+	 * @param contactName
+	 * @param contactPhoneNumber
+	 * @param contactEmail
+	 * @param contactClearanceLevel
+	 * @param contactClassification
+	 * @param contactComment
+	 */
 	public Contact(String contactName, Long contactPhoneNumber,
 			String contactEmail, String contactClearanceLevel,
 			String contactClassification, String contactComment) {
@@ -24,6 +35,29 @@ public class Contact implements ModelInterface {
 		this.contactClassification = contactClassification;
 		this.contactComment = contactComment;
 
+	}
+	
+	/**
+	 * Konstruktor för att återskapa en kontakt från databasen då ett Id finns.
+	 * @param id
+	 * @param contactName
+	 * @param contactPhoneNumber
+	 * @param contactEmail
+	 * @param contactClearanceLevel
+	 * @param contactClassification
+	 * @param contactComment
+	 */
+	public Contact(long id, String contactName, Long contactPhoneNumber,
+			String contactEmail, String contactClearanceLevel,
+			String contactClassification, String contactComment) {
+		super();
+		this.id = id;
+		this.contactName = contactName;
+		this.contactPhoneNumber = contactPhoneNumber;
+		this.contactEmail = contactEmail;
+		this.contactClearanceLevel = contactClearanceLevel;
+		this.contactClassification = contactClassification;
+		this.contactComment = contactComment;
 	}
 
 	public String getContactName() {
@@ -77,5 +111,9 @@ public class Contact implements ModelInterface {
 	public String getDatabaseRepresentation() {
 		// TODO Auto-generated method stub
 		return databasetRepresentation;
+	}
+
+	public long getId() {
+		return id;
 	}
 }

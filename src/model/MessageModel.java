@@ -5,6 +5,8 @@ import java.util.Calendar;
 public class MessageModel implements ModelInterface {
 
 	private String databaseRepresentation = "message";
+	private long id = -1;
+	
 	private String messageContent;
 	private String reciever;
 	private long messageTimeStamp;
@@ -20,8 +22,9 @@ public class MessageModel implements ModelInterface {
 		this.messageTimeStamp = Calendar.getInstance().getTimeInMillis();
 	}
 
-	public MessageModel(CharSequence messageContent, CharSequence reciever,
+	public MessageModel(long id, CharSequence messageContent, CharSequence reciever,
 			long timeStamp) {
+		this.id = id;
 		this.messageContent = (String) messageContent;
 		this.reciever = (String) reciever;
 		this.messageTimeStamp = timeStamp;
@@ -42,5 +45,10 @@ public class MessageModel implements ModelInterface {
 	public String getDatabaseRepresentation() {
 		// TODO Auto-generated method stub
 		return databaseRepresentation;
+	}
+
+	@Override
+	public long getId() {
+		return id;
 	}
 }

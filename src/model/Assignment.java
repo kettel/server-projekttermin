@@ -3,6 +3,8 @@ package model;
 public class Assignment implements ModelInterface {
 
 	private String databasetRepresentation = "assignment";
+	private long id = -1;
+	
 	private String name;
 	private long lat;
 	private long lon;
@@ -18,7 +20,21 @@ public class Assignment implements ModelInterface {
 	public Assignment() {
 
 	}
-
+	
+	/**
+	 * Konstruktor för att skapa ett uppdrag som inte finns i databasen.
+	 * @param name
+	 * @param lat
+	 * @param lon
+	 * @param receiver
+	 * @param sender
+	 * @param assignmentDescription
+	 * @param timeSpan
+	 * @param assignmentStatus
+	 * @param cameraImage
+	 * @param streetName
+	 * @param siteName
+	 */
 	public Assignment(String name, long lat, long lon, String receiver,
 			String sender, String assignmentDescription, String timeSpan,
 			String assignmentStatus, byte[] cameraImage, String streetName,
@@ -26,6 +42,40 @@ public class Assignment implements ModelInterface {
 		this.lat = lat;
 		this.lon = lon;
 		this.name = name;
+		this.receiver = receiver;
+		this.sender = sender;
+		this.assignmentDescription = assignmentDescription;
+		this.timeSpan = timeSpan;
+		this.assignmentStatus = assignmentStatus;
+		this.cameraImage = cameraImage;
+		this.streetName = streetName;
+		this.siteName = siteName;
+	}
+
+	/**
+	 * Konstruktor för att skapa ett uppdrag, hämtat från databasen då ett id sätts.
+	 * @param id
+	 * @param name
+	 * @param lat
+	 * @param lon
+	 * @param receiver
+	 * @param sender
+	 * @param assignmentDescription
+	 * @param timeSpan
+	 * @param assignmentStatus
+	 * @param cameraImage
+	 * @param streetName
+	 * @param siteName
+	 */
+	public Assignment(long id, String name, long lat, long lon,
+			String receiver, String sender, String assignmentDescription,
+			String timeSpan, String assignmentStatus, byte[] cameraImage,
+			String streetName, String siteName) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.lat = lat;
+		this.lon = lon;
 		this.receiver = receiver;
 		this.sender = sender;
 		this.assignmentDescription = assignmentDescription;
@@ -126,5 +176,10 @@ public class Assignment implements ModelInterface {
 
 	public String getDatabaseRepresentation() {
 		return databasetRepresentation;
+	}
+
+	@Override
+	public long getId() {
+		return id;
 	}
 }
