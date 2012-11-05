@@ -73,7 +73,6 @@ public class DatabaseHandlerMessages extends DatabaseHandler{
 						rs.getString(2),
 						rs.getString(3),
 						Long.valueOf(rs.getString(4)));
-            	System.out.println("Meddelande: "+ tempMess.getId());
             	returnList.add((ModelInterface) tempMess);
             }
 

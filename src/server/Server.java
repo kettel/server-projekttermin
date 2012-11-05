@@ -54,8 +54,14 @@ public class Server {
 		// Testa att hämta från databasen
 		List<ModelInterface> testList = db.getAllFromDB(new MessageModel());
 		for (ModelInterface m : testList) {
+			// Hämta gammalt meddelande
 			MessageModel mess = (MessageModel) m;
-			System.out.println("Meddelandeinnehåll: " + mess.getMessageContent());
+			
+			// Skapa ett uppdaterat meddelande
+			MessageModel messUpdate = new MessageModel(mess.getId(), "mjuhu!","höns",mess.getMessageTimeStamp());
+			
+			// Skriv det uppdaterade objektet till databasen
+			db.updateModel(messUpdate);
 		}
 		
 		testList = db.getAllFromDB(new Contact());
