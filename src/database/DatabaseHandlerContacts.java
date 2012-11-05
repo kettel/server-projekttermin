@@ -72,14 +72,14 @@ public class DatabaseHandlerContacts extends DatabaseHandler{
             while (rs.next()) {
             	// Hämta och skapa ett nytt Contact-objekt samt lägg
             	// till det i returnList
-            	returnList.add((ModelInterface) new Contact(rs.getInt(0),
-            						rs.getString(1),
-            						Long.valueOf(rs.getString(2)),
+            	returnList.add((ModelInterface) new Contact(rs.getInt(1),
             						rs.getString(2),
-            						rs.getString(3),
+            						Long.valueOf(rs.getString(3)),
             						rs.getString(4),
             						rs.getString(5),
-            						rs.getString(6)));
+            						rs.getString(6),
+            						rs.getString(7),
+            						rs.getString(8)));
             }
 
         } catch (SQLException ex) {
