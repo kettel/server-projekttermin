@@ -67,13 +67,18 @@ public class Server {
 		testList = db.getAllFromDB(new Contact());
 		for (ModelInterface m : testList) {
 			Contact cont = (Contact) m;
-			System.out.println("Kontakt: " + cont.getContactName());
+			
+			Contact contUpd = new Contact(cont.getId(),"Nise",Long.valueOf("0130123"),"nisse@gdsasdf","s","A","Dålig lirare","192.168.1.1");
+			db.updateModel(contUpd);
 		}
 		
 		testList = db.getAllFromDB(new Assignment());
 		for (ModelInterface m : testList) {
 			Assignment ass = (Assignment) m;
-			System.out.println("Uppdrag: " + ass.getAssignmentDescription());
+			
+			Assignment assUpd = new Assignment(ass.getId(),"Katt i hav", Long.valueOf("12423423"),Long.valueOf("23423425"),"Kalle", "Nisse", "En katt i ett träd", "2 dagar", "Ej påbörjat", fakeImage, "Alstättersgata", "Lekplats");
+			
+			db.updateModel(assUpd);
 		}
 		
 		// Testa att uppdatera i databasen
