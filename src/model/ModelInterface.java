@@ -4,8 +4,8 @@ package model;
 public interface ModelInterface {
 
 	/**
-	 * Returnerar datatyp f�r den aktuella modellen
-	 * @return		String		namn p� datatypen
+	 * Returnerar datatyp för den aktuella modellen
+	 * @return		String		namn på datatypen
 	 */
 	
 	public String getDatabaseRepresentation();

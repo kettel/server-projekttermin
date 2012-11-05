@@ -22,4 +22,9 @@ public class DatabaseHandlerAssignment {
 		return null;
 	}
 
+	public void removeAssignment(Assignment m) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

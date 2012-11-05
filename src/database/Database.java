@@ -55,9 +55,9 @@ public class Database {
 	}
 	
 	/**
-	 * 
-	 * @param m
-	 * @return
+	 * Hämta alla objekt från databasen i en ArrayList
+	 * @param m	ModelInterface	Den önskade returtypen
+	 * @return	
 	 */
 	public List<ModelInterface> getAllFromDB(ModelInterface m){
 		String dbRep = m.getDatabaseRepresentation();
@@ -75,6 +75,27 @@ public class Database {
 			returnList = dhm.getAllMessages();
 		}
 		return returnList;
+	}
+	
+	/**
+	 * Ta bort ett objekt från databasen
+	 * @param m
+	 * @param context
+	 */
+	public void deleteFromDB(ModelInterface m){
+		String dbRep = m.getDatabaseRepresentation();
+		if (dbRep.equalsIgnoreCase("assignment")) {
+			DatabaseHandlerAssignment dha = new DatabaseHandlerAssignment();
+			dha.removeAssignment((Assignment)m);
+		}
+		else if(dbRep.equalsIgnoreCase("contact")){
+			DatabaseHandlerContacts dhc = new DatabaseHandlerContacts();
+			dhc.removeContact((Contact)m);
+		}
+		else if(dbRep.equalsIgnoreCase("message")){
+			DatabaseHandlerMessages dhm = new DatabaseHandlerMessages();
+			dhm.removeMessage((MessageModel)m);
+		}
 	}
 
 }

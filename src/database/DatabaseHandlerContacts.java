@@ -22,4 +22,9 @@ public class DatabaseHandlerContacts {
 		return null;
 	}
 
+	public void removeContact(Contact m) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
