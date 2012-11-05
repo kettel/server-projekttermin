@@ -21,7 +21,7 @@ public class DatabaseHandlerMessages extends DatabaseHandler{
             con = DriverManager.getConnection(url, user, password);
             
             // SQL-frågan
-            pst = con.prepareStatement("INSERT INTO Messages(Content, Receiver, MessageTimestamp) VALUES(?,?,?)");
+            pst = con.prepareStatement("INSERT INTO message(Content, Receiver, MessageTimestamp) VALUES(?,?,?)");
             
             // Sätt in rätt värden till rätt plats i frågan
             pst.setString(1,message.getMessageContent().toString());
@@ -51,12 +51,12 @@ public class DatabaseHandlerMessages extends DatabaseHandler{
 	}
 
 	@Override
-	public List<ModelInterface> getAllModels() {
+	public List<ModelInterface> getAllModels(ModelInterface m) {
 		
 		List<ModelInterface> returnList = new ArrayList<ModelInterface>();
 		try {
             con = DriverManager.getConnection(url, user, password);
-            pst = con.prepareStatement("SELECT * FROM Messages");
+            pst = con.prepareStatement("SELECT * FROM " + m.getDatabaseRepresentation());
             rs = pst.executeQuery();
 
             while (rs.next()) {
@@ -67,7 +67,7 @@ public class DatabaseHandlerMessages extends DatabaseHandler{
             }
 
         } catch (SQLException ex) {
-
+        	System.out.println("Fel: " + ex);
         } finally {
             try {
                 if (rs != null) {
@@ -84,6 +84,46 @@ public class DatabaseHandlerMessages extends DatabaseHandler{
             }
         }
 		return returnList;
+	}
+
+	@Override
+	public void updateModel(ModelInterface m) {
+		try {
+			// Casta ModelInterface m till MessageModel
+			MessageModel message = (MessageModel)m;
+			
+			con = DriverManager.getConnection(url, user, password);
+            st = con.createStatement();
+            
+            // Sätt in rätt värden till rätt plats i frågan och uppdatera dessa
+            st.executeUpdate("UPDATE " + message.getDatabaseRepresentation() + 
+            		" SET Content = " + message.getMessageContent() +
+            		", Receiver = " + message.getReciever() + 
+            		// Tiden ska nog inte ändras...
+            		//", MessageTimestamp = " + Long.toString(message.getMessageTimeStamp()) + 
+            		" WHERE Id = " + message.getId());
+            				
+            
+            // Utför frågan och lägg till objektet i databasen
+            pst.executeUpdate();
+
+        } catch (SQLException ex) {
+        	System.out.println("Fel: " + ex);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (st != null) {
+                    st.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
+
+            } catch (SQLException ex) {
+            }
+        }
 	}
 	
 }

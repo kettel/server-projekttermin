@@ -63,15 +63,15 @@ public class Database {
 		List<ModelInterface> returnList = new ArrayList<ModelInterface>();
 		if (dbRep.equalsIgnoreCase("assignment")) {
 			DatabaseHandlerAssignment dha = new DatabaseHandlerAssignment();
-			returnList = dha.getAllModels();
+			returnList = dha.getAllModels(m);
 		}
 		else if(dbRep.equalsIgnoreCase("contact")){
 			DatabaseHandlerContacts dhc = new DatabaseHandlerContacts();
-			returnList = dhc.getAllModels();
+			returnList = dhc.getAllModels(m);
 		}
 		else if(dbRep.equalsIgnoreCase("message")){
 			DatabaseHandlerMessages dhm = new DatabaseHandlerMessages();
-			returnList = dhm.getAllModels();
+			returnList = dhm.getAllModels(m);
 		}
 		return returnList;
 	}
@@ -94,6 +94,22 @@ public class Database {
 		else if(dbRep.equalsIgnoreCase("message")){
 			DatabaseHandlerMessages dhm = new DatabaseHandlerMessages();
 			dhm.removeModel(m.getDatabaseRepresentation(), Long.toString(m.getId()));
+		}
+	}
+	
+	public void updateModel(ModelInterface m){
+		String dbRep = m.getDatabaseRepresentation();
+		if (dbRep.equalsIgnoreCase("assignment")) {
+			DatabaseHandlerAssignment dha = new DatabaseHandlerAssignment();
+			dha.updateModel(m);
+		}
+		else if(dbRep.equalsIgnoreCase("contact")){
+			DatabaseHandlerContacts dhc = new DatabaseHandlerContacts();
+			dhc.updateModel(m);
+		}
+		else if(dbRep.equalsIgnoreCase("message")){
+			DatabaseHandlerMessages dhm = new DatabaseHandlerMessages();
+			dhm.updateModel(m);
 		}
 	}
 

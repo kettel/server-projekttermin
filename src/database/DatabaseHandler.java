@@ -26,6 +26,8 @@ public abstract class DatabaseHandler {
      */
 	public abstract void addModel(ModelInterface m);
 	
+	public abstract void updateModel(ModelInterface m);
+	
 	/**
 	 * Ta bort en modell från databasen
 	 * @param table	String	Tabellnamnet från vilken önskad modell ska tas bort.
@@ -101,6 +103,6 @@ public abstract class DatabaseHandler {
 	 * Returnerar alla modeller som en arraylist
 	 * @return
 	 */
-	public abstract List<ModelInterface> getAllModels();
+	public abstract List<ModelInterface> getAllModels(ModelInterface m);
 
 }
