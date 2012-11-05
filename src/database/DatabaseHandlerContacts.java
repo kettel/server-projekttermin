@@ -20,7 +20,7 @@ public class DatabaseHandlerContacts extends DatabaseHandler{
             con = DriverManager.getConnection(url, user, password);
             
             // SQL-frågan
-            pst = con.prepareStatement("INSERT INTO contact(Name, PhoneNumber, Email, ClearenceLevel, Classification, Comment, InetAddress) VALUES(?,?,?,?,?,?,?)");
+            pst = con.prepareStatement("INSERT INTO contact(Name, PhoneNumber, Email, ClearanceLevel, Classification, Comment, InetAddress) VALUES(?,?,?,?,?,?,?)");
             
             // Sätt in rätt värden till rätt plats i frågan
             pst.setString(1, contact.getContactName());
