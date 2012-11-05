@@ -71,6 +71,7 @@ public class Server {
 			
 			Contact contUpd = new Contact(cont.getId(),"Nise",Long.valueOf("0130123"),"nisse@gdsasdf","s","A","Dålig lirare","192.168.1.1");
 			db.updateModel(contUpd);
+			db.deleteFromDB(contUpd);
 		}
 		
 		
@@ -81,6 +82,7 @@ public class Server {
 			Assignment assUpd = new Assignment(ass.getId(),"Katt i hav", Long.valueOf("12423423"),Long.valueOf("23423425"),"Kalle", "Nisse", "En katt i ett träd", "2 dagar", "Ej påbörjat", fakeImage, "Alstättersgata", "Lekplats");
 			
 			db.updateModel(assUpd);
+			db.deleteFromDB(assUpd);
 		}
 		
 		
