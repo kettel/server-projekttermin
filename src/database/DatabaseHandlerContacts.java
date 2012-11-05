@@ -20,7 +20,7 @@ public class DatabaseHandlerContacts extends DatabaseHandler{
             con = DriverManager.getConnection(url, user, password);
             
             // SQL-frågan
-            pst = con.prepareStatement("INSERT INTO contact(Name, PhoneNumber, Email, ClearenceLevel, Classification, Comment) VALUES(?,?,?,?)");
+            pst = con.prepareStatement("INSERT INTO contact(Name, PhoneNumber, Email, ClearenceLevel, Classification, Comment, InetAddress) VALUES(?,?,?,?,?,?,?)");
             
             // Sätt in rätt värden till rätt plats i frågan
             pst.setString(1, contact.getContactName());
@@ -29,6 +29,7 @@ public class DatabaseHandlerContacts extends DatabaseHandler{
             pst.setString(4, contact.getContactClearanceLevel());
             pst.setString(5, contact.getContactClassification());
             pst.setString(6, contact.getContactComment());
+            pst.setString(7, contact.getInetAddress());
            
             // Utför frågan och lägg till objektet i databasen
             pst.executeUpdate();
@@ -69,7 +70,8 @@ public class DatabaseHandlerContacts extends DatabaseHandler{
             						rs.getString(2),
             						rs.getString(3),
             						rs.getString(4),
-            						rs.getString(5)));
+            						rs.getString(5),
+            						rs.getString(6)));
             }
 
         } catch (SQLException ex) {
@@ -112,6 +114,7 @@ public class DatabaseHandlerContacts extends DatabaseHandler{
             		", ClearanceLevel = " + contact.getContactClearanceLevel() + 
             		", Classification = " + contact.getContactClassification() + 
             		", Comment = " + contact.getContactComment() +
+            		", InetAddress = " + contact.getInetAddress() +
             		" WHERE Id = " + contact.getId());
             
             // Commita db-uppdateringarna (?)

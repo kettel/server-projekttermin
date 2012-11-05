@@ -2,7 +2,7 @@ package model;
 
 public class Contact implements ModelInterface {
 
-	private String databasetRepresentation = "contact";
+	private String databaseRepresentation = "contact";
 	private long id = -1;
 	
 	private String contactName;
@@ -11,6 +11,7 @@ public class Contact implements ModelInterface {
 	private String contactClearanceLevel;
 	private String contactClassification;
 	private String contactComment;
+	private String inetAddress;
 
 	public Contact() {
 
@@ -27,14 +28,15 @@ public class Contact implements ModelInterface {
 	 */
 	public Contact(String contactName, Long contactPhoneNumber,
 			String contactEmail, String contactClearanceLevel,
-			String contactClassification, String contactComment) {
+			String contactClassification, String contactComment,
+			String inetAdress) {
 		this.contactName = contactName;
 		this.contactPhoneNumber = contactPhoneNumber;
 		this.contactEmail = contactEmail;
 		this.contactClearanceLevel = contactClearanceLevel;
 		this.contactClassification = contactClassification;
 		this.contactComment = contactComment;
-
+		this.inetAddress = inetAdress;
 	}
 	
 	/**
@@ -49,7 +51,8 @@ public class Contact implements ModelInterface {
 	 */
 	public Contact(long id, String contactName, Long contactPhoneNumber,
 			String contactEmail, String contactClearanceLevel,
-			String contactClassification, String contactComment) {
+			String contactClassification, String contactComment,
+			String inetAdress) {
 		super();
 		this.id = id;
 		this.contactName = contactName;
@@ -58,6 +61,7 @@ public class Contact implements ModelInterface {
 		this.contactClearanceLevel = contactClearanceLevel;
 		this.contactClassification = contactClassification;
 		this.contactComment = contactComment;
+		this.inetAddress = inetAddress;
 	}
 
 	public String getContactName() {
@@ -109,8 +113,15 @@ public class Contact implements ModelInterface {
 	}
 
 	public String getDatabaseRepresentation() {
-		// TODO Auto-generated method stub
-		return databasetRepresentation;
+		return databaseRepresentation;
+	}
+	
+	public String getInetAddress(){
+		return inetAddress;
+	}
+	
+	public void setInetAddress(String inetAddress){
+		this.inetAddress = inetAddress;
 	}
 
 	public long getId() {

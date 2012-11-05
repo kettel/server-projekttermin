@@ -20,7 +20,7 @@ public class DatabaseHandlerAssignment extends DatabaseHandler{
             con = DriverManager.getConnection(url, user, password);
             
             // SQL-frågan
-            pst = con.prepareStatement("INSERT INTO "+m.getDatabaseRepresentation()+"(Name, PhoneNumber, Email, ClearenceLevel, Classification, Comment) VALUES(?,?,?,?)");
+            pst = con.prepareStatement("INSERT INTO "+m.getDatabaseRepresentation()+"(Name , Latitude , Longitude , Receiver , Sender , Description , Timespan , Status , Cameraimage , Streetname , Sitename) VALUES(?,?,?,?,?,?,?,?,?,?,?)");
             
             // Sätt in rätt värden till rätt plats i frågan
             pst.setString(1, ass.getName());
@@ -31,6 +31,9 @@ public class DatabaseHandlerAssignment extends DatabaseHandler{
             pst.setString(6, ass.getAssignmentDescription());
             pst.setString(7, ass.getTimeSpan());
             pst.setString(8, ass.getAssignmentStatus());
+            pst.setBytes(9, ass.getCameraImage());
+            pst.setString(10, ass.getStreetName());
+            pst.setString(11, ass.getSiteName());
             
             // Kan krascha. Osäker på om SetBytes -> Blob (blir visst vara VARBINARY)
             pst.setBytes(9, ass.getCameraImage());

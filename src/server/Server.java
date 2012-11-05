@@ -2,9 +2,6 @@ package server;
 import java.io.IOException;
 import java.net.ServerSocket;
 
-import model.MessageModel;
-
-import database.Database;
 
 /**
  * Servern som hanterar anslutningar mellan olika klienter
@@ -24,9 +21,11 @@ public class Server {
 	private static boolean listening = true;
 
 	public static void main(String[] args) {
-		/*try {
+		try {
 			serverSocket = new ServerSocket(port);
-
+			
+			// Skapar en ny tråd som lyssnar på kommandon
+			new ServerTerminal().start();
 			// Lyssnar på anslutningar och skapar en ny tråd per anslutning så
 			// länge servern lyssnar efter anslutningar
 			while (listening) {
@@ -36,8 +35,6 @@ public class Server {
 			serverSocket.close();
 		} catch (IOException e) {
 			System.out.println(e);
-		}*/
-		Database db = new Database();
-		db.addToDB(new MessageModel());
+		}
 	}
 }
