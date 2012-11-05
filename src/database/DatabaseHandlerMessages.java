@@ -20,7 +20,7 @@ public class DatabaseHandlerMessages {
     ResultSet rs = null;
     PreparedStatement pst = null;
     
-    String url = "jdbc:mysql://localhost:3306/assignments";
+    String url = "jdbc:mysql://localhost:3306/TDDD36";
     String user = "serverUser";
     String password = "handdukMandel";
 	
@@ -39,7 +39,7 @@ public class DatabaseHandlerMessages {
             // Sätt in rätt värden till rätt plats i frågan
             pst.setString(1,m.getMessageContent().toString());
             pst.setString(2, m.getReciever().toString());
-            pst.setTimestamp(3, Timestamp.valueOf(Long.toString(m.getMessageTimeStamp())));
+            pst.setString(3, Long.toString(m.getMessageTimeStamp()));
            
             // Utför frågan och lägg till objektet i databasen
             pst.executeUpdate();
@@ -118,7 +118,7 @@ public class DatabaseHandlerMessages {
             	returnList.add((ModelInterface) new MessageModel(rs.getInt(0),
             						rs.getString(1),
             						rs.getString(2),
-            						Long.valueOf(rs.getTimestamp(3).toString())));
+            						Long.valueOf(rs.getString(3))));
                 System.out.println(rs.getString(1));
             }
 
