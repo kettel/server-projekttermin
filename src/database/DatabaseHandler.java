@@ -11,14 +11,14 @@ import java.util.List;
 import model.ModelInterface;
 
 public abstract class DatabaseHandler {
-	private Connection con = null;
-    private Statement st = null;
-    private ResultSet rs = null;
-    private PreparedStatement pst = null;
+	protected Connection con = null;
+	protected Statement st = null;
+	protected ResultSet rs = null;
+	protected PreparedStatement pst = null;
     
-    private String url = "jdbc:mysql://localhost:3306/TDDD36";
-    private String user = "serverUser";
-    private String password = "handdukMandel";
+	protected String url = "jdbc:mysql://localhost:3306/TDDD36";
+	protected String user = "serverUser";
+	protected String password = "handdukMandel";
 	
     /**
      * Lägg till en modell till databasen.
