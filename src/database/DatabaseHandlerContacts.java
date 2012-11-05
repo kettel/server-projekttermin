@@ -116,14 +116,14 @@ public class DatabaseHandlerContacts extends DatabaseHandler{
             
             // Sätt in rätt värden till rätt plats i frågan och uppdatera dessa
             st.executeUpdate("UPDATE " + contact.getDatabaseRepresentation() + 
-            		" SET Name = " + contact.getContactName() +
-            		", PhoneNumber = " + contact.getContactPhoneNumber() + 
-            		", Email = " + contact.getContactEmail() + 
-            		", ClearanceLevel = " + contact.getContactClearanceLevel() + 
-            		", Classification = " + contact.getContactClassification() + 
-            		", Comment = " + contact.getContactComment() +
-            		", InetAddress = " + contact.getInetAddress() +
-            		" WHERE Id = " + contact.getId());
+            		" SET Name = \"" + contact.getContactName() +
+            		"\", PhoneNumber = \"" + contact.getContactPhoneNumber() + 
+            		"\", Email = \"" + contact.getContactEmail() + 
+            		"\", ClearanceLevel = \"" + contact.getContactClearanceLevel() + 
+            		"\", Classification = \"" + contact.getContactClassification() + 
+            		"\", Comment = \"" + contact.getContactComment() +
+            		"\", InetAddress = \"" + contact.getInetAddress() +
+            		"\" WHERE Id = " + contact.getId());
             
             // Commita db-uppdateringarna (?)
             con.commit();

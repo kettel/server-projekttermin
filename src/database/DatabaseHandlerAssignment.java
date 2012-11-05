@@ -85,17 +85,17 @@ public class DatabaseHandlerAssignment extends DatabaseHandler{
             
             // Sätt in rätt värden till rätt plats i frågan och uppdatera dessa
             st.executeUpdate("UPDATE " + ass.getDatabaseRepresentation() + 
-            		" SET Name = " + ass.getName() +
-            		", Latitude = " + Long.toString(ass.getLat()) + 
-            		", Longitude = " + Long.toString(ass.getLon()) + 
-            		", Receiver = " + ass.getReceiver() + 
-            		", Sender = " + ass.getSender() + 
-            		", Description = " + ass.getAssignmentDescription() +
-            		", Timespan = " + ass.getAssignmentStatus() +
-            		", Cameraimage = " + ass.getCameraImage() + 
-            		", Streetname = " + ass.getStreetName() +
-            		", Sitename = " + ass.getSiteName() +
-            		" WHERE Id = " + ass.getId());
+            		" SET Name = \"" + ass.getName() +
+            		"\", Latitude = \"" + Long.toString(ass.getLat()) + 
+            		"\", Longitude = \"" + Long.toString(ass.getLon()) + 
+            		"\", Receiver = \"" + ass.getReceiver() + 
+            		"\", Sender = \"" + ass.getSender() + 
+            		"\", Description = \"" + ass.getAssignmentDescription() +
+            		"\", Timespan = \"" + ass.getAssignmentStatus() +
+            		"\", Cameraimage = \"" + ass.getCameraImage() + 
+            		"\", Streetname = \"" + ass.getStreetName() +
+            		"\", Sitename = \"" + ass.getSiteName() +
+            		"\" WHERE Id = " + ass.getId());
             
             // Commita db-uppdateringarna (?)
             con.commit();
