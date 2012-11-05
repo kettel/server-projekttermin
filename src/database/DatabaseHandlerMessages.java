@@ -61,7 +61,7 @@ public class DatabaseHandlerMessages extends DatabaseHandler{
             rs = pst.executeQuery();
             
             while (rs.next()) {
-            	System.out.println("Nu ska jag hämta ett meddelande..");
+            	System.out.println("Lägger till: " + rs.getInt(0)+rs.getString(1)+rs.getString(2));
             	returnList.add((ModelInterface) new MessageModel(rs.getInt(0),
             						rs.getString(1),
             						rs.getString(2),
