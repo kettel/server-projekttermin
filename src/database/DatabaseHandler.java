@@ -11,10 +11,10 @@ import java.util.List;
 import model.ModelInterface;
 
 public abstract class DatabaseHandler {
-	protected Connection con = null;
-	protected Statement st = null;
-	protected ResultSet rs = null;
-	protected PreparedStatement pst = null;
+	private Connection con = null;
+	private Statement st = null;
+	private ResultSet rs = null;
+	private PreparedStatement pst = null;
     
 	protected String url = "jdbc:mysql://localhost:3306/TDDD36";
 	protected String user = "serverUser";

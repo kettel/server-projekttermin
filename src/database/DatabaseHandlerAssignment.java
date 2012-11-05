@@ -1,7 +1,11 @@
 package database;
 
+import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +13,11 @@ import model.Assignment;
 import model.ModelInterface;
 
 public class DatabaseHandlerAssignment extends DatabaseHandler{
-
+	private Connection con = null;
+	private Statement st = null;
+	private ResultSet rs = null;
+	private PreparedStatement pst = null;
+	
 	@Override
 	public void addModel(ModelInterface m) {
 		try {
