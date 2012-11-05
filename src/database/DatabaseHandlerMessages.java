@@ -110,11 +110,11 @@ public class DatabaseHandlerMessages extends DatabaseHandler{
             
             // Sätt in rätt värden till rätt plats i frågan och uppdatera dessa
             st.executeUpdate("UPDATE " + message.getDatabaseRepresentation() + 
-            		" SET Content = " + message.getMessageContent() +
-            		", Receiver = " + message.getReciever() + 
+            		" SET Content = \"" + message.getMessageContent() +
+            		"\", Receiver = \"" + message.getReciever() + 
             		// Tiden ska nog inte ändras...
             		//", MessageTimestamp = " + Long.toString(message.getMessageTimeStamp()) + 
-            		" WHERE Id = " + message.getId());
+            		"\" WHERE Id = " + message.getId());
             				
             // Commita db-uppdateringarna (?)
             con.commit();
