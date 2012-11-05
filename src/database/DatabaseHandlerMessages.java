@@ -67,7 +67,7 @@ public class DatabaseHandlerMessages extends DatabaseHandler{
             con = DriverManager.getConnection(url, user, password);
             pst = con.prepareStatement("SELECT * FROM message");
             rs = pst.executeQuery();
-            System.out.println("RS i meddelanden är: "+rs);
+            System.out.println("RS i meddelanden är: "+rs.next());
             
             while (rs.next()) {
             	MessageModel tempMess = new MessageModel(rs.getInt(0),
