@@ -58,7 +58,7 @@ public class Server {
 			MessageModel mess = (MessageModel) m;
 			
 			// Skapa ett uppdaterat meddelande
-			MessageModel messUpdate = new MessageModel(mess.getId(), "mjuhu!","höns",mess.getMessageTimeStamp());
+			MessageModel messUpdate = new MessageModel(mess.getId(), "mjuhu","höns",mess.getMessageTimeStamp());
 			
 			// Skriv det uppdaterade objektet till databasen
 			db.updateModel(messUpdate);
