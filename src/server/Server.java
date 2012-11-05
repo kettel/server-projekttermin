@@ -62,7 +62,6 @@ public class Server {
 			
 			// Skriv det uppdaterade objektet till databasen
 			db.updateModel(messUpdate);
-			db.deleteFromDB(messUpdate);
 		}
 		
 		testList = db.getAllFromDB(new Contact());
@@ -71,7 +70,6 @@ public class Server {
 			
 			Contact contUpd = new Contact(cont.getId(),"Nise",Long.valueOf("0130123"),"nisse@gdsasdf","s","A","Dålig lirare","192.168.1.1");
 			db.updateModel(contUpd);
-			db.deleteFromDB(contUpd);
 		}
 		
 		
@@ -82,8 +80,11 @@ public class Server {
 			Assignment assUpd = new Assignment(ass.getId(),"Katt i hav", Long.valueOf("12423423"),Long.valueOf("23423425"),"Kalle", "Nisse", "En katt i ett träd", "2 dagar", "Ej påbörjat", fakeImage, "Alstättersgata", "Lekplats");
 			
 			db.updateModel(assUpd);
-			db.deleteFromDB(assUpd);
 		}
+		
+		System.out.println("Antal meddelanden: " + db.getDBCount(new MessageModel()));
+		System.out.println("Antal kontakter: " + db.getDBCount(new Contact()));
+		System.out.println("Antal uppdrag: " + db.getDBCount(new Assignment()));
 		
 		
 	}
