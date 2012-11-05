@@ -5,26 +5,19 @@ import java.util.List;
 import model.Assignment;
 import model.ModelInterface;
 
-public class DatabaseHandlerAssignment {
+public class DatabaseHandlerAssignment extends DatabaseHandler{
 
-	public void addAssignment(Assignment m) {
+	@Override
+	public void addModel(ModelInterface m) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public int getAssignmentCount() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	public List<ModelInterface> getAllAssignments() {
+	@Override
+	public List<ModelInterface> getAllModels() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public void removeAssignment(Assignment m) {
-		// TODO Auto-generated method stub
-		
-	}
 
 }

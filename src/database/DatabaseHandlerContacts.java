@@ -5,26 +5,17 @@ import java.util.List;
 import model.Contact;
 import model.ModelInterface;
 
-public class DatabaseHandlerContacts {
+public class DatabaseHandlerContacts extends DatabaseHandler{
 
-	public void addContact(Contact m) {
+	@Override
+	public void addModel(ModelInterface m) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public int getContactCount() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	public List<ModelInterface> getAllContacts() {
+	@Override
+	public List<ModelInterface> getAllModels() {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-	public void removeContact(Contact m) {
-		// TODO Auto-generated method stub
-		
-	}
-
 }
