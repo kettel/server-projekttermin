@@ -1,6 +1,14 @@
 package server;
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.util.List;
+
+import model.Assignment;
+import model.Contact;
+import model.MessageModel;
+import model.ModelInterface;
+
+import database.Database;
 
 
 /**
@@ -21,7 +29,7 @@ public class Server {
 	private static boolean listening = true;
 
 	public static void main(String[] args) {
-		try {
+		/*try {
 			serverSocket = new ServerSocket(port);
 			
 			// Skapar en ny tråd som lyssnar på kommandon
@@ -35,6 +43,34 @@ public class Server {
 			serverSocket.close();
 		} catch (IOException e) {
 			System.out.println(e);
+		}*/
+		Database db = new Database();
+		// Testa att lägga till i DB
+		db.addToDB(new Contact("Nise",Long.valueOf("0130123"),"nisse@gdsasdf","s","A","Skön lirare","192.168.1.1"));
+		byte[] fakeImage = null;
+		db.addToDB(new Assignment("Katt i träd", Long.valueOf("12423423"),Long.valueOf("23423425"),"Kalle", "Nisse", "En katt i ett träd", "2 dagar", "Ej påbörjat", fakeImage, "Alstättersgata", "Lekplats"));
+		db.addToDB(new MessageModel("Hejsan svejsan jättemycket!!!", "Kalle"));
+		
+		// Testa att hämta från databasen
+		List<ModelInterface> testList = db.getAllFromDB(new MessageModel());
+		for (ModelInterface m : testList) {
+			MessageModel mess = (MessageModel) m;
+			System.out.println("Meddelandeinnehåll: " + mess.getMessageContent());
 		}
+		
+		testList = db.getAllFromDB(new Contact());
+		for (ModelInterface m : testList) {
+			Contact cont = (Contact) m;
+			System.out.println("Kontakt: " + cont.getContactName());
+		}
+		
+		testList = db.getAllFromDB(new Assignment());
+		for (ModelInterface m : testList) {
+			Assignment ass = (Assignment) m;
+			System.out.println("Uppdrag: " + ass.getAssignmentDescription());
+		}
+		
+		// Testa att uppdatera i databasen
+		
 	}
 }
