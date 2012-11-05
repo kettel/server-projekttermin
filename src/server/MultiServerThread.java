@@ -1,7 +1,9 @@
 package server;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.Socket;
 
 import model.Assignment;
@@ -9,7 +11,6 @@ import model.Contact;
 import model.MessageModel;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 
 import database.Database;
 
@@ -24,6 +25,8 @@ public class MultiServerThread extends Thread {
 	private Socket socket = null;
 	private BufferedReader input = null;
 	private String inputLine;
+	private PrintWriter output = null;
+	private Database db = null;
 
 	/**
 	 * Konstruktorn, tar emot en socket för porten vi lyssnar på
@@ -34,6 +37,7 @@ public class MultiServerThread extends Thread {
 	public MultiServerThread(Socket socket) {
 		super("MultiServerThread");
 		this.socket = socket;
+		db = new Database();
 	}
 
 	/**
@@ -75,42 +79,58 @@ public class MultiServerThread extends Thread {
 	 */
 	private void handleTypeOfInput(String input) {
 
-		//String inputType = input.substring(27, 34);
-		
-		Database db = new Database();
-
 		if (input.contains("\"databaseRepresentation\":\"message\"")) {
-			System.out
-					.println("Sending message to database and/or forwarding it.");
-
-			// Gson konverterar json-strängen till MessageModel-objektet igen
-			// och handleMsg skickar och sparar meddelandet.
-			MessageModel msg = (new Gson()).fromJson(input, MessageModel.class);
-			// Lägger in meddelandet i databasen
-			db.addToDB(msg);
-
+			handleMessage(input);
 		} else if (input.contains("\"databasetRepresentation\":\"assignment\"")) {
-			// Spara och/eller skicka vidare uppdraget.
-			
-			// Gson konverterar json-strängen till Assignment-objektet igen.
-			Assignment assignmentFromJson = (new Gson()).fromJson(input,
-					Assignment.class);
-			// Lägger in kontakten i databasen
-			db.addToDB(assignmentFromJson);
-
-			// *****Skicka vidare till enhet och databas!***********
+			handleAssignment(input);
 		} else if (input.contains("\"databasetRepresentation\":\"contact\"")) {
-			// Spara och/eller skicka vidare uppdraget.
-
-			// Gson konverterar json-strängen till MessageModel-objektet igen.
-			Contact contactFromJson = (new Gson()).fromJson(input,
-					Contact.class);
-			// Lägger in uppdraget i databasen
-			db.addToDB(contactFromJson);
-
-			// *****Skicka vidare till enhet och databas!***********
+			handleContact(input);
 		} else
 			System.out.println("Did not recognise inputtype.");
 	}
 
+	/**
+	 * Hanterar json-strägen om den är ett meddelande
+	 * @param message
+	 * Json-strängen av meddelandet
+	 */
+	private void handleMessage(String message) {
+		System.out.println("Sending message to database and/or forwarding it.");
+		// Gson konverterar json-strängen till MessageModel-objektet igen
+		MessageModel msg = (new Gson()).fromJson(message, MessageModel.class);
+		// Lägger in meddelandet i databasen
+		db.addToDB(msg);
+		// ******Skicka vidare till enhet!********
+		
+	}
+
+	/**
+	 * Hanterar json-strängen om den är ett uppdrag
+	 * @param assignment
+	 * Json-strängen av uppdraget
+	 */
+	private void handleAssignment(String assignment) {
+
+		// Gson konverterar json-strängen till Assignment-objektet igen.
+		Assignment assignmentFromJson = (new Gson()).fromJson(assignment,
+				Assignment.class);
+		// Lägger in kontakten i databasen
+		db.addToDB(assignmentFromJson);
+		// *****Skicka vidare till enhet och databas!***********
+	}
+
+	/**
+	 * Hanterar json-strängen om den är en kontakt
+	 * @param contact
+	 * Json-strängen av kontakten
+	 */
+	private void handleContact(String contact) {
+
+		// Gson konverterar json-strängen till MessageModel-objektet igen.
+		Contact contactFromJson = (new Gson()).fromJson(contact, Contact.class);
+		// Lägger in uppdraget i databasen
+		db.addToDB(contactFromJson);
+
+		// *****Skicka vidare till enhet och databas!***********
+	}
 }

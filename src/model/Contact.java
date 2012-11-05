@@ -2,13 +2,14 @@ package model;
 
 public class Contact implements ModelInterface {
 
-	private String databasetRepresentation = "contact";
+	private String databaseRepresentation = "contact";
 	private String contactName;
 	private Long contactPhoneNumber;
 	private String contactEmail;
 	private String contactClearanceLevel;
 	private String contactClassification;
 	private String contactComment;
+	private String inetAddress;
 
 	public Contact() {
 
@@ -76,6 +77,14 @@ public class Contact implements ModelInterface {
 
 	public String getDatabaseRepresentation() {
 		// TODO Auto-generated method stub
-		return databasetRepresentation;
+		return databaseRepresentation;
+	}
+	
+	public String getInetAddress(){
+		return inetAddress;
+	}
+	
+	public void setInetAddress(String inetAddress){
+		this.inetAddress = inetAddress;
 	}
 }

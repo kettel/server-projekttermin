@@ -22,7 +22,9 @@ public class Server {
 	public static void main(String[] args) {
 		try {
 			serverSocket = new ServerSocket(port);
-
+			
+			// Skapar en ny tråd som lyssnar på kommandon
+			new ServerTerminal().start();
 			// Lyssnar på anslutningar och skapar en ny tråd per anslutning så
 			// länge servern lyssnar efter anslutningar
 			while (listening) {
