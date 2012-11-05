@@ -51,7 +51,6 @@ public class Server {
 		db.addToDB(new Assignment("Katt i träd", Long.valueOf("12423423"),Long.valueOf("23423425"),"Kalle", "Nisse", "En katt i ett träd", "2 dagar", "Ej påbörjat", fakeImage, "Alstättersgata", "Lekplats"));
 		db.addToDB(new MessageModel("Hejsan svejsan jättemycket!!!", "Kalle"));
 		
-		System.out.println("Nu har jag lagt till i databasen. Hurra!");
 		// Testa att hämta från databasen
 		List<ModelInterface> testList = db.getAllFromDB(new MessageModel());
 		for (ModelInterface m : testList) {
