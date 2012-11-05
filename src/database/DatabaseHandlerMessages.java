@@ -69,11 +69,10 @@ public class DatabaseHandlerMessages extends DatabaseHandler{
             rs = pst.executeQuery();
             
             while (rs.next()) {
-            	System.out.println("Skriver medd..");
-            	MessageModel tempMess = new MessageModel(rs.getInt(0),
-						rs.getString(1),
+            	MessageModel tempMess = new MessageModel(rs.getInt(1),
 						rs.getString(2),
-						Long.valueOf(rs.getString(3)));
+						rs.getString(3),
+						Long.valueOf(rs.getString(4)));
             	System.out.println("Meddelande: "+ tempMess.getId());
             	returnList.add((ModelInterface) tempMess);
             }
