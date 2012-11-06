@@ -118,19 +118,19 @@ public class MultiServerThread extends Thread {
 		System.out.println(hashMap.keySet());
 		
 		
-		try {
-			send(message, socket.getOutputStream());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			System.out.println(e);
-		}
+//		try {
+//			send(message, socket.getOutputStream());
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			System.out.println(e);
+//		}
 		
 		
 		//for (ModelInterface m : list) {
 			//Contact cont = (Contact) m;
 			if (/*cont.getContactName().equals(msg.getReciever())
 					&& */(hashMap.keySet().contains(socket.getInetAddress().toString()))) {
-				Server.send(message, hashMap.get(socket.getInetAddress()));
+				send(message, hashMap.get(socket.getInetAddress()));
 				System.out.println();
 				System.out.println("**********Sending: " + message);
 				System.out.println("**********To: " + socket.getInetAddress());
