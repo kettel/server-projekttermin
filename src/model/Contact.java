@@ -2,23 +2,35 @@ package model;
 
 public class Contact implements ModelInterface {
 
-	private String databaseRepresentation = "contact";
+	// Typen av modell
+	private String databasetRepresentation = "contact";
+	// Id för modellen (Sätts av databasen så pilla inte)
 	private long id = -1;
-	
+	// Användarnamnet på konakten
 	private String contactName;
-	private Long contactPhoneNumber;
+	// Telefonnumret till kontakten
+	private long contactPhoneNumber;
+	// E-mailadressen till kontakten
 	private String contactEmail;
+	// Kontaktens behörighetsnivå för att komma åt filer
 	private String contactClearanceLevel;
+	// Kontaktens titel (t.ex. chef,städare,kung,terrorist)
 	private String contactClassification;
+	// Kommentar om kontakten
 	private String contactComment;
+	// Kontaktens ip
 	private String inetAddress;
 
+	/**
+	 * Tom konstruktor for Contact
+	 */
 	public Contact() {
 
 	}
 
 	/**
 	 * Konstruktor för att skapa en ny kontakt som inte finns i databasen.
+	 * 
 	 * @param contactName
 	 * @param contactPhoneNumber
 	 * @param contactEmail
@@ -38,9 +50,10 @@ public class Contact implements ModelInterface {
 		this.contactComment = contactComment;
 		this.inetAddress = inetAdress;
 	}
-	
+
 	/**
 	 * Konstruktor för att återskapa en kontakt från databasen då ett Id finns.
+	 * 
 	 * @param id
 	 * @param contactName
 	 * @param contactPhoneNumber
@@ -112,18 +125,19 @@ public class Contact implements ModelInterface {
 	}
 
 	public String getDatabaseRepresentation() {
-		return databaseRepresentation;
-	}
-	
-	public String getInetAddress(){
-		return inetAddress;
-	}
-	
-	public void setInetAddress(String inetAddress){
-		this.inetAddress = inetAddress;
+		return databasetRepresentation;
 	}
 
 	public long getId() {
 		return id;
 	}
+
+	public String getInetAddress() {
+		return inetAddress;
+	}
+
+	public void setInetAddress(String inetAddress) {
+		this.inetAddress = inetAddress;
+	}
+
 }

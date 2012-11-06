@@ -5,10 +5,15 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.net.SocketOptions;
+import java.net.UnknownHostException;
+import java.util.Iterator;
+import java.util.List;
 
 import model.Assignment;
 import model.Contact;
 import model.MessageModel;
+import model.ModelInterface;
 
 import com.google.gson.Gson;
 
@@ -27,7 +32,8 @@ public class MultiServerThread extends Thread {
 	private String inputLine;
 	private PrintWriter output = null;
 	private Database db = null;
-
+	private List<ModelInterface> list = null;
+	
 	/**
 	 * Konstruktorn, tar emot en socket för porten vi lyssnar på
 	 * 
@@ -54,7 +60,7 @@ public class MultiServerThread extends Thread {
 			inputLine = input.readLine();
 
 			// Trace: Ett meddelande/assingment/kontakt har tagits emot.
-			System.out.println(socket.getInetAddress() + ": " + inputLine);
+			System.out.println(socket.getInetAddress() + " " + socket.getPort() + ": " + inputLine);
 
 			// Bestämmer vilken typ av input som kommer in. När det avgjorts
 			// sparas och/eller skickas input:en vidare.
@@ -101,7 +107,13 @@ public class MultiServerThread extends Thread {
 		// Lägger in meddelandet i databasen
 		db.addToDB(msg);
 		// ******Skicka vidare till enhet!********
-		
+		list = db.getAllFromDB(new Contact());
+		for (ModelInterface m : list) {
+			Contact cont = (Contact) m;
+			if(cont.getContactName().equals(msg.getReciever())){ // contactName = användarnamn?
+			
+			}
+		}
 	}
 
 	/**

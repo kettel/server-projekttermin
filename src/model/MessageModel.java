@@ -4,34 +4,57 @@ import java.util.Calendar;
 
 public class MessageModel implements ModelInterface {
 
+	// Vilken typ av modell detta är
 	private String databaseRepresentation = "message";
+	// Id för igenkänning i databasen (Sätts av databasen,pilla inte)
 	private long id = -1;
-	
+	// Meddelandet tillhörande meddelandemodellen
 	private String messageContent;
+	// Användarnamnet på den person som skickade meddelandemodellen
+	private String sender;
+	// Användarnamnet på den person man ska skicka till
 	private String reciever;
+	// Tidsstämpel på när ett meddelande skickats
 	private long messageTimeStamp;
 
+	/**
+	 * Tom konstruktor. Används för att hämta från databasen.
+	 */
 	public MessageModel() {
 
 	}
 
-	// Mesage borde döpas om till något annat liknande
-	public MessageModel(CharSequence messageContent, CharSequence reciever) {
-		this.messageContent = (String) messageContent;
-		this.reciever = (String) reciever;
-		this.messageTimeStamp = Calendar.getInstance().getTimeInMillis();
+	/**
+	 * Konstruktor för att skapa ett nytt meddelande
+	 * 
+	 * @param messageContent
+	 * @param reciever
+	 */
+	public MessageModel(String messageContent, String reciever) {
+		this.messageContent = messageContent;
+		this.reciever = reciever;
+
+		messageTimeStamp = Calendar.getInstance().getTimeInMillis();
 	}
 
-	public MessageModel(long id, CharSequence messageContent, CharSequence reciever,
-			long timeStamp) {
+	/**
+	 * Konstruktor för att återskapa ett existerande meddelande
+	 * 
+	 * @param messageContent
+	 * @param reciever
+	 * @param timeStamp
+	 */
+
+	public MessageModel(long id, String messageContent, String reciever,
+			long messageTimeStamp) {
 		this.id = id;
-		this.messageContent = (String) messageContent;
-		this.reciever = (String) reciever;
-		this.messageTimeStamp = timeStamp;
+		this.messageContent = messageContent;
+		this.reciever = reciever;
+		this.messageTimeStamp = messageTimeStamp;
 	}
 
 	public CharSequence getMessageContent() {
-		return messageContent;
+		return (CharSequence) messageContent;
 	}
 
 	public CharSequence getReciever() {
@@ -43,11 +66,9 @@ public class MessageModel implements ModelInterface {
 	}
 
 	public String getDatabaseRepresentation() {
-		// TODO Auto-generated method stub
 		return databaseRepresentation;
 	}
 
-	@Override
 	public long getId() {
 		return id;
 	}
