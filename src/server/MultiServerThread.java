@@ -117,6 +117,7 @@ public class MultiServerThread extends Thread {
 		list = db.getAllFromDB(new Contact());
 		System.out.println(hashMap.keySet());
 		
+		
 		try {
 			send(message, socket.getOutputStream());
 		} catch (IOException e) {
@@ -128,7 +129,7 @@ public class MultiServerThread extends Thread {
 		//for (ModelInterface m : list) {
 			//Contact cont = (Contact) m;
 			if (/*cont.getContactName().equals(msg.getReciever())
-					&& */(hashMap.keySet().contains(socket.getInetAddress()))) {
+					&& */(hashMap.keySet().contains(socket.getInetAddress().toString()))) {
 				Server.send(message, hashMap.get(socket.getInetAddress()));
 				System.out.println();
 				System.out.println("**********Sending: " + message);
