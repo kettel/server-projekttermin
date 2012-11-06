@@ -107,12 +107,23 @@ public class MultiServerThread extends Thread {
 	private void handleMessage(String message) {
 		System.out.println("Sending message to database and/or forwarding it.");
 		System.out.println("hashMap empty: " + hashMap.isEmpty());
+		System.out.println("socket.inetAddress = " + socket.getInetAddress());
 		// Gson konverterar json-strängen till MessageModel-objektet igen
 		MessageModel msg = (new Gson()).fromJson(message, MessageModel.class);
 		// Lägger in meddelandet i databasen
 		db.addToDB(msg);
 		// ******Skicka vidare till enhet!********
 		list = db.getAllFromDB(new Contact());
+		
+		
+		try {
+			Server.send(message, socket.getOutputStream());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
 		//for (ModelInterface m : list) {
 			//Contact cont = (Contact) m;
 			if (/*cont.getContactName().equals(msg.getReciever())
