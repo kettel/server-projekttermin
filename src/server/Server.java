@@ -52,6 +52,7 @@ public class Server {
 	}
 
 	public static void send(String msg, OutputStream output) {
+		System.out.println("SKICKARÅÅÅÅÅÅÅÅÅ");
 		PrintWriter pr = new PrintWriter(output, true);
 		pr.write(msg);
 	}

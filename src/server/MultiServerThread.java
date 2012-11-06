@@ -120,7 +120,7 @@ public class MultiServerThread extends Thread {
 			Server.send(message, socket.getOutputStream());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println(e);
 		}
 		
 		
