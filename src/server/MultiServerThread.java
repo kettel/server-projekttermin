@@ -114,9 +114,14 @@ public class MultiServerThread extends Thread {
 		list = db.getAllFromDB(new Contact());
 		for (ModelInterface m : list) {
 			Contact cont = (Contact) m;
-			if (cont.getContactName().equals(msg.getReciever())
-					&& (hashMap.keySet().contains(cont.getInetAddress()))) {
+			if (/*cont.getContactName().equals(msg.getReciever())
+					&& */(hashMap.keySet().contains(cont.getInetAddress()))) {
 				Server.send(message, hashMap.get(cont.getInetAddress()));
+				System.out.println();
+				System.out.println("**********Sending: " + message);
+				System.out.println("**********To: " + cont.getInetAddress());
+				System.out.println("hashMap empty: " + hashMap.isEmpty());
+				System.out.println();
 			}
 		}
 	}
