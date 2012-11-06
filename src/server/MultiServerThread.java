@@ -3,12 +3,10 @@ package server;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.OutputStream;
 import java.net.Socket;
-import java.net.SocketOptions;
-import java.net.UnknownHostException;
-import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 import model.Assignment;
 import model.Contact;
@@ -30,19 +28,22 @@ public class MultiServerThread extends Thread {
 	private Socket socket = null;
 	private BufferedReader input = null;
 	private String inputLine;
-	private PrintWriter output = null;
 	private Database db = null;
 	private List<ModelInterface> list = null;
-	
+	private boolean connected = true;
+	private ConcurrentHashMap<String, OutputStream> hashMap = null;
+
 	/**
 	 * Konstruktorn, tar emot en socket för porten vi lyssnar på
 	 * 
 	 * @param socket
 	 *            Den socket som anslutningen sker genom
 	 */
-	public MultiServerThread(Socket socket) {
+	public MultiServerThread(Socket socket,
+			ConcurrentHashMap<String, OutputStream> hashMap) {
 		super("MultiServerThread");
 		this.socket = socket;
+		this.hashMap = hashMap;
 		db = new Database();
 	}
 
@@ -52,20 +53,22 @@ public class MultiServerThread extends Thread {
 	public void run() {
 
 		try {
-			// Buffrar ihop flera tecken från InputStreamen till en sträng
-			input = new BufferedReader(new InputStreamReader(
-					socket.getInputStream()));
+			while (connected) {
+				// Buffrar ihop flera tecken från InputStreamen till en sträng
+				input = new BufferedReader(new InputStreamReader(
+						socket.getInputStream()));
 
-			// Läser den buffrade strängen
-			inputLine = input.readLine();
+				// Läser den buffrade strängen
+				inputLine = input.readLine();
 
-			// Trace: Ett meddelande/assingment/kontakt har tagits emot.
-			System.out.println(socket.getInetAddress() + " " + socket.getPort() + ": " + inputLine);
+				// Trace: Ett meddelande/assingment/kontakt har tagits emot.
+				System.out.println(socket.getInetAddress() + " "
+						+ socket.getPort() + ": " + inputLine);
 
-			// Bestämmer vilken typ av input som kommer in. När det avgjorts
-			// sparas och/eller skickas input:en vidare.
-			handleTypeOfInput(inputLine);
-
+				// Bestämmer vilken typ av input som kommer in. När det avgjorts
+				// sparas och/eller skickas input:en vidare.
+				handleTypeOfInput(inputLine);
+			}
 			// Stänger buffern
 			input.close();
 			// Stänger anslutningen
@@ -97,8 +100,9 @@ public class MultiServerThread extends Thread {
 
 	/**
 	 * Hanterar json-strägen om den är ett meddelande
+	 * 
 	 * @param message
-	 * Json-strängen av meddelandet
+	 *            Json-strängen av meddelandet
 	 */
 	private void handleMessage(String message) {
 		System.out.println("Sending message to database and/or forwarding it.");
@@ -110,16 +114,18 @@ public class MultiServerThread extends Thread {
 		list = db.getAllFromDB(new Contact());
 		for (ModelInterface m : list) {
 			Contact cont = (Contact) m;
-			if(cont.getContactName().equals(msg.getReciever())){ // contactName = användarnamn?
-			
+			if (cont.getContactName().equals(msg.getReciever())
+					&& (hashMap.keySet().contains(cont.getInetAddress()))) {
+				Server.send(message, hashMap.get(cont.getInetAddress()));
 			}
 		}
 	}
 
 	/**
 	 * Hanterar json-strängen om den är ett uppdrag
+	 * 
 	 * @param assignment
-	 * Json-strängen av uppdraget
+	 *            Json-strängen av uppdraget
 	 */
 	private void handleAssignment(String assignment) {
 
@@ -129,19 +135,25 @@ public class MultiServerThread extends Thread {
 		// Lägger in kontakten i databasen
 		db.addToDB(assignmentFromJson);
 		// *****Skicka vidare till enhet och databas!***********
+		list = db.getAllFromDB(new Contact());
+		for (ModelInterface m : list) {
+			Contact cont = (Contact) m;
+			Server.send(assignment, hashMap.get(cont.getInetAddress()));
+		}
 	}
 
 	/**
 	 * Hanterar json-strängen om den är en kontakt
+	 * 
 	 * @param contact
-	 * Json-strängen av kontakten
+	 *            Json-strängen av kontakten
 	 */
 	private void handleContact(String contact) {
 
 		// Gson konverterar json-strängen till MessageModel-objektet igen.
 		Contact contactFromJson = (new Gson()).fromJson(contact, Contact.class);
 		// Lägger in uppdraget i databasen
-		db.addToDB(contactFromJson);
+		db.updateModel(contactFromJson);
 
 		// *****Skicka vidare till enhet och databas!***********
 	}
