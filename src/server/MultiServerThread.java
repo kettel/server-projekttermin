@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -114,10 +115,10 @@ public class MultiServerThread extends Thread {
 		db.addToDB(msg);
 		// ******Skicka vidare till enhet!********
 		list = db.getAllFromDB(new Contact());
-		
+		System.out.println(hashMap.keySet());
 		
 		try {
-			Server.send(message, socket.getOutputStream());
+			send(message, socket.getOutputStream());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			System.out.println(e);
@@ -173,5 +174,11 @@ public class MultiServerThread extends Thread {
 		db.updateModel(contactFromJson);
 
 		// *****Skicka vidare till enhet och databas!***********
+	}
+	
+	private void send(String msg, OutputStream output) {
+		System.out.println("SKICKARÅÅÅÅÅÅÅÅÅ");
+		PrintWriter pr = new PrintWriter(output, true);
+		pr.write(msg);
 	}
 }
