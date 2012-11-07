@@ -2,7 +2,6 @@ package server;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.ConcurrentHashMap;
@@ -24,7 +23,6 @@ public class Server {
 	// En boolean som avgör om servern lyssnar på anslutningar
 	private static boolean listening = true;
 	private static ConcurrentHashMap<String, OutputStream> hashMap;
-	//private static OutputStream out = null;
 
 	public static void main(String[] args) {
 		try {
@@ -51,9 +49,9 @@ public class Server {
 		}
 	}
 
-	public static void send(String msg, OutputStream output) {
-		System.out.println("SKICKARÅÅÅÅÅÅÅÅÅ");
-		PrintWriter pr = new PrintWriter(output, true);
-		pr.write(msg);
-	}
+	/*
+	 * public static void send(String msg, OutputStream output) {
+	 * System.out.println("SKICKARÅÅÅÅÅÅÅÅÅ"); PrintWriter pr = new
+	 * PrintWriter(output, true); pr.write(msg); }
+	 */
 }

@@ -61,7 +61,7 @@ public class MultiServerThread extends Thread {
 
 				// Läser den buffrade strängen
 				inputLine = input.readLine();
-				if(inputLine.equals("exit")){
+				if (inputLine.equals("exit")) {
 					connected = false;
 				}
 
@@ -73,7 +73,7 @@ public class MultiServerThread extends Thread {
 				// sparas och/eller skickas input:en vidare.
 				handleTypeOfInput(inputLine);
 			}
-			hashMap.remove(socket.getInetAddress().toString(), socket.getOutputStream());
+
 			// Stänger buffern
 			input.close();
 			// Stänger anslutningen
@@ -100,7 +100,13 @@ public class MultiServerThread extends Thread {
 		} else if (input.contains("\"databasetRepresentation\":\"contact\"")) {
 			handleContact(input);
 		} else
-			System.out.println("Did not recognise inputtype.");
+			try {
+				send("Did not recognise inputtype.", socket.getOutputStream());
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		System.out.println("Did not recognise inputtype.");
 	}
 
 	/**
@@ -110,28 +116,30 @@ public class MultiServerThread extends Thread {
 	 *            Json-strängen av meddelandet
 	 */
 	private void handleMessage(String message) {
-		System.out.println("Sending message to database and/or forwarding it.");
-		System.out.println("hashMap empty: " + hashMap.isEmpty() + " keySet: " + hashMap.keySet());
+		System.out.println("hashMap empty: " + hashMap.isEmpty() + " keySet: "
+				+ hashMap.keySet());
 		System.out.println("socket.inetAddress = " + socket.getInetAddress());
 		// Gson konverterar json-strängen till MessageModel-objektet igen
-		MessageModel msg = (new Gson()).fromJson(message, MessageModel.class);
-		// Lägger in meddelandet i databasen
-		db.addToDB(msg);
+		try {
+			MessageModel msg = (new Gson()).fromJson(message,
+					MessageModel.class);
+			// Lägger in meddelandet i databasen
+			db.addToDB(msg);
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+
 		// ******Skicka vidare till enhet!********
-		list = db.getAllFromDB(new Contact());
 		
-		//for (ModelInterface m : list) {
-			//Contact cont = (Contact) m;
-			if (/*cont.getContactName().equals(msg.getReciever())
-					&& */(hashMap.keySet().contains(socket.getInetAddress().toString()))) {
-				send(message, hashMap.get(socket.getInetAddress().toString()));
-				System.out.println();
-				System.out.println("**********Sending: " + message);
-				System.out.println("**********To: " + socket.getInetAddress());
-				System.out.println("hashMap empty: " + hashMap.isEmpty());
-				System.out.println();
-			}
-		//}
+		list = db.getAllFromDB(new Contact());
+		// for (ModelInterface m : list) {
+		// Contact cont = (Contact) m;
+		if (/*
+			 * cont.getContactName().equals(msg.getReciever()) &&
+			 */(hashMap.keySet().contains(socket.getInetAddress().toString()))) {
+			send(message, hashMap.get(socket.getInetAddress().toString()));
+		}
+		// }
 	}
 
 	/**
@@ -143,15 +151,20 @@ public class MultiServerThread extends Thread {
 	private void handleAssignment(String assignment) {
 
 		// Gson konverterar json-strängen till Assignment-objektet igen.
-		Assignment assignmentFromJson = (new Gson()).fromJson(assignment,
-				Assignment.class);
-		// Lägger in kontakten i databasen
-		db.addToDB(assignmentFromJson);
+		try{
+			Assignment assignmentFromJson = (new Gson()).fromJson(assignment,
+					Assignment.class);
+			// Lägger in kontakten i databasen
+			db.addToDB(assignmentFromJson);	
+		}catch(Exception e){
+			System.out.println(e);
+		}
+		
 		// *****Skicka vidare till enhet och databas!***********
 		list = db.getAllFromDB(new Contact());
 		for (ModelInterface m : list) {
 			Contact cont = (Contact) m;
-			Server.send(assignment, hashMap.get(cont.getInetAddress()));
+			send(assignment, hashMap.get(cont.getInetAddress()));
 		}
 	}
 
@@ -164,15 +177,30 @@ public class MultiServerThread extends Thread {
 	private void handleContact(String contact) {
 
 		// Gson konverterar json-strängen till MessageModel-objektet igen.
-		Contact contactFromJson = (new Gson()).fromJson(contact, Contact.class);
-		// Lägger in uppdraget i databasen
-		db.updateModel(contactFromJson);
-
+		try{
+			Contact contactFromJson = (new Gson()).fromJson(contact, Contact.class);
+			// Lägger in uppdraget i databasen
+			db.updateModel(contactFromJson);
+		}catch(Exception e){
+			System.out.println(e);
+		}
+		
 		// *****Skicka vidare till enhet och databas!***********
+		for (ModelInterface m : list) {
+			Contact cont = (Contact) m;
+			send(contact, hashMap.get(cont.getInetAddress()));
+		}
 	}
-	
+
+	/**
+	 * Skickar en sträng till en viss OutputStream
+	 * 
+	 * @param msg
+	 *            Meddelandet som ska skickas
+	 * @param output
+	 *            Den OutputStream som meddelandet ska skickas till
+	 */
 	private void send(String msg, OutputStream output) {
-		System.out.println("SKICKARÅÅÅÅÅÅÅÅÅ");
 		PrintWriter pr = new PrintWriter(output, true);
 		pr.println(msg);
 	}
