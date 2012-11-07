@@ -24,7 +24,7 @@ public class Server {
 	// En boolean som avgör om servern lyssnar på anslutningar
 	private static boolean listening = true;
 	private static ConcurrentHashMap<String, OutputStream> hashMap;
-	private static OutputStream out = null;
+	//private static OutputStream out = null;
 
 	public static void main(String[] args) {
 		try {
@@ -37,7 +37,7 @@ public class Server {
 			// länge servern lyssnar efter anslutningar
 			while (listening) {
 				Socket client = serverSocket.accept();
-				out = client.getOutputStream();
+				OutputStream out = client.getOutputStream();
 				// skapa output
 				// länka med ip med client.getoutput?
 				new MultiServerThread(client, hashMap).start();

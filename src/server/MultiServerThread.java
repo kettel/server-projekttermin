@@ -118,12 +118,12 @@ public class MultiServerThread extends Thread {
 		System.out.println(hashMap.keySet());
 		
 		
-//		try {
-//			send(message, socket.getOutputStream());
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			System.out.println(e);
-//		}
+		try {
+			send(message, socket.getOutputStream());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			System.out.println(e);
+		}
 		
 		
 		//for (ModelInterface m : list) {
@@ -180,6 +180,6 @@ public class MultiServerThread extends Thread {
 	private void send(String msg, OutputStream output) {
 		System.out.println("SKICKARÅÅÅÅÅÅÅÅÅ");
 		PrintWriter pr = new PrintWriter(output, true);
-		pr.write(msg);
+		pr.println(msg);
 	}
 }
