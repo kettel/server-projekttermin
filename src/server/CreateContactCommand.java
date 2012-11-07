@@ -30,7 +30,7 @@ public class CreateContactCommand implements CommandInterface {
 			newContact.setContactClassification(in.nextLine());
 			System.out.print("Kontaktbeskrivning: ");
 			newContact.setContactComment(in.nextLine());
-			System.out.println("Kontaktens IP: ");
+			System.out.print("Kontaktens IP: ");
 			newContact.setInetAddress(in.nextLine());
 
 			System.out

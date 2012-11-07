@@ -122,9 +122,10 @@ public class MultiServerThread extends Thread {
 		System.out.println("hashMap empty: " + hashMap.isEmpty() + " keySet: "
 				+ hashMap.keySet());
 		System.out.println("socket.inetAddress = " + socket.getInetAddress());
+		MessageModel msg = null;
 		// Gson konverterar json-strängen till MessageModel-objektet igen
 		try {
-			MessageModel msg = (new Gson()).fromJson(message,
+			msg = (new Gson()).fromJson(message,
 					MessageModel.class);
 			// Lägger in meddelandet i databasen
 			db.addToDB(msg);
@@ -133,14 +134,14 @@ public class MultiServerThread extends Thread {
 		}
 
 		list = db.getAllFromDB(new Contact());
-		// for (ModelInterface m : list) {
-		// Contact cont = (Contact) m;
-		if (/*
-			 * cont.getContactName().equals(msg.getReciever()) &&
-			 */(hashMap.keySet().contains(socket.getInetAddress().toString()))) {
-			send(message, hashMap.get(socket.getInetAddress().toString()));
+		for (ModelInterface m : list) {
+			Contact cont = (Contact) m;
+			if (cont.getContactName().equals(msg.getReciever())
+					&& (hashMap.keySet().contains(socket.getInetAddress()
+							.toString()))) {
+				send(message, hashMap.get(socket.getInetAddress().toString()));
+			}
 		}
-		// }
 	}
 
 	/**
