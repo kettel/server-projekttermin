@@ -61,7 +61,6 @@ public class MultiServerThread extends Thread {
 
 				// Läser den buffrade strängen
 				inputLine = input.readLine();
-				System.out.println("Input: " + inputLine);
 				if (inputLine.equals("exit")) {
 					connected = false;
 					break;
@@ -121,7 +120,6 @@ public class MultiServerThread extends Thread {
 	private void handleMessage(String message) {
 		System.out.println("hashMap empty: " + hashMap.isEmpty() + " keySet: "
 				+ hashMap.keySet());
-		System.out.println("socket.inetAddress = " + socket.getInetAddress());
 		MessageModel msg = new MessageModel();
 		// Gson konverterar json-strängen till MessageModel-objektet igen
 		try {
