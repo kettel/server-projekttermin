@@ -138,10 +138,10 @@ public class MultiServerThread extends Thread {
 			Contact cont = (Contact) m;
 			System.out.println("cont name: " + cont.getContactName() + "    msg reciever: " + msg.getReciever() + "     cont inet: " + cont.getInetAddress());
 			if (cont.getContactName().equals(msg.getReciever())
-					&& (hashMap.keySet().contains(cont.getInetAddress()
+					&& (hashMap.keySet().contains(socket.getInetAddress()
 							.toString()))) {
 				System.out.println("Nu skickar den vidare skiten");
-				send(message, hashMap.get(cont.getInetAddress().toString()));
+				send(message, hashMap.get(socket.getInetAddress().toString()));
 			}
 		}
 	}
