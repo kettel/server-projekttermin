@@ -136,6 +136,7 @@ public class MultiServerThread extends Thread {
 		list = db.getAllFromDB(new Contact());
 		for (ModelInterface m : list) {
 			Contact cont = (Contact) m;
+			System.out.println(cont.getContactName());
 			if (cont.getContactName().equals(msg.getReciever())
 					&& (hashMap.keySet().contains(socket.getInetAddress()
 							.toString()))) {
