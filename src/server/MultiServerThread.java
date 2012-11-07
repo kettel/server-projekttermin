@@ -61,6 +61,9 @@ public class MultiServerThread extends Thread {
 
 				// Läser den buffrade strängen
 				inputLine = input.readLine();
+				if(inputLine.equals("exit")){
+					connected = false;
+				}
 
 				// Trace: Ett meddelande/assingment/kontakt har tagits emot.
 				System.out.println(socket.getInetAddress() + " "
@@ -70,6 +73,7 @@ public class MultiServerThread extends Thread {
 				// sparas och/eller skickas input:en vidare.
 				handleTypeOfInput(inputLine);
 			}
+			hashMap.remove(socket.getInetAddress().toString(), socket.getOutputStream());
 			// Stänger buffern
 			input.close();
 			// Stänger anslutningen
@@ -107,7 +111,7 @@ public class MultiServerThread extends Thread {
 	 */
 	private void handleMessage(String message) {
 		System.out.println("Sending message to database and/or forwarding it.");
-		System.out.println("hashMap empty: " + hashMap.isEmpty());
+		System.out.println("hashMap empty: " + hashMap.isEmpty() + " keySet: " + hashMap.keySet());
 		System.out.println("socket.inetAddress = " + socket.getInetAddress());
 		// Gson konverterar json-strängen till MessageModel-objektet igen
 		MessageModel msg = (new Gson()).fromJson(message, MessageModel.class);
@@ -115,16 +119,6 @@ public class MultiServerThread extends Thread {
 		db.addToDB(msg);
 		// ******Skicka vidare till enhet!********
 		list = db.getAllFromDB(new Contact());
-		System.out.println(hashMap.keySet());
-		
-		
-		try {
-			send(message, socket.getOutputStream());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			System.out.println(e);
-		}
-		
 		
 		//for (ModelInterface m : list) {
 			//Contact cont = (Contact) m;
