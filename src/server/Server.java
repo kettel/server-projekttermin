@@ -41,7 +41,8 @@ public class Server {
 				new MultiServerThread(client, hashMap).start();
 				hashMap.put(client.getInetAddress().toString(), out);
 			}
-
+			//********TA BORT KLIENTEN UR HASHMAPEN OM ANSLUTNINGEN STÄNGS*********
+			
 			// Stänger socketen, anslutningar är inte längre tillåtna
 			serverSocket.close();
 		} catch (IOException e) {
