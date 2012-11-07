@@ -140,7 +140,7 @@ public class MultiServerThread extends Thread {
 			if (cont.getContactName().equals(msg.getReciever().toString())
 					&& (hashMap.keySet().contains("/"+cont.getInetAddress().toString()))) {
 				System.out.println("Nu skickar den vidare skiten");
-				send(message, hashMap.get(cont.getInetAddress().toString()));
+				send(message, hashMap.get("/"+cont.getInetAddress().toString()));
 			}
 		}
 	}
