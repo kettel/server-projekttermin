@@ -63,6 +63,7 @@ public class MultiServerThread extends Thread {
 				inputLine = input.readLine();
 				if (inputLine.equals("exit")) {
 					connected = false;
+					break;
 				}
 
 				// Trace: Ett meddelande/assingment/kontakt har tagits emot.
