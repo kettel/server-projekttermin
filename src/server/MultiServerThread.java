@@ -61,6 +61,7 @@ public class MultiServerThread extends Thread {
 
 				// Läser den buffrade strängen
 				inputLine = input.readLine();
+				System.out.println("Input: " + inputLine);
 				if (inputLine.equals("exit")) {
 					connected = false;
 					break;
