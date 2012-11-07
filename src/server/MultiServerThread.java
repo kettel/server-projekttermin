@@ -122,7 +122,7 @@ public class MultiServerThread extends Thread {
 		System.out.println("hashMap empty: " + hashMap.isEmpty() + " keySet: "
 				+ hashMap.keySet());
 		System.out.println("socket.inetAddress = " + socket.getInetAddress());
-		MessageModel msg = null;
+		MessageModel msg = new MessageModel();
 		// Gson konverterar json-strängen till MessageModel-objektet igen
 		try {
 			msg = (new Gson()).fromJson(message,
@@ -134,6 +134,7 @@ public class MultiServerThread extends Thread {
 		}
 
 		list = db.getAllFromDB(new Contact());
+		// Jämför om kontakten man vill skicka till finns i databasen och om kontakten är uppkopplad mot servern
 		for (ModelInterface m : list) {
 			Contact cont = (Contact) m;
 			if (cont.getContactName().equals(msg.getReciever().toString())
@@ -169,7 +170,7 @@ public class MultiServerThread extends Thread {
 			if (hashMap.keySet().contains(cont.getInetAddress().toString())
 					&& !cont.getInetAddress().equals(
 							socket.getInetAddress().toString())) {
-				send(assignment, hashMap.get(cont.getInetAddress()));
+				send(assignment, hashMap.get("/"+cont.getInetAddress().toString()));
 			}
 		}
 	}
@@ -199,7 +200,7 @@ public class MultiServerThread extends Thread {
 			if (hashMap.keySet().contains(cont.getInetAddress().toString())
 					&& !cont.getInetAddress().equals(
 							socket.getInetAddress().toString()))
-				send(contact, hashMap.get(cont.getInetAddress()));
+				send(contact, hashMap.get("/"+cont.getInetAddress().toString()));
 		}
 	}
 
