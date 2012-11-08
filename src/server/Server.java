@@ -50,8 +50,6 @@ public class Server {
 			while (listening) {
 				client = serverSocket.accept();
 				OutputStream out = client.getOutputStream();
-				// skapa output
-				// länka med ip med client.getoutput?
 				new MultiServerThread(client, this).start();
 				hashMap.put(client.getInetAddress().toString(), out);
 			}
@@ -62,32 +60,76 @@ public class Server {
 		}
 	}
 
-	public void send(String msg, String reciever) {
+	/**
+	 * Skickar till en specifik klient
+	 * 
+	 * @param stringToBeSent
+	 *            Strängen som ska skickas
+	 * @param reciever
+	 *            Mottagarens namn
+	 */
+	public void send(String stringToBeSent, String reciever) {
 		System.out.println("hashMap empty: " + hashMap.isEmpty() + " keySet: "
 				+ hashMap.keySet());
 		list = db.getAllFromDB(new Contact());
 		for (ModelInterface m : list) {
 			Contact cont = (Contact) m;
-			if (reciever.equals(cont.getContactName()) && hashMap.keySet().contains("/" + cont.getInetAddress())) {
-				PrintWriter pr = new PrintWriter(hashMap.get("/"+cont.getInetAddress()), true);
-				pr.println(msg);
+			if (reciever.equals(cont.getContactName())
+					&& hashMap.keySet().contains("/" + cont.getInetAddress())) {
+				PrintWriter pr = new PrintWriter(hashMap.get("/"
+						+ cont.getInetAddress()), true);
+				pr.println(stringToBeSent);
 			}
 		}
 	}
 
-	public void sendToAll(String msg) {
+	/**
+	 * Skickar till alla som är anslutna i systemet
+	 * 
+	 * @param stringToBeSent
+	 *            Strängen som ska skickas
+	 */
+	public void sendToAll(String stringToBeSent) {
 		list = db.getAllFromDB(new Contact());
 		for (ModelInterface m : list) {
 			Contact cont = (Contact) m;
-			if (hashMap.keySet().contains("/"+cont.getInetAddress())) {
-				PrintWriter pr = new PrintWriter(hashMap.get("/"+cont
-						.getInetAddress()), true);
-				pr.println(msg);
+			if (hashMap.keySet().contains("/" + cont.getInetAddress())) {
+				PrintWriter pr = new PrintWriter(hashMap.get("/"
+						+ cont.getInetAddress()), true);
+				pr.println(stringToBeSent);
 			}
 		}
 	}
 
-	public void removeClient(String string) {
-		hashMap.remove(string);
+	/**
+	 * Skickar till alla som är anslutna i systemet förutom den som skickade
+	 * strängen
+	 * 
+	 * @param stringToBeSent
+	 *            Strängen som ska skickas
+	 * @param sendersIP
+	 *            IP:t på användaren som skickade strängen
+	 */
+	public void sendToAllExceptTheSender(String stringToBeSent, String sendersIP) {
+		list = db.getAllFromDB(new Contact());
+		for (ModelInterface m : list) {
+			Contact cont = (Contact) m;
+			if (!sendersIP.equals(cont.getInetAddress())
+					&& hashMap.keySet().contains("/" + cont.getInetAddress())) {
+				PrintWriter pr = new PrintWriter(hashMap.get("/"
+						+ cont.getInetAddress()), true);
+				pr.println(stringToBeSent);
+			}
+		}
+	}
+
+	/**
+	 * Tar bort en användare från hashMapen
+	 * 
+	 * @param string
+	 *            IP:t på användaren
+	 */
+	public void removeClient(String usersIP) {
+		hashMap.remove(usersIP);
 	}
 }

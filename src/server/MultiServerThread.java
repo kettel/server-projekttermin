@@ -35,13 +35,14 @@ public class MultiServerThread extends Thread {
 	private Server server = null;
 
 	/**
-	 * Konstruktorn, tar emot en socket för porten vi lyssnar på och en
-	 * ConcurrentHashMap med alla som är anslutna till servern
+	 * Konstruktorn, tar emot en socket för porten vi lyssnar på och en Server
+	 * som kan skicka vidare data
 	 * 
 	 * @param socket
 	 *            Den socket som anslutningen sker genom
-	 * @param hashMap
-	 *            hashMapen med alla som är anslutna
+	 * @param server
+	 *            Servern som hanterar alla anslutningar och som kan skicka
+	 *            vidare data
 	 */
 	public MultiServerThread(Socket socket, Server server) {
 		super("MultiServerThread");
@@ -67,8 +68,6 @@ public class MultiServerThread extends Thread {
 					connected = false;
 					break;
 				}
-
-				// Trace: Ett meddelande/assingment/kontakt har tagits emot.
 				System.out.println(socket.getInetAddress() + " "
 						+ socket.getPort() + ": " + inputLine);
 
@@ -104,13 +103,6 @@ public class MultiServerThread extends Thread {
 		} else if (input.contains("\"databasetRepresentation\":\"contact\"")) {
 			handleContact(input);
 		} else {
-			// try {
-			// server.send("Did not recognise inputtype.",
-			// socket.getOutputStream());
-			// } catch (IOException e) {
-			// // TODO Auto-generated catch block
-			// e.printStackTrace();
-			// }
 			System.out.println("Did not recognise inputtype.");
 		}
 	}
@@ -132,12 +124,7 @@ public class MultiServerThread extends Thread {
 		} catch (Exception e) {
 			System.out.println(e);
 		}
-
-		// Jämför om kontakten man vill skicka till finns i databasen och om
-		// kontakten är uppkopplad mot servern
-
 		server.send(message, msg.getReciever().toString());
-
 	}
 
 	/**
@@ -157,19 +144,8 @@ public class MultiServerThread extends Thread {
 		} catch (Exception e) {
 			System.out.println(e);
 		}
-
-		// list = db.getAllFromDB(new Contact());
-		// for (ModelInterface m : list) {
-		// Contact cont = (Contact) m;
-		// // Skickar uppdraget till alla som är anslutna i
-		// // systemet förutom den som skickade uppdraget
-		// if (hashMap.keySet().contains(cont.getInetAddress().toString())
-		// && !cont.getInetAddress().equals(
-		// socket.getInetAddress().toString())) {
-		// send(assignment,
-		// hashMap.get("/" + cont.getInetAddress().toString()));
-		// }
-		// }
+		server.sendToAllExceptTheSender(assignment, socket.getInetAddress()
+				.toString());
 	}
 
 	/**
@@ -190,27 +166,5 @@ public class MultiServerThread extends Thread {
 			System.out.println(e);
 		}
 		server.sendToAll(contact);
-		// for (ModelInterface m : list) {
-		// Contact cont = (Contact) m;
-		// Skickar den uppdaterade kontakten till alla som är anslutna i
-		// systemet förutom den som skickade kontakten
-		// if (hashMap.keySet().contains(cont.getInetAddress().toString())
-		// && !cont.getInetAddress().equals(
-		// socket.getInetAddress().toString()))
-		// send(contact,
-		// hashMap.get("/" + cont.getInetAddress().toString()));
 	}
-
-	/**
-	 * Skickar en sträng till en viss OutputStream
-	 * 
-	 * @param msg
-	 *            Meddelandet som ska skickas
-	 * @param output
-	 *            Den OutputStream som meddelandet ska skickas till
-	 */
-	// private void send(String msg, OutputStream output) {
-	// PrintWriter pr = new PrintWriter(output, true);
-	// pr.println(msg);
-	// }
 }

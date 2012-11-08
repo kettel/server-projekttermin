@@ -23,7 +23,7 @@ public class CreateContactCommand implements CommandInterface {
 	 */
 	@Override
 	public void commandTask() {
-//		try {
+		try {
 			Contact newContact = new Contact();
 			System.out.print("Kontakt namn: ");
 			newContact.setContactName(in.nextLine());
@@ -49,18 +49,17 @@ public class CreateContactCommand implements CommandInterface {
 			if (yesOrNo.equals("n")) {
 				System.out.println("Avbrutet.");
 			} else if (yesOrNo.equals("y")) {
-				// Lägger till den nya kontakten till databasen
-				db.addToDB(newContact);
 				String contact = new Gson().toJson(newContact);
 				server.sendToAll(contact);
+				// Lägger till den nya kontakten till databasen
+				db.addToDB(newContact);
 				System.out.println("Kontakt sparad.");
 			} else {
 				System.out.println("Felaktig inmatning.");
 			}
-//		} catch (Exception e) {
-//			System.out.println(e);
-//		}
-
+		} catch (Exception e) {
+			System.out.println(e);
+		}
 	}
 
 	@Override
