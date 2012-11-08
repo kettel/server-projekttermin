@@ -11,12 +11,9 @@ public class GetAllContactsCommand implements CommandInterface {
 	Database db = new Database();
 	private List<ModelInterface> list = null;
 
-	public GetAllContactsCommand() {
-		list = db.getAllFromDB(new Contact());
-	}
-
 	@Override
 	public void commandTask() {
+		list = db.getAllFromDB(new Contact());
 		for (ModelInterface m : list) {
 			Contact cont = (Contact) m;
 			System.out.println("Kontakt namn: " + cont.getContactName());
