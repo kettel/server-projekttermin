@@ -70,6 +70,7 @@ public class Server {
 			Contact cont = (Contact) m;
 			System.out.println("Kontaktens namn från db: " + cont.getContactName() + "    Mottagaren: "+ reciever + "    Mottagarens IP: " + cont.getInetAddress());
 			if (reciever.equals(cont.getContactName()) && hashMap.keySet().contains("/" + cont.getInetAddress().toString())) {
+				System.out.println("Här blir det null!   " + hashMap.get(cont.getInetAddress()));
 				PrintWriter pr = new PrintWriter(hashMap.get(cont.getInetAddress()), true);
 				pr.println(msg);
 			}
