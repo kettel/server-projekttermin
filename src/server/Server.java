@@ -68,7 +68,7 @@ public class Server {
 		list = db.getAllFromDB(new Contact());
 		for (ModelInterface m : list) {
 			Contact cont = (Contact) m;
-			if (reciever.equals(cont.getContactName()) && hashMap.keySet().contains("/" + cont.getInetAddress().toString())) {
+			if (reciever.equals(cont.getContactName()) && hashMap.keySet().contains("/" + cont.getInetAddress())) {
 				PrintWriter pr = new PrintWriter(hashMap.get("/"+cont.getInetAddress()), true);
 				pr.println(msg);
 			}
@@ -79,7 +79,7 @@ public class Server {
 		list = db.getAllFromDB(new Contact());
 		for (ModelInterface m : list) {
 			Contact cont = (Contact) m;
-			if (hashMap.keySet().contains("/"+cont.getInetAddress().toString())) {
+			if (hashMap.keySet().contains("/"+cont.getInetAddress())) {
 				PrintWriter pr = new PrintWriter(hashMap.get("/"+cont
 						.getInetAddress()), true);
 				pr.println(msg);

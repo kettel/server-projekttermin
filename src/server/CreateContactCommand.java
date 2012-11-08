@@ -23,7 +23,7 @@ public class CreateContactCommand implements CommandInterface {
 	 */
 	@Override
 	public void commandTask() {
-		try {
+//		try {
 			Contact newContact = new Contact();
 			System.out.print("Kontakt namn: ");
 			newContact.setContactName(in.nextLine());
@@ -57,9 +57,9 @@ public class CreateContactCommand implements CommandInterface {
 			} else {
 				System.out.println("Felaktig inmatning.");
 			}
-		} catch (Exception e) {
-			System.out.println(e);
-		}
+//		} catch (Exception e) {
+//			System.out.println(e);
+//		}
 
 	}
 
