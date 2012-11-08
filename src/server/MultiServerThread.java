@@ -77,7 +77,9 @@ public class MultiServerThread extends Thread {
 				// sparas och/eller skickas input:en vidare.
 				handleTypeOfInput(inputLine);
 			}
-
+			System.out.println(hashMap.keySet());
+			hashMap.remove(socket.getInetAddress().toString());
+			System.out.println(hashMap.keySet());
 			// Stänger buffern
 			input.close();
 			// Stänger anslutningen
