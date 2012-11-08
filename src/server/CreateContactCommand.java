@@ -60,6 +60,7 @@ public class CreateContactCommand implements CommandInterface {
 				System.out.println("Felaktig inmatning.");
 			}
 		} catch (Exception e) {
+			System.out.println("HÄR ÄR DET SKITFEST");
 			System.out.println(e);
 		}
 
