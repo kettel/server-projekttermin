@@ -15,6 +15,7 @@ public class ServerTerminal extends Thread {
 	private boolean listeningToCommands = true;
 	private CreateContactCommand contactCommand = null;
 	private GetAllContactsCommand getAllContacts = null;
+	private RemoveContactCommand removeContact = null;
 	Server server;
 
 	public ServerTerminal(Server server) {
@@ -22,6 +23,7 @@ public class ServerTerminal extends Thread {
 		this.server = server;
 		contactCommand = new CreateContactCommand(server);
 		getAllContacts = new GetAllContactsCommand();
+		removeContact = new RemoveContactCommand();
 	}
 
 	/**
@@ -35,6 +37,8 @@ public class ServerTerminal extends Thread {
 				contactCommand.commandTask();
 			}else if(command.equals(getAllContacts.commandLine())){
 				getAllContacts.commandTask();
+			} else if(command.equals(removeContact.commandLine())){
+				removeContact.commandTask();
 			} else {
 			
 				System.out.println("Kommandot existerar inte.");
