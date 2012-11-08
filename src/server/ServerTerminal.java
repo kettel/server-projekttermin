@@ -15,9 +15,9 @@ public class ServerTerminal extends Thread {
 	private boolean listeningToCommands = true;
 	private CreateContactCommand contactCommand = null;
 
-	public ServerTerminal() {
+	public ServerTerminal(Server server) {
 		in = new Scanner(System.in);
-		contactCommand = new CreateContactCommand();
+		contactCommand = new CreateContactCommand(server);
 	}
 
 	/**

@@ -3,12 +3,20 @@ package server;
 import java.util.Scanner;
 
 import model.Contact;
+
+import com.google.gson.Gson;
+
 import database.Database;
 
 public class CreateContactCommand implements CommandInterface {
 
 	Database db = new Database();
 	Scanner in = new Scanner(System.in);
+	Server server;
+
+	public CreateContactCommand(Server server) {
+		this.server = server;
+	}
 
 	/**
 	 * Skapar en ny kontakt med den information som en kontakt behöver
@@ -42,6 +50,8 @@ public class CreateContactCommand implements CommandInterface {
 			} else if (yesOrNo.equals("y")) {
 				// Lägger till den nya kontakten till databasen
 				db.addToDB(newContact);
+				String contact = new Gson().toJson(newContact);
+				server.sendToAll(contact);
 				System.out.println("Kontakt sparad.");
 			} else {
 				System.out.println("Felaktig inmatning.");
