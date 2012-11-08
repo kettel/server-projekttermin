@@ -48,19 +48,15 @@ public class CreateContactCommand implements CommandInterface {
 			if (yesOrNo.equals("n")) {
 				System.out.println("Avbrutet.");
 			} else if (yesOrNo.equals("y")) {
-				System.out.println("Ja");
 				// Lägger till den nya kontakten till databasen
 				db.addToDB(newContact);
-				System.out.println(newContact);
 				String contact = new Gson().toJson(newContact);
-				System.out.println(contact);
 				server.sendToAll(contact);
 				System.out.println("Kontakt sparad.");
 			} else {
 				System.out.println("Felaktig inmatning.");
 			}
 		} catch (Exception e) {
-			System.out.println("HÄR ÄR DET SKITFEST");
 			System.out.println(e);
 		}
 

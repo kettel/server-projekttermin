@@ -30,7 +30,7 @@ public class MultiServerThread extends Thread {
 	private BufferedReader input = null;
 	private String inputLine;
 	private Database db = null;
-	
+
 	private boolean connected = true;
 	private Server server = null;
 
@@ -43,8 +43,7 @@ public class MultiServerThread extends Thread {
 	 * @param hashMap
 	 *            hashMapen med alla som är anslutna
 	 */
-	public MultiServerThread(Socket socket,
-			Server server) {
+	public MultiServerThread(Socket socket, Server server) {
 		super("MultiServerThread");
 		this.socket = socket;
 		this.server = server;
@@ -105,12 +104,13 @@ public class MultiServerThread extends Thread {
 		} else if (input.contains("\"databasetRepresentation\":\"contact\"")) {
 			handleContact(input);
 		} else {
-//			try {
-//				server.send("Did not recognise inputtype.", socket.getOutputStream());
-//			} catch (IOException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
+			// try {
+			// server.send("Did not recognise inputtype.",
+			// socket.getOutputStream());
+			// } catch (IOException e) {
+			// // TODO Auto-generated catch block
+			// e.printStackTrace();
+			// }
 			System.out.println("Did not recognise inputtype.");
 		}
 	}
@@ -122,7 +122,7 @@ public class MultiServerThread extends Thread {
 	 *            Json-strängen av meddelandet
 	 */
 	private void handleMessage(String message) {
-		
+
 		MessageModel msg = new MessageModel();
 		// Gson konverterar json-strängen till MessageModel-objektet igen
 		try {
@@ -133,14 +133,11 @@ public class MultiServerThread extends Thread {
 			System.out.println(e);
 		}
 
-		
 		// Jämför om kontakten man vill skicka till finns i databasen och om
 		// kontakten är uppkopplad mot servern
-		
-			
-				server.send(message, msg.getReciever().toString());
-			
-		
+
+		server.send(message, msg.getReciever().toString());
+
 	}
 
 	/**
@@ -161,18 +158,18 @@ public class MultiServerThread extends Thread {
 			System.out.println(e);
 		}
 
-//		list = db.getAllFromDB(new Contact());
-//		for (ModelInterface m : list) {
-//			Contact cont = (Contact) m;
-//			// Skickar uppdraget till alla som är anslutna i
-//			// systemet förutom den som skickade uppdraget
-//			if (hashMap.keySet().contains(cont.getInetAddress().toString())
-//					&& !cont.getInetAddress().equals(
-//							socket.getInetAddress().toString())) {
-//				send(assignment,
-//						hashMap.get("/" + cont.getInetAddress().toString()));
-//			}
-//		}
+		// list = db.getAllFromDB(new Contact());
+		// for (ModelInterface m : list) {
+		// Contact cont = (Contact) m;
+		// // Skickar uppdraget till alla som är anslutna i
+		// // systemet förutom den som skickade uppdraget
+		// if (hashMap.keySet().contains(cont.getInetAddress().toString())
+		// && !cont.getInetAddress().equals(
+		// socket.getInetAddress().toString())) {
+		// send(assignment,
+		// hashMap.get("/" + cont.getInetAddress().toString()));
+		// }
+		// }
 	}
 
 	/**
@@ -193,17 +190,16 @@ public class MultiServerThread extends Thread {
 			System.out.println(e);
 		}
 		server.sendToAll(contact);
-//		for (ModelInterface m : list) {
-//			Contact cont = (Contact) m;
-			// Skickar den uppdaterade kontakten till alla som är anslutna i
-			// systemet förutom den som skickade kontakten
-//			if (hashMap.keySet().contains(cont.getInetAddress().toString())
-//					&& !cont.getInetAddress().equals(
-//							socket.getInetAddress().toString()))
-//				send(contact,
-//						hashMap.get("/" + cont.getInetAddress().toString()));
-		}
-	
+		// for (ModelInterface m : list) {
+		// Contact cont = (Contact) m;
+		// Skickar den uppdaterade kontakten till alla som är anslutna i
+		// systemet förutom den som skickade kontakten
+		// if (hashMap.keySet().contains(cont.getInetAddress().toString())
+		// && !cont.getInetAddress().equals(
+		// socket.getInetAddress().toString()))
+		// send(contact,
+		// hashMap.get("/" + cont.getInetAddress().toString()));
+	}
 
 	/**
 	 * Skickar en sträng till en viss OutputStream
@@ -213,8 +209,8 @@ public class MultiServerThread extends Thread {
 	 * @param output
 	 *            Den OutputStream som meddelandet ska skickas till
 	 */
-//	private void send(String msg, OutputStream output) {
-//		PrintWriter pr = new PrintWriter(output, true);
-//		pr.println(msg);
-//	}
+	// private void send(String msg, OutputStream output) {
+	// PrintWriter pr = new PrintWriter(output, true);
+	// pr.println(msg);
+	// }
 }
