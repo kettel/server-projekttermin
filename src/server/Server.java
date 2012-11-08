@@ -55,6 +55,7 @@ public class Server {
 				// länka med ip med client.getoutput?
 				new MultiServerThread(client, this).start();
 				hashMap.put(client.getInetAddress().toString(), out);
+				System.out.println("************" + hashMap.keySet() + "      " + hashMap.get(client.getInetAddress().toString()));
 			}
 			// Stänger socketen, anslutningar är inte längre tillåtna
 			serverSocket.close();
