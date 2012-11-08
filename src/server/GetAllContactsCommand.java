@@ -17,7 +17,10 @@ public class GetAllContactsCommand implements CommandInterface {
 
 	@Override
 	public void commandTask() {
-		System.out.println(list);
+		for (ModelInterface m : list) {
+			Contact cont = (Contact) m;
+			System.out.println("Kontakt namn: " + cont.getContactName());
+		}
 	}
 
 	@Override
