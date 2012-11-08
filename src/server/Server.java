@@ -50,6 +50,7 @@ public class Server {
 			while (listening) {
 				client = serverSocket.accept();
 				OutputStream out = client.getOutputStream();
+				System.out.println(out);
 				// skapa output
 				// länka med ip med client.getoutput?
 				new MultiServerThread(client, this).start();
