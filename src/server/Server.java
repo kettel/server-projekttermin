@@ -23,6 +23,7 @@ public class Server {
 	// En boolean som avgör om servern lyssnar på anslutningar
 	private static boolean listening = true;
 	private static ConcurrentHashMap<String, OutputStream> hashMap;
+	private static Socket client = null;
 
 	public static void main(String[] args) {
 		try {
@@ -34,7 +35,7 @@ public class Server {
 			// Lyssnar på anslutningar och skapar en ny tråd per anslutning så
 			// länge servern lyssnar efter anslutningar
 			while (listening) {
-				Socket client = serverSocket.accept();
+				client = serverSocket.accept();
 				OutputStream out = client.getOutputStream();
 				// skapa output
 				// länka med ip med client.getoutput?
@@ -42,7 +43,7 @@ public class Server {
 				hashMap.put(client.getInetAddress().toString(), out);
 			}
 			//********TA BORT KLIENTEN UR HASHMAPEN OM ANSLUTNINGEN STÄNGS*********
-			
+			hashMap.remove(client.getInetAddress().toString());
 			// Stänger socketen, anslutningar är inte längre tillåtna
 			serverSocket.close();
 		} catch (IOException e) {

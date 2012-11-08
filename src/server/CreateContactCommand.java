@@ -33,8 +33,7 @@ public class CreateContactCommand implements CommandInterface {
 			System.out.print("Kontaktens IP: ");
 			newContact.setInetAddress(in.nextLine());
 
-			System.out
-					.print("Är du nöjd med din nya insättning av kontakt? (y/n): ");
+			System.out.print("Är du nöjd med din nya insättning av kontakt? (y/n): ");
 			String yesOrNo = in.nextLine();
 			// Om användaren skriver 'n' så avbryts skapandet av den nya
 			// kontakten

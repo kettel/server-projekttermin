@@ -35,10 +35,13 @@ public class MultiServerThread extends Thread {
 	private ConcurrentHashMap<String, OutputStream> hashMap = null;
 
 	/**
-	 * Konstruktorn, tar emot en socket för porten vi lyssnar på
+	 * Konstruktorn, tar emot en socket för porten vi lyssnar på och en
+	 * ConcurrentHashMap med alla som är anslutna till servern
 	 * 
 	 * @param socket
 	 *            Den socket som anslutningen sker genom
+	 * @param hashMap
+	 * 			  hashMapen med alla som är anslutna
 	 */
 	public MultiServerThread(Socket socket,
 			ConcurrentHashMap<String, OutputStream> hashMap) {
@@ -123,8 +126,7 @@ public class MultiServerThread extends Thread {
 		MessageModel msg = new MessageModel();
 		// Gson konverterar json-strängen till MessageModel-objektet igen
 		try {
-			msg = (new Gson()).fromJson(message,
-					MessageModel.class);
+			msg = (new Gson()).fromJson(message, MessageModel.class);
 			// Lägger in meddelandet i databasen
 			db.addToDB(msg);
 		} catch (Exception e) {
@@ -132,12 +134,15 @@ public class MultiServerThread extends Thread {
 		}
 
 		list = db.getAllFromDB(new Contact());
-		// Jämför om kontakten man vill skicka till finns i databasen och om kontakten är uppkopplad mot servern
+		// Jämför om kontakten man vill skicka till finns i databasen och om
+		// kontakten är uppkopplad mot servern
 		for (ModelInterface m : list) {
 			Contact cont = (Contact) m;
 			if (cont.getContactName().equals(msg.getReciever().toString())
-					&& (hashMap.keySet().contains("/"+cont.getInetAddress().toString()))) {
-				send(message, hashMap.get("/"+cont.getInetAddress().toString()));
+					&& (hashMap.keySet().contains("/"
+							+ cont.getInetAddress().toString()))) {
+				send(message,
+						hashMap.get("/" + cont.getInetAddress().toString()));
 			}
 		}
 	}
@@ -168,7 +173,8 @@ public class MultiServerThread extends Thread {
 			if (hashMap.keySet().contains(cont.getInetAddress().toString())
 					&& !cont.getInetAddress().equals(
 							socket.getInetAddress().toString())) {
-				send(assignment, hashMap.get("/"+cont.getInetAddress().toString()));
+				send(assignment,
+						hashMap.get("/" + cont.getInetAddress().toString()));
 			}
 		}
 	}
@@ -198,7 +204,8 @@ public class MultiServerThread extends Thread {
 			if (hashMap.keySet().contains(cont.getInetAddress().toString())
 					&& !cont.getInetAddress().equals(
 							socket.getInetAddress().toString()))
-				send(contact, hashMap.get("/"+cont.getInetAddress().toString()));
+				send(contact,
+						hashMap.get("/" + cont.getInetAddress().toString()));
 		}
 	}
 
