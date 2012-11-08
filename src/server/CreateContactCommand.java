@@ -23,7 +23,7 @@ public class CreateContactCommand implements CommandInterface {
 	 */
 	@Override
 	public void commandTask() {
-	//	try {
+		try {
 			Contact newContact = new Contact();
 			System.out.print("Kontakt namn: ");
 			newContact.setContactName(in.nextLine());
@@ -41,7 +41,8 @@ public class CreateContactCommand implements CommandInterface {
 			System.out.print("Kontaktens IP: ");
 			newContact.setInetAddress(in.nextLine());
 
-			System.out.print("Är du nöjd med din nya insättning av kontakt? (y/n): ");
+			System.out
+					.print("Är du nöjd med din nya insättning av kontakt? (y/n): ");
 			String yesOrNo = in.nextLine();
 			// Om användaren skriver 'n' så avbryts skapandet av den nya
 			// kontakten
@@ -51,15 +52,14 @@ public class CreateContactCommand implements CommandInterface {
 				// Lägger till den nya kontakten till databasen
 				db.addToDB(newContact);
 				String contact = new Gson().toJson(newContact);
-				System.out.println(server);
 				server.sendToAll(contact);
 				System.out.println("Kontakt sparad.");
 			} else {
 				System.out.println("Felaktig inmatning.");
 			}
-	//	} catch (Exception e) {
-	//		System.out.println(e);
-		//}
+		} catch (Exception e) {
+			System.out.println(e);
+		}
 
 	}
 

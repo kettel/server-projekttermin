@@ -50,12 +50,10 @@ public class Server {
 			while (listening) {
 				client = serverSocket.accept();
 				OutputStream out = client.getOutputStream();
-				System.out.println(out);
 				// skapa output
 				// länka med ip med client.getoutput?
 				new MultiServerThread(client, this).start();
 				hashMap.put(client.getInetAddress().toString(), out);
-				System.out.println("************" + hashMap.keySet() + "      " + hashMap.get(client.getInetAddress().toString()));
 			}
 			// Stänger socketen, anslutningar är inte längre tillåtna
 			serverSocket.close();
@@ -70,9 +68,7 @@ public class Server {
 		list = db.getAllFromDB(new Contact());
 		for (ModelInterface m : list) {
 			Contact cont = (Contact) m;
-			System.out.println("Kontaktens namn från db: " + cont.getContactName() + "    Mottagaren: "+ reciever + "    Mottagarens IP: " + cont.getInetAddress());
 			if (reciever.equals(cont.getContactName()) && hashMap.keySet().contains("/" + cont.getInetAddress().toString())) {
-				System.out.println("Här blir det null!   " + hashMap.get(cont.getInetAddress()));
 				PrintWriter pr = new PrintWriter(hashMap.get("/"+cont.getInetAddress()), true);
 				pr.println(msg);
 			}
@@ -80,10 +76,10 @@ public class Server {
 	}
 
 	public void sendToAll(String msg) {
+		list = db.getAllFromDB(new Contact());
 		for (ModelInterface m : list) {
 			Contact cont = (Contact) m;
-			if (hashMap.keySet().contains(
-					"/" + cont.getInetAddress().toString())) {
+			if (hashMap.keySet().contains("/"+cont.getInetAddress().toString())) {
 				PrintWriter pr = new PrintWriter(hashMap.get("/"+cont
 						.getInetAddress()), true);
 				pr.println(msg);
