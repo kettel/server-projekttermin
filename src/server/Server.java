@@ -68,9 +68,8 @@ public class Server {
 		list = db.getAllFromDB(new Contact());
 		for (ModelInterface m : list) {
 			Contact cont = (Contact) m;
-			if (hashMap.keySet().contains(
-					"/" + cont.getInetAddress().toString())
-					&& reciever.equals(cont.getContactName())) {
+			System.out.println("Kontaktens namn från db: " + cont.getContactName());
+			if (reciever.equals(cont.getContactName()) && hashMap.keySet().contains("/" + cont.getInetAddress().toString())) {
 				PrintWriter pr = new PrintWriter(hashMap.get(cont
 						.getInetAddress()), true);
 				pr.println(msg);
