@@ -14,14 +14,14 @@ public class ServerTerminal extends Thread {
 	private Scanner in = null;
 	private boolean listeningToCommands = true;
 	private CreateContactCommand contactCommand = null;
-	private GetAllContactsCommand getAllContatacs = null;
+	private GetAllContactsCommand getAllContacts = null;
 	Server server;
 
 	public ServerTerminal(Server server) {
 		in = new Scanner(System.in);
 		this.server = server;
 		contactCommand = new CreateContactCommand(server);
-		getAllContatacs = new GetAllContactsCommand();
+		getAllContacts = new GetAllContactsCommand();
 	}
 
 	/**
@@ -33,7 +33,10 @@ public class ServerTerminal extends Thread {
 			String command = in.nextLine();
 			if (command.equals(contactCommand.commandLine())) {
 				contactCommand.commandTask();
+			}else if(command.equals(getAllContacts.commandLine())){
+				getAllContacts.commandTask();
 			} else {
+			
 				System.out.println("Kommandot existerar inte.");
 			}
 		}
