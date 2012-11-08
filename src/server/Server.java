@@ -84,7 +84,7 @@ public class Server {
 			Contact cont = (Contact) m;
 			if (hashMap.keySet().contains(
 					"/" + cont.getInetAddress().toString())) {
-				PrintWriter pr = new PrintWriter(hashMap.get(cont
+				PrintWriter pr = new PrintWriter(hashMap.get("/"+cont
 						.getInetAddress()), true);
 				pr.println(msg);
 			}
