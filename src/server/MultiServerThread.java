@@ -138,7 +138,7 @@ public class MultiServerThread extends Thread {
 		// kontakten är uppkopplad mot servern
 		
 			
-				server.send(message, (String) msg.getReciever());
+				server.send(message, msg.getReciever().toString());
 			
 		
 	}
