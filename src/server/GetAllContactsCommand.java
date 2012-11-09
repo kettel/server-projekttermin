@@ -21,7 +21,7 @@ public class GetAllContactsCommand implements CommandInterface {
 		list = db.getAllFromDB(new Contact());
 		for (ModelInterface m : list) {
 			Contact cont = (Contact) m;
-			System.out.println("Kontakt namn: " + cont.getContactName() + "		IP: " + cont.getInetAddress());
+			System.out.println("Kontakt namn: " + cont.getContactName() + "	- IP: " + cont.getInetAddress());
 		}
 	}
 
@@ -29,5 +29,4 @@ public class GetAllContactsCommand implements CommandInterface {
 	public String commandLine() {
 		return "allaKontakter";
 	}
-
 }
