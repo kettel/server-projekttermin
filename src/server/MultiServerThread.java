@@ -74,9 +74,6 @@ public class MultiServerThread extends Thread {
 				// Bestämmer vilken typ av input som kommer in. När det avgjorts
 				// sparas och/eller skickas input:en vidare.
 				handleTypeOfInput(inputLine);
-				
-				// *********Bekäftelse, TA BORT SEN!
-				server.send("Tack för ditt meddelande.", socket.getInetAddress().toString());
 			}
 			// Tar bort kontakten från hashMapen med de anslutna klienterna
 			server.removeClient(socket.getInetAddress().toString());
