@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import model.Assignment;
 import model.Contact;
@@ -63,8 +65,11 @@ public class MultiServerThread extends Thread {
 					connected = false;
 					break;
 				}
-				System.out.println(socket.getInetAddress() + " "
-						+ socket.getPort() + ": " + inputLine);
+				Calendar cal = Calendar.getInstance();
+		    	cal.getTime();
+		    	SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+				System.out.println(socket.getInetAddress() + ":"
+						+ socket.getPort() + " " + sdf.format(cal.getTime()) + ":  " + inputLine);
 
 				// Bestämmer vilken typ av input som kommer in. När det avgjorts
 				// sparas och/eller skickas input:en vidare.
@@ -103,7 +108,8 @@ public class MultiServerThread extends Thread {
 	}
 
 	/**
-	 * Hanterar json-strägen om den är ett meddelande
+	 * Hanterar json-strägen om den är ett meddelande och skickar denna till en
+	 * specifik kontakt
 	 * 
 	 * @param message
 	 *            Json-strängen av meddelandet
@@ -123,7 +129,8 @@ public class MultiServerThread extends Thread {
 	}
 
 	/**
-	 * Hanterar json-strängen om den är ett uppdrag
+	 * Hanterar json-strängen om den är ett uppdrag och skickar ut den till alla
+	 * förutom den som skickade uppdraget
 	 * 
 	 * @param assignment
 	 *            Json-strängen av uppdraget
@@ -144,7 +151,8 @@ public class MultiServerThread extends Thread {
 	}
 
 	/**
-	 * Hanterar json-strängen om den är en kontakt
+	 * Hanterar json-strängen om den är en kontakt och skickar ut denna till
+	 * alla
 	 * 
 	 * @param contact
 	 *            Json-strängen av kontakten

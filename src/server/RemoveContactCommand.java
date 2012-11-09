@@ -7,6 +7,11 @@ import model.Contact;
 import model.ModelInterface;
 import database.Database;
 
+/**
+ * Ett kommando för att ta bort en kontakt ur databasen
+ * @author kristoffer
+ *
+ */
 public class RemoveContactCommand implements CommandInterface {
 
 	Database db = new Database();

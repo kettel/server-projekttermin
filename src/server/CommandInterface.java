@@ -9,7 +9,7 @@ package server;
 public interface CommandInterface {
 
 	/**
-	 * Det kommandot ska utföra
+	 * Den uppgift kommandot ska utföra
 	 */
 	public void commandTask();
 

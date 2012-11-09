@@ -8,6 +8,11 @@ import com.google.gson.Gson;
 
 import database.Database;
 
+/**
+ * Ett kommando för att skapa en kontakt och skicka ut den till alla klienter
+ * @author kristoffer
+ *
+ */
 public class CreateContactCommand implements CommandInterface {
 
 	Database db = new Database();
@@ -18,9 +23,6 @@ public class CreateContactCommand implements CommandInterface {
 		this.server = server;
 	}
 
-	/**
-	 * Skapar en ny kontakt med den information som en kontakt behöver
-	 */
 	@Override
 	public void commandTask() {
 		try {

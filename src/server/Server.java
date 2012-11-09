@@ -28,8 +28,9 @@ public class Server {
 	private static ServerSocket serverSocket = null;
 	// En boolean som avgör om servern lyssnar på anslutningar
 	private static boolean listening = true;
+	// En ConcurrentHashMap som länkar ett IP till en OutputStream
 	private static ConcurrentHashMap<String, OutputStream> hashMap;
-	private static Socket client = null;
+	private static Socket clientSocket = null;
 	private List<ModelInterface> list = null;
 	private Database db = null;
 
@@ -48,10 +49,10 @@ public class Server {
 			// Lyssnar på anslutningar och skapar en ny tråd per anslutning så
 			// länge servern lyssnar efter anslutningar
 			while (listening) {
-				client = serverSocket.accept();
-				OutputStream out = client.getOutputStream();
-				new MultiServerThread(client, this).start();
-				hashMap.put(client.getInetAddress().toString(), out);
+				clientSocket = serverSocket.accept();
+				OutputStream out = clientSocket.getOutputStream();
+				new MultiServerThread(clientSocket, this).start();
+				hashMap.put(clientSocket.getInetAddress().toString(), out);
 			}
 			// Stänger socketen, anslutningar är inte längre tillåtna
 			serverSocket.close();

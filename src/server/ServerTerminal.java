@@ -13,7 +13,7 @@ public class ServerTerminal extends Thread {
 
 	private Scanner in = null;
 	private boolean listeningToCommands = true;
-	private CreateContactCommand contactCommand = null;
+	private CreateContactCommand createContactCommand = null;
 	private GetAllContactsCommand getAllContacts = null;
 	private RemoveContactCommand removeContact = null;
 	Server server;
@@ -21,7 +21,7 @@ public class ServerTerminal extends Thread {
 	public ServerTerminal(Server server) {
 		in = new Scanner(System.in);
 		this.server = server;
-		contactCommand = new CreateContactCommand(server);
+		createContactCommand = new CreateContactCommand(server);
 		getAllContacts = new GetAllContactsCommand();
 		removeContact = new RemoveContactCommand();
 	}
@@ -33,8 +33,8 @@ public class ServerTerminal extends Thread {
 	public void run() {
 		while (listeningToCommands) {
 			String command = in.nextLine();
-			if (command.equals(contactCommand.commandLine())) {
-				contactCommand.commandTask();
+			if (command.equals(createContactCommand.commandLine())) {
+				createContactCommand.commandTask();
 			}else if(command.equals(getAllContacts.commandLine())){
 				getAllContacts.commandTask();
 			} else if(command.equals(removeContact.commandLine())){

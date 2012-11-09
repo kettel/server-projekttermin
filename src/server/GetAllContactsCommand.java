@@ -6,6 +6,11 @@ import model.Contact;
 import model.ModelInterface;
 import database.Database;
 
+/**
+ * Ett kommando för att se alla kontakter i databasen
+ * @author kristoffer
+ *
+ */
 public class GetAllContactsCommand implements CommandInterface {
 
 	Database db = new Database();
@@ -16,7 +21,7 @@ public class GetAllContactsCommand implements CommandInterface {
 		list = db.getAllFromDB(new Contact());
 		for (ModelInterface m : list) {
 			Contact cont = (Contact) m;
-			System.out.println("Kontakt namn: " + cont.getContactName());
+			System.out.println("Kontakt namn: " + cont.getContactName() + "		IP: " + cont.getInetAddress());
 		}
 	}
 
