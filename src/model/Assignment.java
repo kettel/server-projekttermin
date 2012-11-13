@@ -1,5 +1,7 @@
 package model;
 
+import java.util.ArrayList;
+
 public class Assignment implements ModelInterface {
 
 	// Typen av modell
@@ -37,6 +39,7 @@ public class Assignment implements ModelInterface {
 	private String streetName;
 	// Platsnamn där uppdraget utspelas
 	private String siteName;
+	private ArrayList<Contact> agents;
 
 	/**
 	 * Tom konstruktor for Assignment
@@ -108,7 +111,7 @@ public class Assignment implements ModelInterface {
 	public Assignment(long id, String name, long lat, long lon,
 			String receiver, String sender, String assignmentDescription,
 			String timeSpan, String assignmentStatus, byte[] cameraImage,
-			String streetName, String siteName, boolean externalMission, Long assignmentTimeStamp, String wsg) {
+			String streetName, String siteName, boolean externalMission, Long assignmentTimeStamp, String wsg, ArrayList<Contact> agents) {
 		this.id = id;
 		this.name = name;
 		this.lat = lat;
@@ -124,6 +127,7 @@ public class Assignment implements ModelInterface {
 		this.externalMission = externalMission;
 		this.assignmentTimeStamp = assignmentTimeStamp;
 		this.wgs = wsg;
+		this.agents = agents;
 	}
 
 	public String getName() {
@@ -192,5 +196,9 @@ public class Assignment implements ModelInterface {
 	
 	public Long getAssignmentTimeStamp(){
 		return assignmentTimeStamp;
+	}
+	
+	public ArrayList<Contact> getAgents(){
+		return agents;
 	}
 }
