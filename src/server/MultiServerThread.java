@@ -123,10 +123,10 @@ public class MultiServerThread extends Thread {
 			msg = (new Gson()).fromJson(message, MessageModel.class);
 			// Lägger in meddelandet i databasen
 			db.addToDB(msg);
+			server.send(message, msg.getReciever().toString());
 		} catch (Exception e) {
 			System.out.println(e);
 		}
-		server.send(message, msg.getReciever().toString());
 	}
 
 	/**
@@ -144,11 +144,11 @@ public class MultiServerThread extends Thread {
 					Assignment.class);
 			// Lägger in kontakten i databasen
 			db.addToDB(assignmentFromJson);
+			server.sendToAllExceptTheSender(assignment, socket.getInetAddress()
+					.toString());
 		} catch (Exception e) {
 			System.out.println(e);
 		}
-		server.sendToAllExceptTheSender(assignment, socket.getInetAddress()
-				.toString());
 	}
 
 	/**
@@ -166,9 +166,9 @@ public class MultiServerThread extends Thread {
 					Contact.class);
 			// Lägger in uppdraget i databasen
 			db.updateModel(contactFromJson);
+			server.sendToAll(contact);
 		} catch (Exception e) {
 			System.out.println(e);
 		}
-		server.sendToAll(contact);
 	}
 }
