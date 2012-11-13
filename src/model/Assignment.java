@@ -15,15 +15,18 @@ public class Assignment implements ModelInterface {
 	// Användarnamnet på mottagaren för ett uppdrag (Om man vill specificera
 	// det)
 	private String receiver;
-	private String wsg;
+	// En lista med koordinater
+	private String wgs;
 	// Användarnamnet på den person som skapade uppdraget.
 	private String sender;
+	// Säger om uppdraget ska skickas vidare till annan aktör
 	private boolean externalMission;
 	// Textbeskrivning av uppdraget
 	private String assignmentDescription;
 	// Tidsbeskrivning av hur lång tid uppdraget kommer ta (1 timme, 20
 	// minuter...)
 	private String timeSpan;
+	// När uppdraget skapades
 	private Long assignmentTimeStamp;
 	// Textbeskrivning av uppdragets nuvarande status (Icke påbörjat, Påbörjat,
 	// Behöver hjälp)
@@ -120,7 +123,7 @@ public class Assignment implements ModelInterface {
 		this.siteName = siteName;
 		this.externalMission = externalMission;
 		this.assignmentTimeStamp = assignmentTimeStamp;
-		this.wsg = wsg;
+		this.wgs = wsg;
 	}
 
 	public String getName() {
@@ -184,7 +187,7 @@ public class Assignment implements ModelInterface {
 	}
 	
 	public String getWSG(){
-		return wsg;
+		return wgs;
 	}
 	
 	public Long getAssignmentTimeStamp(){
