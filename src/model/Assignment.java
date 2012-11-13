@@ -39,6 +39,7 @@ public class Assignment implements ModelInterface {
 	private String streetName;
 	// Platsnamn där uppdraget utspelas
 	private String siteName;
+	// En lista med de personer som accepterat uppdraget
 	private ArrayList<Contact> agents;
 
 	/**
@@ -111,7 +112,8 @@ public class Assignment implements ModelInterface {
 	public Assignment(long id, String name, long lat, long lon,
 			String receiver, String sender, String assignmentDescription,
 			String timeSpan, String assignmentStatus, byte[] cameraImage,
-			String streetName, String siteName, boolean externalMission, Long assignmentTimeStamp, String wsg, ArrayList<Contact> agents) {
+			String streetName, String siteName, boolean externalMission,
+			Long assignmentTimeStamp, String wsg, ArrayList<Contact> agents) {
 		this.id = id;
 		this.name = name;
 		this.lat = lat;
@@ -185,20 +187,20 @@ public class Assignment implements ModelInterface {
 	public long getId() {
 		return id;
 	}
-	
-	public boolean getExternalMission(){
+
+	public boolean getExternalMission() {
 		return externalMission;
 	}
-	
-	public String getWSG(){
+
+	public String getWSG() {
 		return wgs;
 	}
-	
-	public Long getAssignmentTimeStamp(){
+
+	public Long getAssignmentTimeStamp() {
 		return assignmentTimeStamp;
 	}
-	
-	public ArrayList<Contact> getAgents(){
+
+	public ArrayList<Contact> getAgents() {
 		return agents;
 	}
 }
