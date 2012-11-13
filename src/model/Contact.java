@@ -3,7 +3,7 @@ package model;
 public class Contact implements ModelInterface {
 
 	// Typen av modell
-	private String databasetRepresentation = "contact";
+	private String databaseRepresentation = "contact";
 	// Id för modellen (Sätts av databasen så pilla inte)
 	private long id = -1;
 	// Användarnamnet på konakten
@@ -51,7 +51,7 @@ public class Contact implements ModelInterface {
 	}
 
 	public String getDatabaseRepresentation() {
-		return databasetRepresentation;
+		return databaseRepresentation;
 	}
 
 	public long getId() {

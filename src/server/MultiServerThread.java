@@ -65,6 +65,7 @@ public class MultiServerThread extends Thread {
 					connected = false;
 					break;
 				}
+				
 				Calendar cal = Calendar.getInstance();
 		    	cal.getTime();
 		    	SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
@@ -98,9 +99,9 @@ public class MultiServerThread extends Thread {
 
 		if (input.contains("\"databaseRepresentation\":\"message\"")) {
 			handleMessage(input);
-		} else if (input.contains("\"databasetRepresentation\":\"assignment\"")) {
+		} else if (input.contains("\"databaseRepresentation\":\"assignment\"")) {
 			handleAssignment(input);
-		} else if (input.contains("\"databasetRepresentation\":\"contact\"")) {
+		} else if (input.contains("\"databaseRepresentation\":\"contact\"")) {
 			handleContact(input);
 		} else {
 			System.out.println("Did not recognise inputtype.");

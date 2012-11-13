@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Assignment implements ModelInterface {
 
 	// Typen av modell
-	private String databasetRepresentation = "assignment";
+	private String databaseRepresentation = "assignment";
 	// Id för modellen (Sätts av databasen så pilla inte)
 	private long id = -1;
 	// Namnet på uppdraget
@@ -14,9 +14,6 @@ public class Assignment implements ModelInterface {
 	private long lat;
 	// Longitud för uppdragspositionen
 	private long lon;
-	// Användarnamnet på mottagaren för ett uppdrag (Om man vill specificera
-	// det)
-	private String receiver;
 	// En lista med koordinater
 	private String wgs;
 	// Användarnamnet på den person som skapade uppdraget.
@@ -39,7 +36,7 @@ public class Assignment implements ModelInterface {
 	private String streetName;
 	// Platsnamn där uppdraget utspelas
 	private String siteName;
-	// En lista med de personer som accepterat uppdraget 
+	// En lista med de personer som accepterat uppdraget
 	private ArrayList<Contact> agents;
 
 	/**
@@ -74,14 +71,13 @@ public class Assignment implements ModelInterface {
 	 * @param siteName
 	 *            String Platsnamn
 	 */
-	public Assignment(String name, long lat, long lon, String receiver,
-			String sender, String assignmentDescription, String timeSpan,
+	public Assignment(String name, long lat, long lon, String sender,
+			String assignmentDescription, String timeSpan,
 			String assignmentStatus, byte[] cameraImage, String streetName,
 			String siteName) {
 		this.lat = lat;
 		this.lon = lon;
 		this.name = name;
-		this.receiver = receiver;
 		this.sender = sender;
 		this.assignmentDescription = assignmentDescription;
 		this.timeSpan = timeSpan;
@@ -109,8 +105,7 @@ public class Assignment implements ModelInterface {
 	 * @param siteName
 	 */
 
-	public Assignment(long id, String name, long lat, long lon,
-			String receiver, String sender, String assignmentDescription,
+	public Assignment(long id, String name, long lat, long lon, String sender, String assignmentDescription,
 			String timeSpan, String assignmentStatus, byte[] cameraImage,
 			String streetName, String siteName, boolean externalMission,
 			Long assignmentTimeStamp, String wsg, ArrayList<Contact> agents) {
@@ -118,7 +113,6 @@ public class Assignment implements ModelInterface {
 		this.name = name;
 		this.lat = lat;
 		this.lon = lon;
-		this.receiver = receiver;
 		this.sender = sender;
 		this.assignmentDescription = assignmentDescription;
 		this.timeSpan = timeSpan;
@@ -152,10 +146,6 @@ public class Assignment implements ModelInterface {
 		return lon;
 	}
 
-	public String getReceiver() {
-		return receiver;
-	}
-
 	public String getSender() {
 		return sender;
 	}
@@ -181,7 +171,7 @@ public class Assignment implements ModelInterface {
 	}
 
 	public String getDatabaseRepresentation() {
-		return databasetRepresentation;
+		return databaseRepresentation;
 	}
 
 	public long getId() {
