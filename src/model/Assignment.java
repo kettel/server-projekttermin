@@ -15,13 +15,16 @@ public class Assignment implements ModelInterface {
 	// Användarnamnet på mottagaren för ett uppdrag (Om man vill specificera
 	// det)
 	private String receiver;
+	private String wsg;
 	// Användarnamnet på den person som skapade uppdraget.
 	private String sender;
+	private boolean externalMission;
 	// Textbeskrivning av uppdraget
 	private String assignmentDescription;
 	// Tidsbeskrivning av hur lång tid uppdraget kommer ta (1 timme, 20
 	// minuter...)
 	private String timeSpan;
+	private Long assignmentTimeStamp;
 	// Textbeskrivning av uppdragets nuvarande status (Icke påbörjat, Påbörjat,
 	// Behöver hjälp)
 	private String assignmentStatus;
@@ -102,7 +105,7 @@ public class Assignment implements ModelInterface {
 	public Assignment(long id, String name, long lat, long lon,
 			String receiver, String sender, String assignmentDescription,
 			String timeSpan, String assignmentStatus, byte[] cameraImage,
-			String streetName, String siteName) {
+			String streetName, String siteName, boolean externalMission, Long assignmentTimeStamp, String wsg) {
 		this.id = id;
 		this.name = name;
 		this.lat = lat;
@@ -115,62 +118,37 @@ public class Assignment implements ModelInterface {
 		this.cameraImage = cameraImage;
 		this.streetName = streetName;
 		this.siteName = siteName;
+		this.externalMission = externalMission;
+		this.assignmentTimeStamp = assignmentTimeStamp;
+		this.wsg = wsg;
 	}
 
 	public String getName() {
 		return name;
 	}
 
-	public void setName(String nameToBeSet) {
-		this.name = nameToBeSet;
-	}
-
 	public String getStreetName() {
 		return streetName;
-	}
-
-	public void setStreetName(String streetNameToBeSet) {
-		this.streetName = streetNameToBeSet;
 	}
 
 	public String getSiteName() {
 		return siteName;
 	}
 
-	public void setSiteName(String siteNameToBeSet) {
-		this.siteName = siteNameToBeSet;
-	}
-
 	public long getLat() {
 		return lat;
-	}
-
-	public void setLat(long latToBeSet) {
-		this.lat = latToBeSet;
 	}
 
 	public long getLon() {
 		return lon;
 	}
 
-	public void setLon(long lonToBeSet) {
-		this.lon = lonToBeSet;
-	}
-
 	public String getReceiver() {
 		return receiver;
 	}
 
-	public void setReceiver(String receiverToBeSet) {
-		this.receiver = receiverToBeSet;
-	}
-
 	public String getSender() {
 		return sender;
-	}
-
-	public void setSender(String senderToBeSet) {
-		this.sender = senderToBeSet;
 	}
 
 	public byte[] getCameraImage() {
@@ -185,24 +163,12 @@ public class Assignment implements ModelInterface {
 		return assignmentDescription;
 	}
 
-	public void setAssignmentDescription(String assignmentDescriptionToBeSet) {
-		this.assignmentDescription = assignmentDescriptionToBeSet;
-	}
-
 	public String getTimeSpan() {
 		return timeSpan;
 	}
 
-	public void setTimeSpan(String timeSpanToBeSet) {
-		this.timeSpan = timeSpanToBeSet;
-	}
-
 	public String getAssignmentStatus() {
 		return assignmentStatus;
-	}
-
-	public void setAssignmentStatus(String assignmentStatusToBeSet) {
-		this.assignmentStatus = assignmentStatusToBeSet;
 	}
 
 	public String getDatabaseRepresentation() {
@@ -211,5 +177,17 @@ public class Assignment implements ModelInterface {
 
 	public long getId() {
 		return id;
+	}
+	
+	public boolean getExternalMission(){
+		return externalMission;
+	}
+	
+	public String getWSG(){
+		return wsg;
+	}
+	
+	public Long getAssignmentTimeStamp(){
+		return assignmentTimeStamp;
 	}
 }

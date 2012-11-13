@@ -29,17 +29,6 @@ public class CreateContactCommand implements CommandInterface {
 			Contact newContact = new Contact();
 			System.out.print("Kontakt namn: ");
 			newContact.setContactName(in.nextLine());
-			System.out.print("Telefonnummer: ");
-			newContact.setContactPhoneNumber(Long.valueOf(in.nextLine())
-					.longValue());
-			System.out.print("E-post: ");
-			newContact.setContactEmail(in.nextLine());
-			System.out.print("Behörighetsnivå: ");
-			newContact.setContactClearanceLevel(in.nextLine());
-			System.out.print("Klassificering: ");
-			newContact.setContactClassification(in.nextLine());
-			System.out.print("Kontaktbeskrivning: ");
-			newContact.setContactComment(in.nextLine());
 			System.out.print("Kontaktens IP: ");
 			newContact.setInetAddress(in.nextLine());
 

@@ -10,13 +10,13 @@ public class MessageModel implements ModelInterface {
 	private long id = -1;
 	// Meddelandet tillhörande meddelandemodellen
 	private String messageContent;
-	// Användarnamnet på den person som skickade meddelandemodellen
-	private String sender;
 	// Användarnamnet på den person man ska skicka till
 	private String reciever;
 	// Tidsstämpel på när ett meddelande skickats
 	private long messageTimeStamp;
-
+	// Säger om meddelandet är läst eller inte
+	private boolean isRead;
+	
 	/**
 	 * Tom konstruktor. Används för att hämta från databasen.
 	 */
@@ -46,11 +46,12 @@ public class MessageModel implements ModelInterface {
 	 */
 
 	public MessageModel(long id, String messageContent, String reciever,
-			long messageTimeStamp) {
+			long messageTimeStamp, boolean isRead) {
 		this.id = id;
 		this.messageContent = messageContent;
 		this.reciever = reciever;
 		this.messageTimeStamp = messageTimeStamp;
+		this.isRead = isRead;
 	}
 
 	public CharSequence getMessageContent() {
@@ -71,5 +72,9 @@ public class MessageModel implements ModelInterface {
 
 	public long getId() {
 		return id;
+	}
+	
+	public boolean getIsRead(){
+		return isRead;
 	}
 }
