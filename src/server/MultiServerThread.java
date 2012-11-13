@@ -61,20 +61,24 @@ public class MultiServerThread extends Thread {
 
 				// Läser den buffrade strängen
 				inputLine = input.readLine();
-				if (inputLine.equals("exit")) {
-					connected = false;
-					break;
-				}
-				
-				Calendar cal = Calendar.getInstance();
-		    	cal.getTime();
-		    	SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-				System.out.println(socket.getInetAddress() + ":"
-						+ socket.getPort() + " " + sdf.format(cal.getTime()) + ":  " + inputLine);
+				if (!inputLine.equals(null)) {
+					if (inputLine.equals("exit")) {
+						connected = false;
+						break;
+					}
 
-				// Bestämmer vilken typ av input som kommer in. När det avgjorts
-				// sparas och/eller skickas input:en vidare.
-				handleTypeOfInput(inputLine);
+					Calendar cal = Calendar.getInstance();
+					cal.getTime();
+					SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+					System.out.println(socket.getInetAddress() + ":"
+							+ socket.getPort() + " "
+							+ sdf.format(cal.getTime()) + ":  " + inputLine);
+
+					// Bestämmer vilken typ av input som kommer in. När det
+					// avgjorts
+					// sparas och/eller skickas input:en vidare.
+					handleTypeOfInput(inputLine);
+				}
 			}
 			// Tar bort kontakten från hashMapen med de anslutna klienterna
 			server.removeClient(socket.getInetAddress().toString());
