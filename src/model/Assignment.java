@@ -39,7 +39,7 @@ public class Assignment implements ModelInterface {
 	private String streetName;
 	// Platsnamn där uppdraget utspelas
 	private String siteName;
-	// En lista med de personer som accepterat uppdraget
+	// En lista med de personer som accepterat uppdraget 
 	private ArrayList<Contact> agents;
 
 	/**
