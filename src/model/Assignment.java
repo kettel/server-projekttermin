@@ -39,7 +39,7 @@ public class Assignment implements ModelInterface {
 	private Long assignmentTimeStamp;
 	// Textbeskrivning av uppdragets nuvarande status (Icke påbörjat, Påbörjat,
 	// Behöver hjälp)
-	private AssignmentStatus assignmentStatus;
+	private String assignmentStatus;
 	// Bild kopplat till uppdraget
 	private byte[] cameraImage;
 	// Gatunamn för platsen där uppdraget utspelas
@@ -69,7 +69,7 @@ public class Assignment implements ModelInterface {
 	 */
 	public Assignment(String name, String sender, boolean externalMission,
 			String assignmentDescription, String timeSpan,
-			AssignmentStatus assignmentStatus, String streetName) {
+			String assignmentStatus, String streetName) {
 		this.name = name;
 		this.sender = sender;
 		this.externalMission = externalMission;
@@ -96,7 +96,7 @@ public class Assignment implements ModelInterface {
 	 */
 	public Assignment(String name, String sender, boolean externalMission,
 			String assignmentDescription, String timeSpan,
-			AssignmentStatus assignmentStatus, String streetName,
+			String assignmentStatus, String streetName,
 			String siteName) {
 		this.name = name;
 		this.sender = sender;
@@ -124,7 +124,7 @@ public class Assignment implements ModelInterface {
 	 */
 	public Assignment(String name, String sender, boolean externalMission,
 			String assignmentDescription, String timeSpan,
-			AssignmentStatus assignmentStatus, byte[] cameraImage,
+			String assignmentStatus, byte[] cameraImage,
 			String streetName, String siteName) {
 		this.name = name;
 		this.sender = sender;
@@ -155,7 +155,7 @@ public class Assignment implements ModelInterface {
 	 */
 	public Assignment(String name, double lat, double lon, String sender,
 			boolean externalMission, String assignmentDescription,
-			String timeSpan, AssignmentStatus assignmentStatus,
+			String timeSpan, String assignmentStatus,
 			String streetName, String siteName) {
 		this.name = name;
 		this.lat = lat;
@@ -187,7 +187,7 @@ public class Assignment implements ModelInterface {
 	 */
 	public Assignment(String name, double lat, double lon, String sender,
 			boolean externalMission, String assignmentDescription,
-			String timeSpan, AssignmentStatus assignmentStatus,
+			String timeSpan, String assignmentStatus,
 			byte[] cameraImage, String streetName, String siteName) {
 		this.name = name;
 		this.lat = lat;
@@ -218,7 +218,7 @@ public class Assignment implements ModelInterface {
 	 */
 	public Assignment(String name, String region, String sender,
 			boolean externalMission, String assignmentDescription,
-			String timeSpan, AssignmentStatus assignmentStatus,
+			String timeSpan, String assignmentStatus,
 			String streetName, String siteName) {
 		this.name = name;
 		this.region = region;
@@ -248,7 +248,7 @@ public class Assignment implements ModelInterface {
 	 */
 	public Assignment(String name, String region, String sender,
 			boolean externalMission, String assignmentDescription,
-			String timeSpan, AssignmentStatus assignmentStatus,
+			String timeSpan, String assignmentStatus,
 			byte[] cameraImage, String streetName, String siteName) {
 		this.name = name;
 		this.region = region;
@@ -284,7 +284,7 @@ public class Assignment implements ModelInterface {
 	public Assignment(long id, String name, double lat, double lon,
 			String region, List<Contact> agents, String sender,
 			boolean externalMission, String assignmentDescription,
-			String timeSpan, AssignmentStatus assignmentStatus,
+			String timeSpan, String assignmentStatus,
 			byte[] cameraImage, String streetName, String siteName,
 			Long timeStamp) {
 		this.id = id; // 1
@@ -352,7 +352,7 @@ public class Assignment implements ModelInterface {
 		return timeSpan;
 	}
 
-	public AssignmentStatus getAssignmentStatus() {
+	public String getAssignmentStatus() {
 		return assignmentStatus;
 	}
 
