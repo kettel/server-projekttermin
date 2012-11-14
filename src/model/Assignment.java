@@ -29,7 +29,7 @@ public class Assignment implements ModelInterface {
 	// Om uppdraget ska skickas till externa aktörer
 	private boolean externalMission;
 	// Lista över kontakter (agenter) som har accepterat uppdraget
-	List<Contact> agents = new ArrayList<Contact>();
+	private List<Contact> agents = new ArrayList<Contact>();
 	// Textbeskrivning av uppdraget
 	private String assignmentDescription;
 	// Tidsbeskrivning av hur lång tid uppdraget kommer ta (1 timme, 20
