@@ -143,16 +143,16 @@ public class MultiServerThread extends Thread {
 	private void handleAssignment(String assignment) {
 
 		// Gson konverterar json-strängen till Assignment-objektet igen.
-		try {
+//		try {
 			Assignment assignmentFromJson = (new Gson()).fromJson(assignment,
 					Assignment.class);
 			// Lägger in kontakten i databasen
 			db.addToDB(assignmentFromJson);
 			server.sendToAllExceptTheSender(assignment, socket.getInetAddress()
 					.toString());
-		} catch (Exception e) {
-			System.out.println(e);
-		}
+//		} catch (Exception e) {
+//			System.out.println(e);
+//		}
 	}
 
 	/**
