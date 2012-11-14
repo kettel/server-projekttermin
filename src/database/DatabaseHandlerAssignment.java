@@ -11,6 +11,8 @@ import java.util.List;
 
 import model.Assignment;
 import model.ModelInterface;
+import model.Contact;
+import model.AssignmentStatus;
 
 public class DatabaseHandlerAssignment extends DatabaseHandler{
 	private Connection con = null;
@@ -30,25 +32,23 @@ public class DatabaseHandlerAssignment extends DatabaseHandler{
             // SQL-frågan
             pst = con.prepareStatement("INSERT INTO "+m.getDatabaseRepresentation()+"(Name , Latitude , Longitude , Receiver , Sender , Description , Timespan , Status , Cameraimage , Streetname , Sitename) VALUES(?,?,?,?,?,?,?,?,?,?,?)");
             
+            
             // Sätt in rätt värden till rätt plats i frågan
             pst.setString(1, ass.getName());
-            pst.setString(2, Long.toString(ass.getLat()));
-            pst.setString(3, Long.toString(ass.getLon()));
-            pst.setString(4, ass.getReceiver());
-            pst.setString(5, ass.getSender());
-            pst.setString(6, ass.getAssignmentDescription());
-            pst.setString(7, ass.getTimeSpan());
-            pst.setString(8, ass.getAssignmentStatus());
-            pst.setBytes(9, ass.getCameraImage());
-            pst.setString(10, ass.getStreetName());
-            pst.setString(11, ass.getSiteName());
-            
-            // Kan krascha. Osäker på om SetBytes -> Blob (blir visst vara VARBINARY)
-            pst.setBytes(9, ass.getCameraImage());
-            
-            pst.setString(10, ass.getStreetName());
-            pst.setString(11, ass.getSiteName());
-           
+            pst.setString(2, Double.toString(ass.getLat()));
+            pst.setString(3, Double.toString(ass.getLon()));
+            pst.setString(4, ass.getRegion());
+            pst.setString(5, ass.getAgentsString());
+            pst.setString(6, ass.getSender());
+            pst.setString(7, Boolean.toString(ass.isExternalMission()));
+            pst.setString(8, ass.getAssignmentDescription());
+            pst.setString(9, ass.getTimeSpan());
+            pst.setString(10, ass.getAssignmentStatus().toString());
+            pst.setBytes(11, ass.getCameraImage());
+            pst.setString(12, ass.getStreetName());
+            pst.setString(13, ass.getSiteName());
+            pst.setString(14, Long.toString(ass.getTimeStamp()));
+          
             // Utför frågan och lägg till objektet i databasen
             pst.executeUpdate();
 
@@ -86,12 +86,15 @@ public class DatabaseHandlerAssignment extends DatabaseHandler{
             // Sätt in rätt värden till rätt plats i frågan och uppdatera dessa
             st.executeUpdate("UPDATE " + ass.getDatabaseRepresentation() + 
             		" SET Name = \"" + ass.getName() +
-            		"\", Latitude = \"" + Long.toString(ass.getLat()) + 
-            		"\", Longitude = \"" + Long.toString(ass.getLon()) + 
-            		"\", Receiver = \"" + ass.getReceiver() + 
+            		"\", Latitude = \"" + Double.toString(ass.getLat()) + 
+            		"\", Longitude = \"" + Double.toString(ass.getLon()) + 
+            		"\", Region = \"" + ass.getRegion() + 
+            		"\", Agents = \"" + ass.getAgentsString() + 
             		"\", Sender = \"" + ass.getSender() + 
+            		"\", ExternalMission = \"" + Boolean.toString(ass.isExternalMission()) +
             		"\", Description = \"" + ass.getAssignmentDescription() +
             		"\", Timespan = \"" + ass.getAssignmentStatus() +
+            		"\", Status = \"" + ass.getAssignmentStatus().toString() +
             		"\", Cameraimage = \"" + ass.getCameraImage() + 
             		"\", Streetname = \"" + ass.getStreetName() +
             		"\", Sitename = \"" + ass.getSiteName() +
@@ -130,19 +133,21 @@ public class DatabaseHandlerAssignment extends DatabaseHandler{
             while (rs.next()) {
             	// Hämta och skapa ett nytt Contact-objekt samt lägg
             	// till det i returnList
-            	returnList.add((ModelInterface) new Assignment(rs.getInt(1),
-            						rs.getString(2),
-            						Long.valueOf(rs.getString(3)),
-            						Long.valueOf(rs.getString(4)),
-            						rs.getString(5),
-            						rs.getString(6),
-            						rs.getString(7),
-            						rs.getString(8),
-            						rs.getString(9),
-            						// Lyckad konvertering för bilden?
-            						rs.getBytes(10),
-            						rs.getString(11),
-            						rs.getString(12)));
+            	returnList.add((ModelInterface) new Assignment(rs.getInt(1), // Id
+            						rs.getString(2),// Namn
+            						Double.valueOf(rs.getString(3)), // Lat
+            						Double.valueOf(rs.getString(4)), // Lon
+            						rs.getString(5), // Region
+            						getAgentsFromString(rs.getString(6)), // Agents
+            						rs.getString(7), // Sender
+            						Boolean.parseBoolean(rs.getString(8)), // ExternalMission
+            						rs.getString(9), // Desc
+            						rs.getString(10), // Timespan
+            						AssignmentStatus.valueOf(rs.getString(11)), // Status
+            						rs.getBytes(12), // CameraImage
+            						rs.getString(13), // Streetname
+            						rs.getString(14), // Sitename
+            						Long.valueOf(rs.getString(15)))); // Timestamp
             }
 
         } catch (SQLException ex) {
@@ -163,6 +168,18 @@ public class DatabaseHandlerAssignment extends DatabaseHandler{
             }
         }
 		return returnList;
+	}
+	
+	private List<Contact> getAgentsFromString(String agentString){
+		// Gör om strängar med agenter på uppdrag till en lista
+		List <Contact> agents = new ArrayList<Contact>();
+		String[] agentArray = agentString.split("/");
+		for (String agent : agentArray) {
+			// Dela upp kontakten så man kommer åt namn och IP
+			String[] contactArray = agent.split(":");
+			agents.add(new Contact(contactArray[0],contactArray[1]));
+		}
+		return agents;
 	}
 
 
