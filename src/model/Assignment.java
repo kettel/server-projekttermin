@@ -29,7 +29,7 @@ public class Assignment implements ModelInterface {
 	// Om uppdraget ska skickas till externa aktörer
 	private boolean externalMission;
 	// Lista över kontakter (agenter) som har accepterat uppdraget
-	private String[] agents;
+	private List<String> agents = new ArrayList<String>();
 	// Textbeskrivning av uppdraget
 	private String assignmentDescription;
 	// Tidsbeskrivning av hur lång tid uppdraget kommer ta (1 timme, 20
@@ -41,7 +41,7 @@ public class Assignment implements ModelInterface {
 	// Behöver hjälp)
 	private String assignmentStatus;
 	// Bild kopplat till uppdraget
-//	private byte[] cameraImage;
+	private byte[] cameraImage;
 	// Gatunamn för platsen där uppdraget utspelas
 	private String streetName;
 	// Platsnamn där uppdraget utspelas
@@ -122,21 +122,21 @@ public class Assignment implements ModelInterface {
 	 * @param streetName
 	 * @param siteName
 	 */
-//	public Assignment(String name, String sender, boolean externalMission,
-//			String assignmentDescription, String timeSpan,
-//			String assignmentStatus, byte[] cameraImage,
-//			String streetName, String siteName) {
-//		this.name = name;
-//		this.sender = sender;
-//		this.externalMission = externalMission;
-//		this.assignmentDescription = assignmentDescription;
-//		this.timeSpan = timeSpan;
-//		this.assignmentStatus = assignmentStatus;
-//		this.cameraImage = cameraImage;
-//		this.streetName = streetName;
-//		this.siteName = siteName;
-//		this.assignmentTimeStamp = Calendar.getInstance().getTimeInMillis();
-//	}
+	public Assignment(String name, String sender, boolean externalMission,
+			String assignmentDescription, String timeSpan,
+			String assignmentStatus, byte[] cameraImage,
+			String streetName, String siteName) {
+		this.name = name;
+		this.sender = sender;
+		this.externalMission = externalMission;
+		this.assignmentDescription = assignmentDescription;
+		this.timeSpan = timeSpan;
+		this.assignmentStatus = assignmentStatus;
+		this.cameraImage = cameraImage;
+		this.streetName = streetName;
+		this.siteName = siteName;
+		this.assignmentTimeStamp = Calendar.getInstance().getTimeInMillis();
+	}
 
 	/**
 	 * Konstruktor för att skapa ett uppdrag utifrån en koordinat utan
@@ -185,23 +185,23 @@ public class Assignment implements ModelInterface {
 	 * @param streetName
 	 * @param siteName
 	 */
-//	public Assignment(String name, double lat, double lon, String sender,
-//			boolean externalMission, String assignmentDescription,
-//			String timeSpan, String assignmentStatus,
-//			byte[] cameraImage, String streetName, String siteName) {
-//		this.name = name;
-//		this.lat = lat;
-//		this.lon = lon;
-//		this.sender = sender;
-//		this.externalMission = externalMission;
-//		this.assignmentDescription = assignmentDescription;
-//		this.timeSpan = timeSpan;
-//		this.assignmentStatus = assignmentStatus;
-//		this.cameraImage = cameraImage;
-//		this.streetName = streetName;
-//		this.siteName = siteName;
-//		this.assignmentTimeStamp = Calendar.getInstance().getTimeInMillis();
-//	}
+	public Assignment(String name, double lat, double lon, String sender,
+			boolean externalMission, String assignmentDescription,
+			String timeSpan, String assignmentStatus,
+			byte[] cameraImage, String streetName, String siteName) {
+		this.name = name;
+		this.lat = lat;
+		this.lon = lon;
+		this.sender = sender;
+		this.externalMission = externalMission;
+		this.assignmentDescription = assignmentDescription;
+		this.timeSpan = timeSpan;
+		this.assignmentStatus = assignmentStatus;
+		this.cameraImage = cameraImage;
+		this.streetName = streetName;
+		this.siteName = siteName;
+		this.assignmentTimeStamp = Calendar.getInstance().getTimeInMillis();
+	}
 
 	/**
 	 * Konstruktor för att skapa ett uppdrag utifrån en region utan kamerabild
@@ -246,22 +246,22 @@ public class Assignment implements ModelInterface {
 	 * @param streetName
 	 * @param siteName
 	 */
-//	public Assignment(String name, String region, String sender,
-//			boolean externalMission, String assignmentDescription,
-//			String timeSpan, String assignmentStatus,
-//			byte[] cameraImage, String streetName, String siteName) {
-//		this.name = name;
-//		this.region = region;
-//		this.sender = sender;
-//		this.externalMission = externalMission;
-//		this.assignmentDescription = assignmentDescription;
-//		this.timeSpan = timeSpan;
-//		this.assignmentStatus = assignmentStatus;
-//		this.cameraImage = cameraImage;
-//		this.streetName = streetName;
-//		this.siteName = siteName;
-//		this.assignmentTimeStamp = Calendar.getInstance().getTimeInMillis();
-//	}
+	public Assignment(String name, String region, String sender,
+			boolean externalMission, String assignmentDescription,
+			String timeSpan, String assignmentStatus,
+			byte[] cameraImage, String streetName, String siteName) {
+		this.name = name;
+		this.region = region;
+		this.sender = sender;
+		this.externalMission = externalMission;
+		this.assignmentDescription = assignmentDescription;
+		this.timeSpan = timeSpan;
+		this.assignmentStatus = assignmentStatus;
+		this.cameraImage = cameraImage;
+		this.streetName = streetName;
+		this.siteName = siteName;
+		this.assignmentTimeStamp = Calendar.getInstance().getTimeInMillis();
+	}
 
 	/**
 	 * Konstruktor som används av databasen för att återskapa ett objekt och
@@ -282,10 +282,10 @@ public class Assignment implements ModelInterface {
 	 * @param siteName
 	 */
 	public Assignment(long id, String name, double lat, double lon,
-			String region, String[] agents, String sender,
+			String region, List<String> agents, String sender,
 			boolean externalMission, String assignmentDescription,
 			String timeSpan, String assignmentStatus,
-			/*byte[] cameraImage,*/ String streetName, String siteName,
+			byte[] cameraImage, String streetName, String siteName,
 			Long timeStamp) {
 		this.id = id; // 1
 		this.name = name; // 2
@@ -298,7 +298,7 @@ public class Assignment implements ModelInterface {
 		this.assignmentDescription = assignmentDescription; // 9
 		this.timeSpan = timeSpan; // 10
 		this.assignmentStatus = assignmentStatus; // 11
-		//this.cameraImage = cameraImage; // 12
+		this.cameraImage = cameraImage; // 12
 		this.streetName = streetName; // 13
 		this.siteName = siteName; // 14
 		this.assignmentTimeStamp = timeStamp; // 15
@@ -312,7 +312,7 @@ public class Assignment implements ModelInterface {
 		return externalMission;
 	}
 
-	public String[] getAgents() {
+	public List<String> getAgents() {
 		return agents;
 	}
 
@@ -340,9 +340,9 @@ public class Assignment implements ModelInterface {
 		return sender;
 	}
 
-//	public byte[] getCameraImage() {
-//		return cameraImage;
-//	}
+	public byte[] getCameraImage() {
+		return cameraImage;
+	}
 
 	public String getAssignmentDescription() {
 		return assignmentDescription;
@@ -394,7 +394,7 @@ public class Assignment implements ModelInterface {
 	public String getAgentsString() {
 		// Konkatenera alla agenter till en sträng
 		String agents = new String();
-		String[] receivers = this.agents;
+		List<String> receivers = this.agents;
 		for (String contact : receivers) {
 			agents.concat(/*contact.getContactName() + ":"
 					+ */contact/*.getInetAddress()*/ + "/");
