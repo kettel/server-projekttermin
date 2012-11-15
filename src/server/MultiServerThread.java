@@ -125,6 +125,12 @@ public class MultiServerThread extends Thread {
 		// Gson konverterar json-strängen till MessageModel-objektet igen
 		try {
 			msg = (new Gson()).fromJson(message, MessageModel.class);
+			
+			List<ModelInterface> list = db.getAllFromDB(new Assignment());
+			Assignment a = (Assignment)list.get(list.size()-1);
+			String aToJson = new Gson().toJson(a);
+			System.out.println(aToJson);
+			
 			// Lägger in meddelandet i databasen
 			db.addToDB(msg);
 			server.send(message, msg.getReciever().toString());
@@ -146,13 +152,7 @@ public class MultiServerThread extends Thread {
 			Assignment assignmentFromJson = (new Gson()).fromJson(assignment,
 					Assignment.class);
 			// Lägger in kontakten i databasen
-			db.addToDB(assignmentFromJson);
-			
-			List<ModelInterface> list = db.getAllFromDB(new Assignment());
-			Assignment a = (Assignment)list.get(list.size()-1);
-			String aToJson = new Gson().toJson(a);
-			System.out.println(aToJson);
-			
+			db.addToDB(assignmentFromJson);			
 			server.sendToAllExceptTheSender(assignment, socket.getInetAddress()
 					.toString());
 		} catch (Exception e) {
