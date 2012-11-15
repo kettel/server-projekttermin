@@ -124,16 +124,7 @@ public class MultiServerThread extends Thread {
 		MessageModel msg = new MessageModel();
 		// Gson konverterar json-strängen till MessageModel-objektet igen
 		try {
-			msg = (new Gson()).fromJson(message, MessageModel.class);
-			
-			List<ModelInterface> list = db.getAllFromDB(new Assignment());
-			for(int i = 0; i < list.size()-1; i++){
-				Assignment a = (Assignment)list.get(i);
-			String aToJson = new Gson().toJson(a);
-			System.out.println(aToJson);
-			}
-			
-			
+			msg = (new Gson()).fromJson(message, MessageModel.class);	
 			// Lägger in meddelandet i databasen
 			db.addToDB(msg);
 			server.send(message, msg.getReciever().toString());
