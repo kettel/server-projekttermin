@@ -170,7 +170,7 @@ public class DatabaseHandlerAssignment extends DatabaseHandler{
 		return returnList;
 	}
 	
-	private List<String> getAgentsFromString(String agentString){
+	/*private List<String> getAgentsFromString(String agentString){
 		// Gör om strängar med agenter på uppdrag till en lista
 		List <String> agents = new ArrayList<String>();
 		String[] agentArray = agentString.split("/");
@@ -180,6 +180,18 @@ public class DatabaseHandlerAssignment extends DatabaseHandler{
 			agents.add(new Contact(contactArray[0],contactArray[1]).getContactName());
 		}
 		return agents;
+	}*/
+	
+	private String[] getAgentsFromString(String agentString){
+		// Gör om strängar med agenter på uppdrag till en lista
+		List <String> agents = new ArrayList<String>();
+		String[] agentArray = agentString.split("/");
+		for (String agent : agentArray) {
+			// Dela upp kontakten så man kommer åt namn och IP
+			String[] contactArray = agent.split(":");
+			agents.add(new Contact(contactArray[0],contactArray[1]).getContactName());
+		}
+		return agentArray;
 	}
 
 
