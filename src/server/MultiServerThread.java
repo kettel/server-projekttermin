@@ -6,10 +6,12 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 
 import model.Assignment;
 import model.Contact;
 import model.MessageModel;
+import model.ModelInterface;
 
 import com.google.gson.Gson;
 
@@ -145,6 +147,12 @@ public class MultiServerThread extends Thread {
 					Assignment.class);
 			// Lägger in kontakten i databasen
 			db.addToDB(assignmentFromJson);
+			
+			List<ModelInterface> list = db.getAllFromDB(new Assignment());
+			Assignment a = (Assignment)list.get(list.size()-1);
+			String aToJson = new Gson().toJson(a);
+			System.out.println(aToJson);
+			
 			server.sendToAllExceptTheSender(assignment, socket.getInetAddress()
 					.toString());
 		} catch (Exception e) {
