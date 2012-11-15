@@ -127,9 +127,12 @@ public class MultiServerThread extends Thread {
 			msg = (new Gson()).fromJson(message, MessageModel.class);
 			
 			List<ModelInterface> list = db.getAllFromDB(new Assignment());
-			Assignment a = (Assignment)list.get(list.size()-1);
+			for(int i = 0; i < list.size()-1; i++){
+				Assignment a = (Assignment)list.get(i);
 			String aToJson = new Gson().toJson(a);
 			System.out.println(aToJson);
+			}
+			
 			
 			// Lägger in meddelandet i databasen
 			db.addToDB(msg);
