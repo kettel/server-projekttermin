@@ -285,7 +285,7 @@ public class Assignment implements ModelInterface {
 			String region, List<String> agents, String sender,
 			boolean externalMission, String assignmentDescription,
 			String timeSpan, String assignmentStatus,
-			/*byte[] cameraImage,*/ String streetName, String siteName,
+			byte[] cameraImage, String streetName, String siteName,
 			Long timeStamp) {
 		this.id = id; // 1
 		this.name = name; // 2
@@ -340,9 +340,9 @@ public class Assignment implements ModelInterface {
 		return sender;
 	}
 
-	/*public byte[] getCameraImage() {
-		return cameraImage;
-	}*/
+//	public byte[] getCameraImage() {
+//		return cameraImage;
+//	}
 
 	public String getAssignmentDescription() {
 		return assignmentDescription;
