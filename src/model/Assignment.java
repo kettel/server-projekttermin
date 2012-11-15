@@ -340,9 +340,9 @@ public class Assignment implements ModelInterface {
 		return sender;
 	}
 
-//	public byte[] getCameraImage() {
-//		return cameraImage;
-//	}
+	public byte[] getCameraImage() {
+		return cameraImage;
+	}
 
 	public String getAssignmentDescription() {
 		return assignmentDescription;
