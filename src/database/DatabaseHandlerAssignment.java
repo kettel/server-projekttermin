@@ -170,9 +170,9 @@ public class DatabaseHandlerAssignment extends DatabaseHandler{
 		return returnList;
 	}
 	
-	private List<String> getAgentsFromString(String agentString){
+	private ArrayList<String> getAgentsFromString(String agentString){
 		// Gör om strängar med agenter på uppdrag till en lista
-		List <String> agents = new ArrayList<String>();
+		ArrayList <String> agents = new ArrayList<String>();
 		String[] agentArray = agentString.split("/");
 		for (String agent : agentArray) {
 			// Dela upp kontakten så man kommer åt namn och IP
