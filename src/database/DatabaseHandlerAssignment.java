@@ -147,9 +147,9 @@ public class DatabaseHandlerAssignment extends DatabaseHandler{
             						rs.getString(10), // Timespan
             						/*AssignmentStatus.valueOf(*/rs.getString(11)/*)*/, // Status
 //            						rs.getBytes(12), // CameraImage
-            						rs.getString(13), // Streetname
-            						rs.getString(14), // Sitename
-            						Long.valueOf(rs.getString(15)))); // Timestamp
+            						rs.getString(12), // Streetname
+            						rs.getString(13), // Sitename
+            						Long.valueOf(rs.getString(14)))); // Timestamp
             }
 
         } catch (SQLException ex) {
