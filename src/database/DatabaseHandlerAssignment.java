@@ -44,7 +44,7 @@ public class DatabaseHandlerAssignment extends DatabaseHandler{
             pst.setString(8, ass.getAssignmentDescription());
             pst.setString(9, ass.getTimeSpan());
             pst.setString(10, ass.getAssignmentStatus().toString());
-            pst.setBytes(11, ass.getCameraImage());
+           // pst.setBytes(11, ass.getCameraImage());
             pst.setString(12, ass.getStreetName());
             pst.setString(13, ass.getSiteName());
             pst.setString(14, Long.toString(ass.getTimeStamp()));
@@ -95,7 +95,7 @@ public class DatabaseHandlerAssignment extends DatabaseHandler{
             		"\", Description = \"" + ass.getAssignmentDescription() +
             		"\", Timespan = \"" + ass.getAssignmentStatus() +
             		"\", Status = \"" + ass.getAssignmentStatus().toString() +
-            		"\", Cameraimage = \"" + ass.getCameraImage() + 
+            		/*"\", Cameraimage = \"" + ass.getCameraImage() + */
             		"\", Streetname = \"" + ass.getStreetName() +
             		"\", Sitename = \"" + ass.getSiteName() +
             		"\" WHERE Id = " + ass.getId());
@@ -144,7 +144,7 @@ public class DatabaseHandlerAssignment extends DatabaseHandler{
             						rs.getString(9), // Desc
             						rs.getString(10), // Timespan
             						/*AssignmentStatus.valueOf(*/rs.getString(11)/*)*/, // Status
-            						rs.getBytes(12), // CameraImage
+//            						rs.getBytes(12), // CameraImage
             						rs.getString(13), // Streetname
             						rs.getString(14), // Sitename
             						Long.valueOf(rs.getString(15)))); // Timestamp
