@@ -141,6 +141,7 @@ public class MultiServerThread extends Thread {
 	 *            Json-strängen av uppdraget
 	 */
 	private void handleAssignment(String assignment) {
+		System.out.println("ASSIGNMENT");
 		// Gson konverterar json-strängen till Assignment-objektet igen.
 		try {
 			Assignment assignmentFromJson = (new Gson()).fromJson(assignment,
