@@ -115,6 +115,7 @@ public class Server {
 		list = db.getAllFromDB(new Contact());
 		for (ModelInterface m : list) {
 			Contact cont = (Contact) m;
+			System.out.println(sendersIP + " compared to " + cont.getInetAddress());
 			if (!sendersIP.equals(cont.getInetAddress())
 					&& hashMap.keySet().contains("/" + cont.getInetAddress())) {
 				PrintWriter pr = new PrintWriter(hashMap.get("/"
