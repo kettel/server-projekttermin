@@ -30,7 +30,7 @@ public class DatabaseHandlerAssignment extends DatabaseHandler{
             con = DriverManager.getConnection(url, user, password);
             
             // SQL-frågan
-            pst = con.prepareStatement("INSERT INTO "+m.getDatabaseRepresentation()+"(Name , Latitude , Longitude , Receiver , Sender , Description , Timespan , Status , Cameraimage , Streetname , Sitename) VALUES(?,?,?,?,?,?,?,?,?,?,?)");
+            pst = con.prepareStatement("INSERT INTO "+m.getDatabaseRepresentation()+"(Name , Latitude , Longitude , Region , Agents , ExternalMission , Sender , Description , Timespan , Status , Cameraimage , Streetname , Sitename , Timestamp) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
             
             
             // Sätt in rätt värden till rätt plats i frågan
