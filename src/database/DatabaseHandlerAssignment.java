@@ -143,7 +143,7 @@ public class DatabaseHandlerAssignment extends DatabaseHandler{
             						Boolean.parseBoolean(rs.getString(8)), // ExternalMission
             						rs.getString(9), // Desc
             						rs.getString(10), // Timespan
-            						/*AssignmentStatus.valueOf(*/rs.getString(11)/*)*/, // Status
+            						AssignmentStatus.valueOf(rs.getString(11)), // Status
             						rs.getBytes(12), // CameraImage
             						rs.getString(13), // Streetname
             						rs.getString(14), // Sitename
