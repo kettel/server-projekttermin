@@ -100,10 +100,11 @@ public class MultiServerThread extends Thread {
 	 *            Json strängen.
 	 */
 	private void handleTypeOfInput(String input) {
-
+		System.out.println("handle");
 		if (input.contains("\"databaseRepresentation\":\"message\"")) {
 			handleMessage(input);
 		} else if (input.contains("\"databaseRepresentation\":\"assignment\"")) {
+			System.out.println("ass");
 			handleAssignment(input);
 		} else if (input.contains("\"databaseRepresentation\":\"contact\"")) {
 			handleContact(input);
