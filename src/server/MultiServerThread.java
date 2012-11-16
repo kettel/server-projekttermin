@@ -100,11 +100,9 @@ public class MultiServerThread extends Thread {
 	 *            Json strängen.
 	 */
 	private void handleTypeOfInput(String input) {
-		System.out.println("handle");
 		if (input.contains("\"databaseRepresentation\":\"message\"")) {
 			handleMessage(input);
 		} else if (input.contains("\"databaseRepresentation\":\"assignment\"")) {
-			System.out.println("ass");
 			handleAssignment(input);
 		} else if (input.contains("\"databaseRepresentation\":\"contact\"")) {
 			handleContact(input);
@@ -142,14 +140,12 @@ public class MultiServerThread extends Thread {
 	 *            Json-strängen av uppdraget
 	 */
 	private void handleAssignment(String assignment) {
-		System.out.println("ASSIGNMENT");
 		// Gson konverterar json-strängen till Assignment-objektet igen.
 		try {
 			Assignment assignmentFromJson = (new Gson()).fromJson(assignment,
 					Assignment.class);
 			// Lägger in kontakten i databasen
 			db.addToDB(assignmentFromJson);			
-			System.out.println("HÄR SKA VI SKICKA TILL ALLA UTOM MIG");
 			server.sendToAllExceptTheSender(assignment, socket.getInetAddress()
 					.toString());
 		} catch (Exception e) {
