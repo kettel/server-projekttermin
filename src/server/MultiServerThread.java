@@ -147,6 +147,7 @@ public class MultiServerThread extends Thread {
 					Assignment.class);
 			// Lägger in kontakten i databasen
 			db.addToDB(assignmentFromJson);			
+			System.out.println("HÄR SKA VI SKICKA TILL ALLA UTOM MIG");
 			server.sendToAllExceptTheSender(assignment, socket.getInetAddress()
 					.toString());
 		} catch (Exception e) {
