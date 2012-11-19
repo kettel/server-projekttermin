@@ -82,7 +82,7 @@ public class Server {
 							+ cont.getInetAddress()), true);
 					pr.println(stringToBeSent);
 				} else {
-					System.out.println(cont.getContactName());
+					
 				}
 			}
 		}

@@ -22,6 +22,7 @@ public class MessageModel implements ModelInterface {
 	private String sender;
 	// Tiddstämpel i UNIX Epoch-format för när meddelandet skapades
 	private Long messageTimeStamp;
+	private boolean sent;
 
 	/**
 	 * Tom konstruktor. Används för att hämta från databasen.
@@ -126,5 +127,9 @@ public class MessageModel implements ModelInterface {
 	 */
 	public boolean isRead() {
 		return isRead;
+	}
+	
+	public boolean sent(){
+		return sent;
 	}
 }
