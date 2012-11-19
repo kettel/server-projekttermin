@@ -33,16 +33,16 @@ public class ServerTerminal extends Thread {
 	public void run() {
 		while (listeningToCommands) {
 			String command = in.nextLine();
+			System.out.println(command);
 			if (command.equals(createContactCommand.commandLine())) {
 				createContactCommand.commandTask();
 			}else if(command.equals(getAllContacts.commandLine())){
 				getAllContacts.commandTask();
 			} else if(command.equals(removeContact.commandLine())){
 				removeContact.commandTask();
-			}else if(command.equals("hej")){
-					getAllContacts.commandTask();
-			} else {
-			
+			}else if(command.equals("gcm")){
+				new GCM().sendMessage();
+			}else {
 				System.out.println("Kommandot existerar inte.");
 			}
 		}
