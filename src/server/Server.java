@@ -34,7 +34,7 @@ public class Server {
 	private static Socket clientSocket = null;
 	private List<ModelInterface> list = null;
 	private Database db = null;
-	private static List<ModelInterface> unsentList = null;
+//	private static List<ModelInterface> unsentList = null;
 
 	public static void main(String[] args) {
 		new Server();
@@ -43,7 +43,7 @@ public class Server {
 	public Server() {
 		try {
 			db = new Database();
-			unsentList = new ArrayList<ModelInterface>();
+//			unsentList = new ArrayList<ModelInterface>();
 			hashMap = new ConcurrentHashMap<String, OutputStream>();
 			serverSocket = new ServerSocket(port);
 
@@ -86,6 +86,7 @@ public class Server {
 				} else {
 					System.out.println("Lägg i kön");
 					cont.addUnsentItem(stringToBeSent);
+					db.updateModel(cont);
 				}
 			}
 		}
@@ -152,7 +153,9 @@ public class Server {
 	 */
 
 	public void sendUnsentItems(Contact receiver) {
-		System.out.println("sync");
+		if(receiver != null){
+		System.out.println(receiver.getContactName() + " " + receiver.getUnsentQueue());
+		}
 		if (receiver != null && !receiver.getUnsentQueue().isEmpty()) {
 			System.out.println("inte null");
 			PrintWriter pr = new PrintWriter(hashMap.get("/"
