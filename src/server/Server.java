@@ -151,9 +151,9 @@ public class Server {
 	 * unsentList.add(m); }
 	 */
 
-	public synchronized void sendUnsentItems(Contact receiver) {
+	public void sendUnsentItems(Contact receiver) {
 		System.out.println("sync");
-		if (receiver != null) {
+		if (receiver != null && !receiver.getUnsentQueue().isEmpty()) {
 			System.out.println("inte null");
 			PrintWriter pr = new PrintWriter(hashMap.get("/"
 					+ receiver.getInetAddress()), true);
