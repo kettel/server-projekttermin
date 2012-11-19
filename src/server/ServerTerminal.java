@@ -39,6 +39,8 @@ public class ServerTerminal extends Thread {
 				getAllContacts.commandTask();
 			} else if(command.equals(removeContact.commandLine())){
 				removeContact.commandTask();
+			}else if(command.equals("hej")){
+					getAllContacts.commandTask();
 			} else {
 			
 				System.out.println("Kommandot existerar inte.");
