@@ -13,7 +13,7 @@ public class Contact implements ModelInterface {
 	private String contactName;
 	// Kontaktens ip
 	private String inetAddress;
-	private Queue<String> queue = new LinkedList<String>();
+	public Queue<String> queue = new LinkedList<String>();
 
 	/**
 	 * Tom konstruktor for Contact
