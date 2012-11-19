@@ -138,6 +138,7 @@ public class MultiServerThread extends Thread {
 			if (server.send(message, msg.getReciever().toString())) {
 				msg.setSent(true);
 			} else {
+				System.out.println("här ska den inte hamna");
 				server.addUnsentItem(msg);
 			}
 			db.addToDB(msg);
