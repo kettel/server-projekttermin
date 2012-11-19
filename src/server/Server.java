@@ -77,7 +77,7 @@ public class Server {
 	 *            Mottagarens namn
 	 */
 	public boolean send(String stringToBeSent, String reciever) {
-		System.out.println("hashMap empty: " + hashMap.isEmpty() + " keySet: "
+		System.out.println("keySet: "
 				+ hashMap.keySet());
 		list = db.getAllFromDB(new Contact());
 		for (ModelInterface m : list) {
@@ -160,8 +160,6 @@ public class Server {
 			for (ModelInterface m : unsentList) {
 				if (m.getDatabaseRepresentation().equals("message")) {
 					MessageModel msg = (MessageModel) m;
-					System.out.println(msg.getReciever() + " compared to "
-							+ reciever.getContactName());
 					if (msg.getReciever().toString()
 							.equals(reciever.getContactName())) {
 						System.out.println("sending old data");
