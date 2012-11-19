@@ -125,8 +125,11 @@ public class MultiServerThread extends Thread {
 		try {
 			msg = (new Gson()).fromJson(message, MessageModel.class);	
 			// Lägger in meddelandet i databasen
+			if(server.send(message, msg.getReciever().toString())){
+				msg.setSent(true);
+			}
+			
 			db.addToDB(msg);
-			server.send(message, msg.getReciever().toString());
 		} catch (Exception e) {
 			System.out.println(e);
 		}

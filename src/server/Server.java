@@ -69,7 +69,7 @@ public class Server {
 	 * @param reciever
 	 *            Mottagarens namn
 	 */
-	public void send(String stringToBeSent, String reciever) {
+	public boolean send(String stringToBeSent, String reciever) {
 		System.out.println("hashMap empty: " + hashMap.isEmpty() + " keySet: "
 				+ hashMap.keySet());
 		list = db.getAllFromDB(new Contact());
@@ -81,11 +81,13 @@ public class Server {
 					PrintWriter pr = new PrintWriter(hashMap.get("/"
 							+ cont.getInetAddress()), true);
 					pr.println(stringToBeSent);
+					return true;
 				} else {
-					
+					return false;
 				}
 			}
 		}
+		return false;
 	}
 
 	/**

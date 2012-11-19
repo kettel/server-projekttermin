@@ -129,6 +129,10 @@ public class MessageModel implements ModelInterface {
 		return isRead;
 	}
 	
+	public void setSent(boolean b){
+		sent = b;
+	}
+	
 	public boolean sent(){
 		return sent;
 	}
