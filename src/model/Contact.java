@@ -73,4 +73,12 @@ public class Contact implements ModelInterface {
 	public Queue getQueue(){
 		return queue;
 	}
+	
+	public void addToQueue(String s){
+		queue.add(s);
+	}
+	
+	public void popQueue(){
+		queue.poll();
+	}
 }

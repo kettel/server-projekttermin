@@ -82,7 +82,7 @@ public class Server {
 							+ cont.getInetAddress()), true);
 					pr.println(stringToBeSent);
 				} else {
-					cont.queue.add(stringToBeSent);
+					cont.addToQueue(stringToBeSent);
 					System.out.println(cont.getQueue());
 				}
 			}
