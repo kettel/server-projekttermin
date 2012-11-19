@@ -5,11 +5,16 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 import model.Contact;
+import model.MessageModel;
 import model.ModelInterface;
+
+import com.google.gson.Gson;
+
 import database.Database;
 
 /**
@@ -33,6 +38,7 @@ public class Server {
 	private static Socket clientSocket = null;
 	private List<ModelInterface> list = null;
 	private Database db = null;
+	private static List<ModelInterface> unsentList = null;
 
 	public static void main(String[] args) {
 		new Server();
@@ -41,6 +47,7 @@ public class Server {
 	public Server() {
 		try {
 			db = new Database();
+			unsentList = new ArrayList<ModelInterface>();
 			hashMap = new ConcurrentHashMap<String, OutputStream>();
 			serverSocket = new ServerSocket(port);
 
@@ -142,5 +149,26 @@ public class Server {
 	 */
 	public void removeClient(String usersIP) {
 		hashMap.remove(usersIP);
+	}
+	
+	public void addUnsentItem(ModelInterface m){
+		unsentList.add(m);
+	}
+	
+	public void sendUnsentItems(Contact reciever){
+		for (ModelInterface m : unsentList) {
+			if(m.getDatabaseRepresentation().equals("message")){
+				MessageModel msg = (MessageModel) m;
+				if(msg.getReciever().toString().equals(reciever.getContactName())){
+					PrintWriter pr = new PrintWriter(hashMap.get("/"
+							+ reciever.getInetAddress()), true);
+					pr.println(new Gson().toJson(msg));
+				}
+			}else if(m.getDatabaseRepresentation().equals("assignment")){
+				
+			}else if(m.getDatabaseRepresentation().equals("contact")){
+				
+			}
+		}
 	}
 }

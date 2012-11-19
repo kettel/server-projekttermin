@@ -32,6 +32,7 @@ public class MultiServerThread extends Thread {
 
 	private boolean connected = true;
 	private Server server = null;
+	private Contact thisContact;
 
 	/**
 	 * Konstruktorn, tar emot en socket för porten vi lyssnar på och en Server
@@ -48,6 +49,13 @@ public class MultiServerThread extends Thread {
 		this.socket = socket;
 		this.server = server;
 		db = new Database();
+		List<ModelInterface> m = db.getAllFromDB(new Contact());
+		for (ModelInterface mi : m) {
+			Contact cont = (Contact) mi;
+			if(cont.getInetAddress().equals(socket.getInetAddress().toString())){
+				thisContact = cont;
+			}
+		}
 	}
 
 	/**
@@ -57,6 +65,7 @@ public class MultiServerThread extends Thread {
 
 		try {
 			while (connected) {
+				server.sendUnsentItems(thisContact);
 				// Buffrar ihop flera tecken från InputStreamen till en sträng
 				input = new BufferedReader(new InputStreamReader(
 						socket.getInputStream()));
@@ -106,6 +115,7 @@ public class MultiServerThread extends Thread {
 			handleAssignment(input);
 		} else if (input.contains("\"databaseRepresentation\":\"contact\"")) {
 			handleContact(input);
+		} else if (input.equals("Heart")) {
 		} else {
 			System.out.println("Did not recognise inputtype.");
 		}
@@ -123,12 +133,13 @@ public class MultiServerThread extends Thread {
 		MessageModel msg = new MessageModel();
 		// Gson konverterar json-strängen till MessageModel-objektet igen
 		try {
-			msg = (new Gson()).fromJson(message, MessageModel.class);	
+			msg = (new Gson()).fromJson(message, MessageModel.class);
 			// Lägger in meddelandet i databasen
-			if(server.send(message, msg.getReciever().toString())){
+			if (server.send(message, msg.getReciever().toString())) {
 				msg.setSent(true);
+			} else {
+				server.addUnsentItem(msg);
 			}
-			
 			db.addToDB(msg);
 		} catch (Exception e) {
 			System.out.println(e);
@@ -148,7 +159,7 @@ public class MultiServerThread extends Thread {
 			Assignment assignmentFromJson = (new Gson()).fromJson(assignment,
 					Assignment.class);
 			// Lägger in kontakten i databasen
-			db.addToDB(assignmentFromJson);			
+			db.addToDB(assignmentFromJson);
 			server.sendToAllExceptTheSender(assignment, socket.getInetAddress()
 					.toString());
 		} catch (Exception e) {
