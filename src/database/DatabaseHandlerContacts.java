@@ -28,11 +28,12 @@ public class DatabaseHandlerContacts extends DatabaseHandler{
             con = DriverManager.getConnection(url, user, password);
             
             // SQL-frågan
-            pst = con.prepareStatement("INSERT INTO contact(Name, InetAddress) VALUES(?,?)");
+            pst = con.prepareStatement("INSERT INTO contact(Name, InetAddress, UnsentQueue) VALUES(?,?,?)");
             
             // Sätt in rätt värden till rätt plats i frågan
             pst.setString(1, contact.getContactName());
             pst.setString(2, contact.getInetAddress());
+            pst.setString(3, contact.getUnsentQueue().toString());
            
             // Utför frågan och lägg till objektet i databasen
             pst.executeUpdate();
@@ -70,6 +71,7 @@ public class DatabaseHandlerContacts extends DatabaseHandler{
             	returnList.add((ModelInterface) new Contact(rs.getInt(1), // Id
             						rs.getString(2), // Name
             						rs.getString(3))); // Inetaddress
+            						
             }
 
         } catch (SQLException ex) {
@@ -108,6 +110,7 @@ public class DatabaseHandlerContacts extends DatabaseHandler{
             st.executeUpdate("UPDATE " + contact.getDatabaseRepresentation() + 
             		" SET Name = \"" + contact.getContactName() +
             		"\", InetAddress = \"" + contact.getInetAddress() +
+            		"\", UnsentQueue = \"" + contact.getUnsentQueue() +
             		"\" WHERE Id = " + contact.getId());
             
             // Commita db-uppdateringarna (?)

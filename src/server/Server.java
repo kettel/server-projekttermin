@@ -77,8 +77,7 @@ public class Server {
 	 *            Mottagarens namn
 	 */
 	public boolean send(String stringToBeSent, String reciever) {
-		System.out.println("keySet: "
-				+ hashMap.keySet());
+		System.out.println("keySet: " + hashMap.keySet());
 		list = db.getAllFromDB(new Contact());
 		for (ModelInterface m : list) {
 			Contact cont = (Contact) m;
@@ -128,11 +127,14 @@ public class Server {
 		list = db.getAllFromDB(new Contact());
 		for (ModelInterface m : list) {
 			Contact cont = (Contact) m;
-			if (!sendersIP.equals("/" + cont.getInetAddress())
-					&& hashMap.keySet().contains("/" + cont.getInetAddress())) {
-				PrintWriter pr = new PrintWriter(hashMap.get("/"
-						+ cont.getInetAddress()), true);
-				pr.println(stringToBeSent);
+			if (!sendersIP.equals("/" + cont.getInetAddress())) {
+				if (hashMap.keySet().contains("/" + cont.getInetAddress())) {
+					PrintWriter pr = new PrintWriter(hashMap.get("/"
+							+ cont.getInetAddress()), true);
+					pr.println(stringToBeSent);
+				}else{
+					
+				}
 			}
 		}
 	}
