@@ -52,7 +52,7 @@ public class MultiServerThread extends Thread {
 		List<ModelInterface> m = db.getAllFromDB(new Contact());
 		for (ModelInterface mi : m) {
 			Contact cont = (Contact) mi;
-			if(cont.getInetAddress().equals(socket.getInetAddress().toString())){
+			if(socket.getInetAddress().toString().equals("/"+cont.getInetAddress())){
 				thisContact = cont;
 			}
 		}

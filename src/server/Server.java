@@ -159,7 +159,9 @@ public class Server {
 		for (ModelInterface m : unsentList) {
 			if(m.getDatabaseRepresentation().equals("message")){
 				MessageModel msg = (MessageModel) m;
+				System.out.println(msg.getReciever() + " compared to " + reciever.getContactName());
 				if(msg.getReciever().toString().equals(reciever.getContactName())){
+					System.out.println("sending old data");
 					PrintWriter pr = new PrintWriter(hashMap.get("/"
 							+ reciever.getInetAddress()), true);
 					pr.println(new Gson().toJson(msg));
