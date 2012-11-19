@@ -75,11 +75,16 @@ public class Server {
 		list = db.getAllFromDB(new Contact());
 		for (ModelInterface m : list) {
 			Contact cont = (Contact) m;
-			if (reciever.equals(cont.getContactName())
-					&& hashMap.keySet().contains("/" + cont.getInetAddress())) {
-				PrintWriter pr = new PrintWriter(hashMap.get("/"
-						+ cont.getInetAddress()), true);
-				pr.println(stringToBeSent);
+			if (reciever.equals(cont.getContactName())) {
+				// Om mottagaren är ansluten så skickas strängen
+				if (hashMap.keySet().contains("/" + cont.getInetAddress())) {
+					PrintWriter pr = new PrintWriter(hashMap.get("/"
+							+ cont.getInetAddress()), true);
+					pr.println(stringToBeSent);
+				} else {
+					cont.getQueue().add(stringToBeSent);
+					System.out.println(cont.getQueue());
+				}
 			}
 		}
 	}
@@ -115,13 +120,17 @@ public class Server {
 		list = db.getAllFromDB(new Contact());
 		for (ModelInterface m : list) {
 			Contact cont = (Contact) m;
-			if (!sendersIP.equals("/"+cont.getInetAddress())
+			if (!sendersIP.equals("/" + cont.getInetAddress())
 					&& hashMap.keySet().contains("/" + cont.getInetAddress())) {
 				PrintWriter pr = new PrintWriter(hashMap.get("/"
 						+ cont.getInetAddress()), true);
 				pr.println(stringToBeSent);
 			}
 		}
+	}
+	
+	public void sendWhenReconnected(String stringToBeSent, Contact reciever){
+		
 	}
 
 	/**

@@ -1,5 +1,7 @@
 package model;
 
+import java.util.Queue;
+
 public class Contact implements ModelInterface {
 
 	// Typen av modell
@@ -10,6 +12,7 @@ public class Contact implements ModelInterface {
 	private String contactName;
 	// Kontaktens ip
 	private String inetAddress;
+	private Queue<String> queue;
 
 	/**
 	 * Tom konstruktor for Contact
@@ -64,5 +67,9 @@ public class Contact implements ModelInterface {
 
 	public void setInetAddress(String inetAddress) {
 		this.inetAddress = inetAddress;
+	}
+	
+	public Queue getQueue(){
+		return queue;
 	}
 }
