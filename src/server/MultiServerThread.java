@@ -69,9 +69,6 @@ public class MultiServerThread extends Thread {
 				Calendar cal = Calendar.getInstance();
 				cal.getTime();
 				SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-				System.out.println(socket.getInetAddress() + ":"
-						+ socket.getPort() + " " + sdf.format(cal.getTime())
-						+ ":  " + inputLine);
 
 				// Bestämmer vilken typ av input som kommer in. När det
 				// avgjorts
