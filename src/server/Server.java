@@ -69,21 +69,22 @@ public class Server {
 	 * 
 	 * @param stringToBeSent
 	 *            Strängen som ska skickas
-	 * @param reciever
+	 * @param receiver
 	 *            Mottagarens namn
 	 */
-	public void send(String stringToBeSent, String reciever) {
+	public void send(String stringToBeSent, String receiver) {
 		System.out.println("keySet: " + hashMap.keySet());
 		list = db.getAllFromDB(new Contact());
 		for (ModelInterface m : list) {
 			Contact cont = (Contact) m;
-			if (reciever.equals(cont.getContactName())) {
+			if (receiver.equals(cont.getContactName())) {
 				// Om mottagaren är ansluten så skickas strängen
 				if (hashMap.keySet().contains("/" + cont.getInetAddress())) {
 					PrintWriter pr = new PrintWriter(hashMap.get("/"
 							+ cont.getInetAddress()), true);
 					pr.println(stringToBeSent);
 				} else {
+					System.out.println("Lägg i kön");
 					cont.addUnsentItem(stringToBeSent);
 				}
 			}
@@ -104,7 +105,7 @@ public class Server {
 				PrintWriter pr = new PrintWriter(hashMap.get("/"
 						+ cont.getInetAddress()), true);
 				pr.println(stringToBeSent);
-			}else{
+			} else {
 				cont.addUnsentItem(stringToBeSent);
 			}
 		}
@@ -145,29 +146,28 @@ public class Server {
 		hashMap.remove(usersIP);
 	}
 
-	public synchronized void addUnsentItem(ModelInterface m) {
-		unsentList.add(m);
-	}
+	/*
+	 * public synchronized void addUnsentItem(ModelInterface m) {
+	 * unsentList.add(m); }
+	 */
 
 	public synchronized void sendUnsentItems(Contact receiver) {
-		PrintWriter pr = new PrintWriter(hashMap.get("/"
-				+ receiver.getInetAddress()), true);
-		for (String s : receiver.getUnsentQueue()) {
-			pr.println(s);
-			receiver.removeUnsentItem(s);
-		}
-		/*if (!unsentList.isEmpty()) {
-			for (ModelInterface m : unsentList) {
-				if (m.getDatabaseRepresentation().equals("message")) {
-					MessageModel msg = (MessageModel) m;
-					if (msg.getReciever().toString()
-							.equals(reciever.getContactName())) {
-						System.out.println("sending old data");
-						pr.println(new Gson().toJson(msg));
-						unsentList.remove(msg);
-					}
-				}
+		if (receiver != null) {
+			PrintWriter pr = new PrintWriter(hashMap.get("/"
+					+ receiver.getInetAddress()), true);
+			for (String s : receiver.getUnsentQueue()) {
+				pr.println(s);
+				receiver.removeUnsentItem(s);
 			}
-		}*/
+		}
+
+		/*
+		 * if (!unsentList.isEmpty()) { for (ModelInterface m : unsentList) { if
+		 * (m.getDatabaseRepresentation().equals("message")) { MessageModel msg
+		 * = (MessageModel) m; if (msg.getReciever().toString()
+		 * .equals(reciever.getContactName())) {
+		 * System.out.println("sending old data"); pr.println(new
+		 * Gson().toJson(msg)); unsentList.remove(msg); } } } }
+		 */
 	}
 }
