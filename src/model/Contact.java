@@ -70,11 +70,11 @@ public class Contact implements ModelInterface {
 		this.inetAddress = inetAddress;
 	}
 	
-	public void addUnsentItem(String s){
+	public synchronized void addUnsentItem(String s){
 		unsentQueue.add(s);
 	}
 	
-	public void removeUnsentItem(String s){
+	public synchronized void removeUnsentItem(String s){
 		unsentQueue.remove(s);
 	}
 	

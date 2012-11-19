@@ -10,11 +10,7 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 import model.Contact;
-import model.MessageModel;
 import model.ModelInterface;
-
-import com.google.gson.Gson;
-
 import database.Database;
 
 /**
@@ -76,7 +72,7 @@ public class Server {
 	 * @param reciever
 	 *            Mottagarens namn
 	 */
-	public boolean send(String stringToBeSent, String reciever) {
+	public void send(String stringToBeSent, String reciever) {
 		System.out.println("keySet: " + hashMap.keySet());
 		list = db.getAllFromDB(new Contact());
 		for (ModelInterface m : list) {
@@ -87,13 +83,11 @@ public class Server {
 					PrintWriter pr = new PrintWriter(hashMap.get("/"
 							+ cont.getInetAddress()), true);
 					pr.println(stringToBeSent);
-					return true;
 				} else {
-					return false;
+					cont.addUnsentItem(stringToBeSent);
 				}
 			}
 		}
-		return false;
 	}
 
 	/**
@@ -110,6 +104,8 @@ public class Server {
 				PrintWriter pr = new PrintWriter(hashMap.get("/"
 						+ cont.getInetAddress()), true);
 				pr.println(stringToBeSent);
+			}else{
+				cont.addUnsentItem(stringToBeSent);
 			}
 		}
 	}
@@ -132,8 +128,8 @@ public class Server {
 					PrintWriter pr = new PrintWriter(hashMap.get("/"
 							+ cont.getInetAddress()), true);
 					pr.println(stringToBeSent);
-				}else{
-					
+				} else {
+					cont.addUnsentItem(stringToBeSent);
 				}
 			}
 		}
@@ -153,25 +149,25 @@ public class Server {
 		unsentList.add(m);
 	}
 
-	public synchronized void sendUnsentItems(Contact reciever) {
-		if (!unsentList.isEmpty()) {
+	public synchronized void sendUnsentItems(Contact receiver) {
+		PrintWriter pr = new PrintWriter(hashMap.get("/"
+				+ receiver.getInetAddress()), true);
+		for (String s : receiver.getUnsentQueue()) {
+			pr.println(s);
+			receiver.removeUnsentItem(s);
+		}
+		/*if (!unsentList.isEmpty()) {
 			for (ModelInterface m : unsentList) {
 				if (m.getDatabaseRepresentation().equals("message")) {
 					MessageModel msg = (MessageModel) m;
 					if (msg.getReciever().toString()
 							.equals(reciever.getContactName())) {
 						System.out.println("sending old data");
-						PrintWriter pr = new PrintWriter(hashMap.get("/"
-								+ reciever.getInetAddress()), true);
 						pr.println(new Gson().toJson(msg));
 						unsentList.remove(msg);
 					}
-				} else if (m.getDatabaseRepresentation().equals("assignment")) {
-
-				} else if (m.getDatabaseRepresentation().equals("contact")) {
-
 				}
 			}
-		}
+		}*/
 	}
 }

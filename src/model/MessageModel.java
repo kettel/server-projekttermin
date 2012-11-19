@@ -17,7 +17,7 @@ public class MessageModel implements ModelInterface {
 	// Meddelandeinnehåll
 	private String messageContent;
 	// Mottagare av meddelandet
-	private String reciever;
+	private String receiver;
 	// Vem som skickade meddelandet
 	private String sender;
 	// Tiddstämpel i UNIX Epoch-format för när meddelandet skapades
@@ -39,7 +39,7 @@ public class MessageModel implements ModelInterface {
 	 */
 	public MessageModel(String messageContent, String reciever, String sender) {
 		this.messageContent = messageContent;
-		this.reciever = reciever;
+		this.receiver = reciever;
 		this.sender = sender;
 		messageTimeStamp = Calendar.getInstance().getTimeInMillis();
 	}
@@ -55,7 +55,7 @@ public class MessageModel implements ModelInterface {
 			String sender, Long messageTimeStamp, boolean isRead) {
 		this.id = id;
 		this.messageContent = messageContent;
-		this.reciever = reciever;
+		this.receiver = reciever;
 		this.sender = sender;
 		this.messageTimeStamp = messageTimeStamp;
 		this.isRead = isRead;
@@ -74,7 +74,7 @@ public class MessageModel implements ModelInterface {
 	 * @return	CharSequence
 	 */
 	public CharSequence getReciever() {
-		return (CharSequence) reciever;
+		return (CharSequence) receiver;
 	}
 
 	/**

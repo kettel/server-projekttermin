@@ -52,7 +52,8 @@ public class MultiServerThread extends Thread {
 		List<ModelInterface> m = db.getAllFromDB(new Contact());
 		for (ModelInterface mi : m) {
 			Contact cont = (Contact) mi;
-			if(socket.getInetAddress().toString().equals("/"+cont.getInetAddress())){
+			if (socket.getInetAddress().toString()
+					.equals("/" + cont.getInetAddress())) {
 				thisContact = cont;
 			}
 		}
@@ -80,12 +81,11 @@ public class MultiServerThread extends Thread {
 				Calendar cal = Calendar.getInstance();
 				cal.getTime();
 				SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-				if(!inputLine.equals("Heart")){
+				if (!inputLine.equals("Heart")) {
 					System.out.println(socket.getInetAddress() + ":"
-						+ socket.getPort() + " " + sdf.format(cal.getTime())
-						+ ":  " + inputLine);
+							+ socket.getPort() + " "
+							+ sdf.format(cal.getTime()) + ":  " + inputLine);
 				}
-				
 
 				// Bestämmer vilken typ av input som kommer in. När det
 				// avgjorts
@@ -137,12 +137,8 @@ public class MultiServerThread extends Thread {
 		// Gson konverterar json-strängen till MessageModel-objektet igen
 		try {
 			msg = (new Gson()).fromJson(message, MessageModel.class);
+			server.send(message, msg.getReciever().toString());
 			// Lägger in meddelandet i databasen
-			if (server.send(message, msg.getReciever().toString())) {
-				msg.setSent(true);
-			} else {
-				server.addUnsentItem(msg);
-			}
 			db.addToDB(msg);
 		} catch (Exception e) {
 			System.out.println(e);
@@ -161,10 +157,10 @@ public class MultiServerThread extends Thread {
 		try {
 			Assignment assignmentFromJson = (new Gson()).fromJson(assignment,
 					Assignment.class);
-			// Lägger in kontakten i databasen
-			db.addToDB(assignmentFromJson);
 			server.sendToAllExceptTheSender(assignment, socket.getInetAddress()
 					.toString());
+			// Lägger in kontakten i databasen
+			db.addToDB(assignmentFromJson);
 		} catch (Exception e) {
 			System.out.println(e);
 		}
@@ -183,9 +179,9 @@ public class MultiServerThread extends Thread {
 		try {
 			Contact contactFromJson = (new Gson()).fromJson(contact,
 					Contact.class);
+			server.sendToAll(contact);
 			// Lägger in uppdraget i databasen
 			db.updateModel(contactFromJson);
-			server.sendToAll(contact);
 		} catch (Exception e) {
 			System.out.println(e);
 		}
