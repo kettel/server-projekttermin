@@ -155,7 +155,7 @@ public class Server {
 		unsentList.add(m);
 	}
 
-	public void sendUnsentItems(Contact reciever) {
+	public synchronized void sendUnsentItems(Contact reciever) {
 		if (!unsentList.isEmpty()) {
 			for (ModelInterface m : unsentList) {
 				if (m.getDatabaseRepresentation().equals("message")) {
