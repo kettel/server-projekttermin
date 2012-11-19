@@ -13,7 +13,7 @@ public class Contact implements ModelInterface {
 	private String contactName;
 	// Kontaktens ip
 	private String inetAddress;
-	public Queue<String> queue;
+	public Queue<String> queue = new LinkedList<String>();
 
 	/**
 	 * Tom konstruktor for Contact
@@ -70,7 +70,7 @@ public class Contact implements ModelInterface {
 		this.inetAddress = inetAddress;
 	}
 	
-	public Queue getQueue(){
+	public Queue<String> getQueue(){
 		return queue;
 	}
 	
