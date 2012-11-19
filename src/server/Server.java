@@ -168,6 +168,7 @@ public class Server {
 						PrintWriter pr = new PrintWriter(hashMap.get("/"
 								+ reciever.getInetAddress()), true);
 						pr.println(new Gson().toJson(msg));
+						unsentList.remove(msg);
 					}
 				} else if (m.getDatabaseRepresentation().equals("assignment")) {
 
