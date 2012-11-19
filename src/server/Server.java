@@ -137,21 +137,17 @@ public class Server {
 		}
 	}
 
-	public void sendWhenReconnected(String stringToBeSent, Contact reciever) {
-
-	}
-
 	/**
 	 * Tar bort en användare från hashMapen
 	 * 
 	 * @param string
 	 *            IP:t på användaren
 	 */
-	public void removeClient(String usersIP) {
+	public synchronized void removeClient(String usersIP) {
 		hashMap.remove(usersIP);
 	}
 
-	public void addUnsentItem(ModelInterface m) {
+	public synchronized void addUnsentItem(ModelInterface m) {
 		unsentList.add(m);
 	}
 
