@@ -136,9 +136,9 @@ public class Server {
 			}
 		}
 	}
-	
-	public void sendWhenReconnected(String stringToBeSent, Contact reciever){
-		
+
+	public void sendWhenReconnected(String stringToBeSent, Contact reciever) {
+
 	}
 
 	/**
@@ -150,26 +150,30 @@ public class Server {
 	public void removeClient(String usersIP) {
 		hashMap.remove(usersIP);
 	}
-	
-	public void addUnsentItem(ModelInterface m){
+
+	public void addUnsentItem(ModelInterface m) {
 		unsentList.add(m);
 	}
-	
-	public void sendUnsentItems(Contact reciever){
-		for (ModelInterface m : unsentList) {
-			if(m.getDatabaseRepresentation().equals("message")){
-				MessageModel msg = (MessageModel) m;
-				System.out.println(msg.getReciever() + " compared to " + reciever.getContactName());
-				if(msg.getReciever().toString().equals(reciever.getContactName())){
-					System.out.println("sending old data");
-					PrintWriter pr = new PrintWriter(hashMap.get("/"
-							+ reciever.getInetAddress()), true);
-					pr.println(new Gson().toJson(msg));
+
+	public void sendUnsentItems(Contact reciever) {
+		if (!unsentList.isEmpty()) {
+			for (ModelInterface m : unsentList) {
+				if (m.getDatabaseRepresentation().equals("message")) {
+					MessageModel msg = (MessageModel) m;
+					System.out.println(msg.getReciever() + " compared to "
+							+ reciever.getContactName());
+					if (msg.getReciever().toString()
+							.equals(reciever.getContactName())) {
+						System.out.println("sending old data");
+						PrintWriter pr = new PrintWriter(hashMap.get("/"
+								+ reciever.getInetAddress()), true);
+						pr.println(new Gson().toJson(msg));
+					}
+				} else if (m.getDatabaseRepresentation().equals("assignment")) {
+
+				} else if (m.getDatabaseRepresentation().equals("contact")) {
+
 				}
-			}else if(m.getDatabaseRepresentation().equals("assignment")){
-				
-			}else if(m.getDatabaseRepresentation().equals("contact")){
-				
 			}
 		}
 	}
