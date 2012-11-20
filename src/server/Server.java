@@ -84,7 +84,7 @@ public class Server {
 					pr.println(stringToBeSent);
 				} else {
 					cont.addUnsentItem(stringToBeSent);	
-					db.addToDB(cont);
+//					db.addToDB(cont);  UPDATE FUNGERAR EJ?
 				}
 			}
 		}
@@ -151,6 +151,13 @@ public class Server {
 	 */
 
 	public void sendUnsentItems(Contact receiver) {
+		list = db.getAllFromDB(new Contact());
+		for(ModelInterface m : list){
+			Contact cont = (Contact) m;
+			if(receiver.getContactName().equals(cont.getContactName())){
+				receiver = cont;
+			}
+		}
 		if(receiver != null){
 		System.out.println(receiver.getContactName() + " " + receiver.getUnsentQueue());
 		}
