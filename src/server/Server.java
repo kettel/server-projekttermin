@@ -130,7 +130,7 @@ public class Server {
 					pr.println(stringToBeSent);
 				} else {
 					cont.addUnsentItem("hej");
-					db.updateModel(cont);
+					db.addToDB(cont);
 				}
 			}
 		}
