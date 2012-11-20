@@ -66,7 +66,10 @@ public class MultiServerThread extends Thread {
 
 		try {
 			server.sendUnsentItems(thisContact);
-			//System.out.println(thisContact.getUnsentQueue());
+			if(thisContact.getUnsentQueue() != null){
+				System.out.println(thisContact.getUnsentQueue());
+			}
+			
 			while (connected) {
 				// Buffrar ihop flera tecken från InputStreamen till en sträng
 				input = new BufferedReader(new InputStreamReader(
