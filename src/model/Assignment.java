@@ -26,7 +26,7 @@ public class Assignment implements ModelInterface {
 	// Om uppdraget ska skickas till externa aktörer
 	private boolean externalMission;
 	// Lista över kontakter (agenter) som har accepterat uppdraget
-	private List<String> agents = new ArrayList<String>();
+	private List<Contact> agents = new ArrayList<Contact>();
 	// Textbeskrivning av uppdraget
 	private String assignmentDescription;
 	// Tidsbeskrivning av hur lång tid uppdraget kommer ta (1 timme, 20
@@ -279,7 +279,7 @@ public class Assignment implements ModelInterface {
 	 * @param siteName
 	 */
 	public Assignment(long id, String name, double lat, double lon,
-			String region, List<String> agents, String sender,
+			String region, List<Contact> agents, String sender,
 			boolean externalMission, String assignmentDescription,
 			String timeSpan, AssignmentStatus assignmentStatus,
 			byte[] cameraImage, String streetName, String siteName,
@@ -309,7 +309,7 @@ public class Assignment implements ModelInterface {
 		return externalMission;
 	}
 
-	public List<String> getAgents() {
+	public List<Contact> getAgents() {
 		return agents;
 	}
 
@@ -391,8 +391,8 @@ public class Assignment implements ModelInterface {
 	public String getAgentsString() {
 		// Konkatenera alla agenter till en sträng
 		String agents = new String();
-		List<String> receivers = this.agents;
-		for (String contact : receivers) {
+		List<Contact> receivers = this.agents;
+		for (Contact contact : receivers) {
 			agents.concat(/*contact.getContactName() + ":"
 					+ */contact/*.getInetAddress()*/ + "/");
 		}

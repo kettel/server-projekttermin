@@ -170,14 +170,14 @@ public class DatabaseHandlerAssignment extends DatabaseHandler{
 		return returnList;
 	}
 	
-	private List<String> getAgentsFromString(String agentString){
+	private List<Contact> getAgentsFromString(String agentString){
 		// Gör om strängar med agenter på uppdrag till en lista
-		List <String> agents = new ArrayList<String>();
+		List <Contact> agents = new ArrayList<Contact>();
 		String[] agentArray = agentString.split("/");
 		for (String agent : agentArray) {
 			// Dela upp kontakten så man kommer åt namn och IP
 			String[] contactArray = agent.split(":");
-			agents.add(new Contact(contactArray[0],contactArray[1]).getContactName());
+			agents.add(new Contact(contactArray[0],contactArray[1]));
 		}
 		return agents;
 	}
