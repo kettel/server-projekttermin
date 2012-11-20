@@ -66,7 +66,7 @@ public class MultiServerThread extends Thread {
 
 		try {
 			server.sendUnsentItems(thisContact);
-			if(thisContact.getUnsentQueue() != null){
+			if(thisContact != null){
 				System.out.println(thisContact.getUnsentQueue());
 			}
 			
