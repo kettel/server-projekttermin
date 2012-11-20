@@ -43,7 +43,6 @@ public class Server {
 	public Server() {
 		try {
 			db = new Database();
-			list = db.getAllFromDB(new Contact());
 //			unsentList = new ArrayList<ModelInterface>();
 			hashMap = new ConcurrentHashMap<String, OutputStream>();
 			serverSocket = new ServerSocket(port);
@@ -75,8 +74,7 @@ public class Server {
 	 */
 	public void send(String stringToBeSent, String receiver) {
 		System.out.println("keySet: " + hashMap.keySet());
-//		list = db.getAllFromDB(new Contact());
-		System.out.println(list);
+		list = db.getAllFromDB(new Contact());
 		for (ModelInterface m : list) {
 			Contact cont = (Contact) m;
 			if (receiver.equals(cont.getContactName())) {
