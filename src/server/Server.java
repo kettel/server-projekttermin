@@ -83,9 +83,7 @@ public class Server {
 							+ cont.getInetAddress()), true);
 					pr.println(stringToBeSent);
 				} else {
-					cont.addUnsentItem("hej");
-					db.addToDB(cont);
-					
+					cont.addUnsentItem(stringToBeSent);					
 				}
 			}
 		}

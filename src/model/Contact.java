@@ -72,7 +72,9 @@ public class Contact implements ModelInterface {
 	}
 	
 	public synchronized void addUnsentItem(String s){
+		System.out.println("@Contact(75): " + s);
 		unsentQueue.add(s);
+		System.out.println("@Contact(77): " + unsentQueue);
 	}
 	
 	public synchronized void removeUnsentItem(String s){
@@ -87,7 +89,9 @@ public class Contact implements ModelInterface {
 		// Konkatenera alla agenter till en sträng
 		String queue = new String();
 		Queue<String> unsentQueue = this.unsentQueue;
+		System.err.println("@Contact(92): " + unsentQueue);
 		for (String unsent : unsentQueue) {
+			System.out.println("@Contact(94): " + unsent);
 			queue.concat(/*contact.getContactName() + ":"
 					+ */unsent/*.getInetAddress()*/ + "/");
 		}
