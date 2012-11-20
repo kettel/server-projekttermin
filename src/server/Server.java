@@ -33,7 +33,8 @@ public class Server {
 	private static Socket clientSocket = null;
 	private List<ModelInterface> list = null;
 	private Database db = null;
-//	private static List<ModelInterface> unsentList = null;
+
+	// private static List<ModelInterface> unsentList = null;
 
 	public static void main(String[] args) {
 		new Server();
@@ -42,7 +43,7 @@ public class Server {
 	public Server() {
 		try {
 			db = new Database();
-//			unsentList = new ArrayList<ModelInterface>();
+			// unsentList = new ArrayList<ModelInterface>();
 			hashMap = new ConcurrentHashMap<String, OutputStream>();
 			serverSocket = new ServerSocket(port);
 
@@ -83,8 +84,8 @@ public class Server {
 							+ cont.getInetAddress()), true);
 					pr.println(stringToBeSent);
 				} else {
-					cont.addUnsentItem(stringToBeSent);	
-					db.addToDB(cont);  //UPDATE FUNGERAR EJ?
+					cont.addUnsentItem(stringToBeSent);
+					db.addToDB(cont); // UPDATE FUNGERAR EJ?
 				}
 			}
 		}
@@ -151,27 +152,29 @@ public class Server {
 	 */
 
 	public void sendUnsentItems(Contact receiver) {
-		list = db.getAllFromDB(new Contact());
-		for(ModelInterface m : list){
-			Contact cont = (Contact) m;
-			if(receiver.getContactName().equals(cont.getContactName())){
-				receiver = cont;
+		if (receiver != null) {
+			list = db.getAllFromDB(new Contact());
+			for (ModelInterface m : list) {
+				Contact cont = (Contact) m;
+				if (receiver.getContactName().equals(cont.getContactName())) {
+					receiver = cont;
+				}
+			}
+			if (receiver != null) {
+				System.out.println(receiver.getContactName() + " "
+						+ receiver.getUnsentQueue());
+			}
+			if (receiver != null && !receiver.getUnsentQueue().isEmpty()) {
+				System.out.println("kön är inte tom");
+				PrintWriter pr = new PrintWriter(hashMap.get("/"
+						+ receiver.getInetAddress()), true);
+				for (String s : receiver.getUnsentQueue()) {
+					System.out.println("@Server(162): " + s);
+					pr.println(s);
+					receiver.removeUnsentItem(s);
+				}
 			}
 		}
-		if(receiver != null){
-		System.out.println(receiver.getContactName() + " " + receiver.getUnsentQueue());
-		}
-		if (receiver != null && !receiver.getUnsentQueue().isEmpty()) {
-			System.out.println("kön är inte tom");
-			PrintWriter pr = new PrintWriter(hashMap.get("/"
-					+ receiver.getInetAddress()), true);
-			for (String s : receiver.getUnsentQueue()) {
-				System.out.println("@Server(162): " + s);
-				pr.println(s);
-				receiver.removeUnsentItem(s);
-			}
-		}
-
 		/*
 		 * if (!unsentList.isEmpty()) { for (ModelInterface m : unsentList) { if
 		 * (m.getDatabaseRepresentation().equals("message")) { MessageModel msg
