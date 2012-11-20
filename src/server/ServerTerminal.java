@@ -33,7 +33,6 @@ public class ServerTerminal extends Thread {
 	public void run() {
 		while (listeningToCommands) {
 			String command = in.nextLine();
-			System.out.println(command);
 			if (command.equals(createContactCommand.commandLine())) {
 				createContactCommand.commandTask();
 			}else if(command.equals(getAllContacts.commandLine())){
