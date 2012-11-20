@@ -53,7 +53,7 @@ public class CreateContactCommand implements CommandInterface {
 					if(newContact.getContactName().equals(cont.getContactName())){
 						System.out.println("uppdatering");
 						cont.setInetAddress(newContact.getInetAddress());
-//						db.updateModel(cont);
+						db.updateModel(cont);
 						alreadyExists = true;
 					}
 				}
