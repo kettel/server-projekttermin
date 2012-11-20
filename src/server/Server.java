@@ -87,7 +87,7 @@ public class Server {
 					System.out.println("Lägg i kön");
 					cont.getUnsentQueue().add(stringToBeSent);
 					System.out.println("kön för kontakten: " + cont.getUnsentQueue());
-//					db.updateModel(cont);
+					db.updateModel(cont);
 				}
 			}
 		}
