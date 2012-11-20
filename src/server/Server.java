@@ -84,8 +84,8 @@ public class Server {
 							+ cont.getInetAddress()), true);
 					pr.println(stringToBeSent);
 				} else {
-					cont.addUnsentItem(stringToBeSent);
-					db.addToDB(cont); // UPDATE FUNGERAR EJ?
+//					cont.addUnsentItem(stringToBeSent);
+//					db.addToDB(cont); // UPDATE FUNGERAR EJ?
 				}
 			}
 		}
@@ -106,7 +106,7 @@ public class Server {
 						+ cont.getInetAddress()), true);
 				pr.println(stringToBeSent);
 			} else {
-				cont.addUnsentItem(stringToBeSent);
+//				cont.addUnsentItem(stringToBeSent);
 			}
 		}
 	}
@@ -130,7 +130,7 @@ public class Server {
 							+ cont.getInetAddress()), true);
 					pr.println(stringToBeSent);
 				} else {
-					cont.addUnsentItem(stringToBeSent);
+//					cont.addUnsentItem(stringToBeSent);
 				}
 			}
 		}

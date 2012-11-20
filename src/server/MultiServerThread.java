@@ -65,10 +65,10 @@ public class MultiServerThread extends Thread {
 	public void run() {
 
 		try {
-			server.sendUnsentItems(thisContact);
-			if (thisContact != null) {
-				System.out.println(thisContact.getUnsentQueue());
-			}
+//			server.sendUnsentItems(thisContact);
+//			if (thisContact != null) {
+//				System.out.println(thisContact.getUnsentQueue());
+//			}
 
 			while (connected) {
 				// Buffrar ihop flera tecken från InputStreamen till en sträng
@@ -164,7 +164,6 @@ public class MultiServerThread extends Thread {
 	private void handleAssignment(String assignment) {
 		// Gson konverterar json-strängen till Assignment-objektet igen.
 		try {
-			System.out.println("ASSIGNMENT");
 			Assignment assignmentFromJson = (new Gson()).fromJson(assignment,
 					Assignment.class);
 			server.sendToAllExceptTheSender(assignment, socket.getInetAddress()
@@ -187,7 +186,6 @@ public class MultiServerThread extends Thread {
 
 		// Gson konverterar json-strängen till MessageModel-objektet igen.
 		try {
-			System.out.println("CONTACT");
 			Contact contactFromJson = (new Gson()).fromJson(contact,
 					Contact.class);
 			server.sendToAll(contact);
