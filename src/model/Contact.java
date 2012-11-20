@@ -81,7 +81,6 @@ public class Contact implements ModelInterface {
 	}
 	
 	public Queue<String> getUnsentQueue(){
-		unsentQueue.add("hej");
 		return unsentQueue;
 	}
 	

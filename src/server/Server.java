@@ -129,7 +129,8 @@ public class Server {
 							+ cont.getInetAddress()), true);
 					pr.println(stringToBeSent);
 				} else {
-					cont.addUnsentItem(stringToBeSent);
+					cont.addUnsentItem("hej");
+					db.updateModel(cont);
 				}
 			}
 		}
