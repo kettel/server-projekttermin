@@ -155,9 +155,11 @@ public class Server {
 		System.out.println(receiver.getContactName() + " " + receiver.getUnsentQueue());
 		}
 		if (receiver != null && !receiver.getUnsentQueue().isEmpty()) {
+			System.out.println("kön är inte tom");
 			PrintWriter pr = new PrintWriter(hashMap.get("/"
 					+ receiver.getInetAddress()), true);
 			for (String s : receiver.getUnsentQueue()) {
+				System.out.println("@Server(162): " + s);
 				pr.println(s);
 				receiver.removeUnsentItem(s);
 			}
