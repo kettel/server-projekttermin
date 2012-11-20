@@ -141,13 +141,13 @@ public class DatabaseHandlerContacts extends DatabaseHandler{
 	
 	private Queue<String> getUnsentQueueFromString(String unsentQueueString){
 		// Gör om strängar med agenter på uppdrag till en lista
-		Queue<String> unsent = new LinkedList<String>();
+		Queue<String> unsentQueue = new LinkedList<String>();
 		String[] unsentArray = unsentQueueString.split("/");
-		for (String agent : unsent) {
+		for (String unsent : unsentArray) {
 			// Dela upp kontakten så man kommer åt namn och IP
-			String[] array = agent.split(":");
-			unsent.add(new Contact(array[0],array[1]).getContactName());
+			String[] array = unsent.split(":");
+			unsentQueue.add(new Contact(array[0],array[1]).getContactName());
 		}
-		return unsent;
+		return unsentQueue;
 	}
 }
