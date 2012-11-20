@@ -84,7 +84,7 @@ public class Server {
 					pr.println(stringToBeSent);
 				} else {
 					cont.addUnsentItem(stringToBeSent);	
-//					db.addToDB(cont);  UPDATE FUNGERAR EJ?
+					db.addToDB(cont);  //UPDATE FUNGERAR EJ?
 				}
 			}
 		}
