@@ -51,14 +51,12 @@ public class CreateContactCommand implements CommandInterface {
 				for (ModelInterface m : list) {
 					Contact cont = (Contact) m;
 					if(newContact.getContactName().equals(cont.getContactName())){
-						System.out.println("uppdatering");
 						cont.setInetAddress(newContact.getInetAddress());
 						db.updateModel(cont);
 						alreadyExists = true;
 					}
 				}
 				if(alreadyExists == false){
-					System.out.println("skapar ny");
 					// Lägger till den nya kontakten till databasen
 				db.addToDB(newContact);
 				}
