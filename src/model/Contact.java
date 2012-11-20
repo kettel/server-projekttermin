@@ -87,7 +87,7 @@ public class Contact implements ModelInterface {
 	
 	public String getUnsentQueueString() {
 		// Konkatenera alla agenter till en sträng
-		String queueString = new String();
+		String queueString = "";
 		Queue<String> unsentQueue = this.unsentQueue;
 //		System.out.println("@Contact(92): " + unsentQueue);
 		for (String unsent : unsentQueue) {
