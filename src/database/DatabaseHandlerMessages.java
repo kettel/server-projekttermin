@@ -30,7 +30,7 @@ public class DatabaseHandlerMessages extends DatabaseHandler{
             con = DriverManager.getConnection(url, user, password);
             
             // SQL-frågan
-            pst = con.prepareStatement("INSERT INTO message(Content, Receiver, Sender, MessageTimestamp, IsRead, Sent) VALUES(?,?,?,?,?,?)");
+            pst = con.prepareStatement("INSERT INTO message(Content, Receiver, Sender, MessageTimestamp, IsRead) VALUES(?,?,?,?,?)");
             
             // Sätt in rätt värden till rätt plats i frågan
             pst.setString(1, message.getMessageContent().toString());
