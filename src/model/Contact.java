@@ -95,6 +95,7 @@ public class Contact implements ModelInterface {
 			queue.concat(/*contact.getContactName() + ":"
 					+ */unsent/*.getInetAddress()*/ + "/");
 		}
+		System.out.println("@Contact(98): " + queue);
 		return queue;
 	}
 }
