@@ -43,6 +43,7 @@ public class Server {
 	public Server() {
 		try {
 			db = new Database();
+			list = db.getAllFromDB(new Contact());
 //			unsentList = new ArrayList<ModelInterface>();
 			hashMap = new ConcurrentHashMap<String, OutputStream>();
 			serverSocket = new ServerSocket(port);
@@ -74,7 +75,7 @@ public class Server {
 	 */
 	public void send(String stringToBeSent, String receiver) {
 		System.out.println("keySet: " + hashMap.keySet());
-		list = db.getAllFromDB(new Contact());
+//		list = db.getAllFromDB(new Contact());
 		for (ModelInterface m : list) {
 			Contact cont = (Contact) m;
 			if (receiver.equals(cont.getContactName())) {
@@ -84,10 +85,7 @@ public class Server {
 							+ cont.getInetAddress()), true);
 					pr.println(stringToBeSent);
 				} else {
-					System.out.println("Lägg i kön");
 					cont.addUnsentItem(stringToBeSent);
-					System.out.println("kön för kontakten: " + cont.getUnsentQueue());
-					db.updateModel(cont);
 				}
 			}
 		}
@@ -158,7 +156,6 @@ public class Server {
 		System.out.println(receiver.getContactName() + " " + receiver.getUnsentQueue());
 		}
 		if (receiver != null && !receiver.getUnsentQueue().isEmpty()) {
-			System.out.println("inte null");
 			PrintWriter pr = new PrintWriter(hashMap.get("/"
 					+ receiver.getInetAddress()), true);
 			for (String s : receiver.getUnsentQueue()) {
