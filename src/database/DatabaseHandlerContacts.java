@@ -146,7 +146,7 @@ public class DatabaseHandlerContacts extends DatabaseHandler{
 		for (String unsent : unsentArray) {
 			// Dela upp kontakten så man kommer åt namn och IP
 			String[] array = unsent.split(":");
-			unsentQueue.add(new Contact(array[0],array[1]).getContactName());
+			unsentQueue.add(array[0]);
 		}
 		return unsentQueue;
 	}
