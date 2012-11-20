@@ -76,6 +76,7 @@ public class Server {
 	public void send(String stringToBeSent, String receiver) {
 		System.out.println("keySet: " + hashMap.keySet());
 //		list = db.getAllFromDB(new Contact());
+		System.out.println(list);
 		for (ModelInterface m : list) {
 			Contact cont = (Contact) m;
 			if (receiver.equals(cont.getContactName())) {
