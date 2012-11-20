@@ -8,9 +8,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import model.AssignmentStatus;
-import model.Contact;
-
 public class Assignment implements ModelInterface {
 	// Typen av model
 	private String databaseRepresentation = "assignment";

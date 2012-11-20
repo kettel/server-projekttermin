@@ -5,7 +5,6 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -85,8 +84,8 @@ public class Server {
 					pr.println(stringToBeSent);
 				} else {
 					cont.addUnsentItem("hej");
-					db.updateModel(cont);
 					db.addToDB(cont);
+					
 				}
 			}
 		}
