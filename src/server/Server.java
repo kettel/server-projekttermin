@@ -84,7 +84,7 @@ public class Server {
 					pr.println(stringToBeSent);
 				} else {
 					cont.addUnsentItem(stringToBeSent);	
-					db.updateModel(cont);
+					db.addToDB(cont);
 				}
 			}
 		}
