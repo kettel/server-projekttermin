@@ -26,7 +26,6 @@ public class CreateContactCommand implements CommandInterface {
 
 	public CreateContactCommand(Server server) {
 		this.server = server;
-		list = new ArrayList<ModelInterface>();
 	}
 
 	@Override
@@ -48,6 +47,7 @@ public class CreateContactCommand implements CommandInterface {
 			} else if (yesOrNo.equals("y")) {
 				String contact = new Gson().toJson(newContact);
 				server.sendToAll(contact);
+				list = db.getAllFromDB(new Contact());
 				for (ModelInterface m : list) {
 					Contact cont = (Contact) m;
 					if(newContact.getContactName().equals(cont.getContactName())){
