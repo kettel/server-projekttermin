@@ -84,7 +84,9 @@ public class Server {
 							+ cont.getInetAddress()), true);
 					pr.println(stringToBeSent);
 				} else {
-					cont.addUnsentItem(stringToBeSent);
+					cont.addUnsentItem("hej");
+					db.updateModel(cont);
+					db.addToDB(cont);
 				}
 			}
 		}
@@ -129,8 +131,7 @@ public class Server {
 							+ cont.getInetAddress()), true);
 					pr.println(stringToBeSent);
 				} else {
-					cont.addUnsentItem("hej");
-					db.addToDB(cont);
+					cont.addUnsentItem(stringToBeSent);
 				}
 			}
 		}
