@@ -139,9 +139,9 @@ public class DatabaseHandlerContacts extends DatabaseHandler{
 		
 	}
 	
-	private Queue<String> getUnsentQueueFromString(String unsentQueueString){
+	private List<String> getUnsentQueueFromString(String unsentQueueString){
 		// Gör om strängar med agenter på uppdrag till en lista
-		Queue<String> unsentQueue = new LinkedList<String>();
+		List<String> unsentQueue = new LinkedList<String>();
 		String[] unsentArray = unsentQueueString.split("/");
 		for (String unsent : unsentArray) {
 			// Dela upp kontakten så man kommer åt namn och IP

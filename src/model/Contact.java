@@ -1,6 +1,6 @@
 package model;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 
@@ -14,7 +14,7 @@ public class Contact implements ModelInterface {
 	private String contactName;
 	// Kontaktens ip
 	private String inetAddress;
-	private Queue<String> unsentQueue = new LinkedList<String>();
+	private List<String> unsentQueue = new ArrayList<String>();
 
 	/**
 	 * Tom konstruktor for Contact
@@ -41,7 +41,7 @@ public class Contact implements ModelInterface {
 	 * @param contactName
 	 * @param inetAddress
 	 */
-	public Contact(long id, String contactName, String inetAddress, Queue<String> unsentQueue) {
+	public Contact(long id, String contactName, String inetAddress, List<String> unsentQueue) {
 		this.id = id;
 		this.contactName = contactName;
 		this.inetAddress = inetAddress;
@@ -80,14 +80,14 @@ public class Contact implements ModelInterface {
 		unsentQueue.remove(s);
 	}
 	
-	public Queue<String> getUnsentQueue(){
+	public List<String> getUnsentQueue(){
 		return unsentQueue;
 	}
 	
 	public String getUnsentQueueString() {
 		// Konkatenera alla agenter till en sträng
 		String queue = new String();
-		Queue<String> unsentQueue = this.unsentQueue;
+		List<String> unsentQueue = this.unsentQueue;
 		for (String unsent : unsentQueue) {
 			queue.concat(/*contact.getContactName() + ":"
 					+ */unsent/*.getInetAddress()*/ + "/");
