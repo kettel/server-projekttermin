@@ -81,7 +81,7 @@ public class Contact implements ModelInterface {
 		unsentQueue.remove(s);
 	}
 	
-	public Queue<String> getUnsentQueue(){
+	public synchronized Queue<String> getUnsentQueue(){
 		return unsentQueue;
 	}
 	

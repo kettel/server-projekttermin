@@ -144,9 +144,7 @@ public class DatabaseHandlerContacts extends DatabaseHandler{
 		Queue<String> unsentQueue = new LinkedList<String>();
 		String[] unsentArray = unsentQueueString.split("/");
 		for (String unsent : unsentArray) {
-			// Dela upp kontakten så man kommer åt namn och IP
-			String[] array = unsent.split(":");
-			unsentQueue.add(array[0]);
+			unsentQueue.add(unsent);
 		}
 		return unsentQueue;
 	}
