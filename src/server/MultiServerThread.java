@@ -142,7 +142,7 @@ public class MultiServerThread extends Thread {
 			cal.getTime();
 			SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
 			System.out.println("<" + socket.getInetAddress() + ":"
-					+ socket.getPort() + "		" + sdf.format(cal.getTime())
+					+ socket.getPort() + "	" + sdf.format(cal.getTime())
 					+ "> message from  " + msg.getSender() + " to "
 					+ msg.getReciever() + ": " + msg.getMessageContent());
 
@@ -171,7 +171,7 @@ public class MultiServerThread extends Thread {
 			cal.getTime();
 			SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
 			System.out.println("<" + socket.getInetAddress() + ":"
-					+ socket.getPort() + "		" + sdf.format(cal.getTime())
+					+ socket.getPort() + "	" + sdf.format(cal.getTime())
 					+ "> assignment from  " + assignmentFromJson.getSender() + ": " + assignmentFromJson.getName());
 		} catch (Exception e) {
 			System.out.println(e);
