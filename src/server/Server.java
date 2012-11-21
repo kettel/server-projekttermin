@@ -149,7 +149,7 @@ public class Server {
 	 * public synchronized void addUnsentItem(ModelInterface m) {
 	 * unsentList.add(m); }
 	 */
-
+	/*
 	public void sendUnsentItems(Contact receiver) {
 		if (receiver != null) {
 			list = db.getAllFromDB(new Contact());
@@ -181,6 +181,6 @@ public class Server {
 		 * .equals(reciever.getContactName())) {
 		 * System.out.println("sending old data"); pr.println(new
 		 * Gson().toJson(msg)); unsentList.remove(msg); } } } }
-		 */
-	}
+		 
+	}*/
 }

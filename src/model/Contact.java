@@ -13,7 +13,6 @@ public class Contact implements ModelInterface {
 	private String contactName;
 	// Kontaktens ip
 	private String inetAddress;
-	private Queue<String> unsentQueue = new LinkedList<String>();
 
 	/**
 	 * Tom konstruktor for Contact
@@ -40,11 +39,10 @@ public class Contact implements ModelInterface {
 	 * @param contactName
 	 * @param inetAddress
 	 */
-	public Contact(long id, String contactName, String inetAddress, Queue<String> unsentQueue) {
+	public Contact(long id, String contactName, String inetAddress) {
 		this.id = id;
 		this.contactName = contactName;
 		this.inetAddress = inetAddress;
-		this.unsentQueue = unsentQueue;
 	}
 
 	public String getContactName() {
@@ -71,33 +69,4 @@ public class Contact implements ModelInterface {
 		this.inetAddress = inetAddress;
 	}
 	
-	public synchronized void addUnsentItem(String s){
-//		System.out.println("@Contact(75): " + s);
-		unsentQueue.add(s);
-//		System.out.println("@Contact(77): " + unsentQueue);
-	}
-	
-	public synchronized void removeUnsentItem(String s){
-		unsentQueue.remove(s);
-	}
-	
-	public synchronized Queue<String> getUnsentQueue(){
-		return unsentQueue;
-	}
-	
-	public String getUnsentQueueString() {
-		// Konkatenera alla agenter till en sträng
-		String queueString = new String();
-		Queue<String> unsentQueue = this.unsentQueue;
-//		System.out.println("@Contact(92): " + unsentQueue);
-		for (String unsent : unsentQueue) {
-//			System.out.println("@Contact(94): " + unsent);
-//			queueString.concat(/*contact.getContactName() + ":"
-//					+ */"hej"/*.getInetAddress()*/ + "/");
-//			System.out.println("@Contact(97): " + queueString);
-			queueString = queueString + unsent + "/";
-		}
-//		System.out.println("@Contact(98): " + queueString);
-		return queueString;
-	}
 }

@@ -35,7 +35,6 @@ public class DatabaseHandlerContacts extends DatabaseHandler{
             // Sätt in rätt värden till rätt plats i frågan
             pst.setString(1, contact.getContactName());
             pst.setString(2, contact.getInetAddress());
-            pst.setString(3, contact.getUnsentQueueString());
            
             // Utför frågan och lägg till objektet i databasen
             pst.executeUpdate();
@@ -72,8 +71,8 @@ public class DatabaseHandlerContacts extends DatabaseHandler{
             	// till det i returnList
             	returnList.add((ModelInterface) new Contact(rs.getInt(1), // Id
             						rs.getString(2), // Name
-            						rs.getString(3), // Inetaddress
-            						getUnsentQueueFromString(rs.getString(4)))); 
+            						rs.getString(3))); // Inetaddress
+            						 
             						
             }
 
@@ -113,7 +112,6 @@ public class DatabaseHandlerContacts extends DatabaseHandler{
             st.executeUpdate("UPDATE " + contact.getDatabaseRepresentation() + 
             		" SET Name = \"" + contact.getContactName() +
             		"\", InetAddress = \"" + contact.getInetAddress() +
-            		"\", UnsentQueue = \"" + contact.getUnsentQueueString() +
             		"\" WHERE Id = " + contact.getId());
             
             // Commita db-uppdateringarna (?)
@@ -139,13 +137,4 @@ public class DatabaseHandlerContacts extends DatabaseHandler{
 		
 	}
 	
-	private Queue<String> getUnsentQueueFromString(String unsentQueueString){
-		// Gör om strängar med agenter på uppdrag till en lista
-		Queue<String> unsentQueue = new LinkedList<String>();
-		String[] unsentArray = unsentQueueString.split("/");
-		for (String unsent : unsentArray) {
-			unsentQueue.add(unsent);
-		}
-		return unsentQueue;
-	}
 }
