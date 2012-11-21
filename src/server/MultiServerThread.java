@@ -65,10 +65,10 @@ public class MultiServerThread extends Thread {
 	public void run() {
 
 		try {
-//			server.sendUnsentItems(thisContact);
-//			if (thisContact != null) {
-//				System.out.println(thisContact.getUnsentQueue());
-//			}
+			// server.sendUnsentItems(thisContact);
+			// if (thisContact != null) {
+			// System.out.println(thisContact.getUnsentQueue());
+			// }
 
 			while (connected) {
 				// Buffrar ihop flera tecken från InputStreamen till en sträng
@@ -82,17 +82,6 @@ public class MultiServerThread extends Thread {
 					if (inputLine.equals("exit")) {
 						connected = false;
 						break;
-					}
-
-					Calendar cal = Calendar.getInstance();
-					cal.getTime();
-					SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-					if (!inputLine.equals("Heart")) {
-						System.out
-								.println(socket.getInetAddress() + ":"
-										+ socket.getPort() + " "
-										+ sdf.format(cal.getTime()) + ":  "
-										+ inputLine);
 					}
 
 					// Bestämmer vilken typ av input som kommer in. När det
@@ -149,6 +138,14 @@ public class MultiServerThread extends Thread {
 			server.send(message, msg.getReciever().toString());
 			// Lägger in meddelandet i databasen
 			db.addToDB(msg);
+			Calendar cal = Calendar.getInstance();
+			cal.getTime();
+			SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+			System.out.println("<" + socket.getInetAddress() + ":"
+					+ socket.getPort() + " " + sdf.format(cal.getTime())
+					+ "> message from  " + msg.getSender() + " to "
+					+ msg.getReciever() + ": " + msg.getMessageContent());
+
 		} catch (Exception e) {
 			System.out.println(e);
 		}
@@ -170,6 +167,12 @@ public class MultiServerThread extends Thread {
 					.toString());
 			// Lägger in kontakten i databasen
 			db.addToDB(assignmentFromJson);
+			Calendar cal = Calendar.getInstance();
+			cal.getTime();
+			SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+			System.out.println("<" + socket.getInetAddress() + ":"
+					+ socket.getPort() + " " + sdf.format(cal.getTime())
+					+ "> assignment from  " + assignmentFromJson.getSender() + ": " + assignmentFromJson.getName());
 		} catch (Exception e) {
 			System.out.println(e);
 		}
