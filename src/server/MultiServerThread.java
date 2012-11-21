@@ -160,12 +160,12 @@ public class MultiServerThread extends Thread {
 	 */
 	private void handleAssignment(String assignment) {
 		// Gson konverterar json-strängen till Assignment-objektet igen.
-		System.out.println("ASSIGNMENT");
 		try {
 			Assignment assignmentFromJson = (new Gson()).fromJson(assignment,
 					Assignment.class);
-			server.sendToAllExceptTheSender(assignment, socket.getInetAddress()
-					.toString());
+//			server.sendToAllExceptTheSender(assignment, socket.getInetAddress().toString());
+			server.sendToAll(assignment);
+					
 			// Lägger in kontakten i databasen
 			db.addToDB(assignmentFromJson);
 			Calendar cal = Calendar.getInstance();
