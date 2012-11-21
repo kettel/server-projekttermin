@@ -73,7 +73,6 @@ public class Server {
 	 *            Mottagarens namn
 	 */
 	public void send(String stringToBeSent, String receiver) {
-		System.out.println("keySet: " + hashMap.keySet());
 		list = db.getAllFromDB(new Contact());
 		for (ModelInterface m : list) {
 			Contact cont = (Contact) m;
