@@ -30,12 +30,14 @@ public class DatabaseHandlerMessages extends DatabaseHandler{
             con = DriverManager.getConnection(url, user, password);
             
             // SQL-frågan
-            pst = con.prepareStatement("INSERT INTO message(Content, Receiver, MessageTimestamp) VALUES(?,?,?)");
+            pst = con.prepareStatement("INSERT INTO message(Content, Receiver, Sender, MessageTimestamp, IsRead) VALUES(?,?,?,?,?)");
             
             // Sätt in rätt värden till rätt plats i frågan
             pst.setString(1, message.getMessageContent().toString());
             pst.setString(2, message.getReciever().toString());
-            pst.setString(3, Long.toString(message.getMessageTimeStamp()));
+            pst.setString(3, message.getSender());
+            pst.setString(4, Long.toString(message.getMessageTimeStamp()));
+            pst.setString(5, Boolean.toString(message.isRead()));
            
             // Utför frågan och lägg till objektet i databasen
             pst.executeUpdate();
@@ -69,10 +71,12 @@ public class DatabaseHandlerMessages extends DatabaseHandler{
             rs = pst.executeQuery();
             
             while (rs.next()) {
-            	MessageModel tempMess = new MessageModel(rs.getInt(1),
-						rs.getString(2),
-						rs.getString(3),
-						Long.valueOf(rs.getString(4)));
+            	MessageModel tempMess = new MessageModel(rs.getInt(1), // Id
+						rs.getString(2), // Content
+						rs.getString(3), // Receiver
+						rs.getString(4), // Sender
+						Long.valueOf(rs.getString(5)), // Timestamp
+						Boolean.parseBoolean(rs.getString(6))); // isRead
             	returnList.add((ModelInterface) tempMess);
             }
 
@@ -112,8 +116,8 @@ public class DatabaseHandlerMessages extends DatabaseHandler{
             st.executeUpdate("UPDATE " + message.getDatabaseRepresentation() + 
             		" SET Content = \"" + message.getMessageContent() +
             		"\", Receiver = \"" + message.getReciever() + 
-            		// Tiden ska nog inte ändras...
-            		//", MessageTimestamp = " + Long.toString(message.getMessageTimeStamp()) + 
+            		"\", Sender = \"" + message.getSender() +
+            		"\", IsRead = \"" + Boolean.toString(message.isRead()) +
             		"\" WHERE Id = " + message.getId());
             				
             // Commita db-uppdateringarna (?)

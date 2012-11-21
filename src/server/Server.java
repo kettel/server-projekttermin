@@ -1,15 +1,16 @@
 package server;
+
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
-import model.Assignment;
 import model.Contact;
-import model.MessageModel;
 import model.ModelInterface;
-
 import database.Database;
-
 
 /**
  * Servern som hanterar anslutningar mellan olika klienter
@@ -27,65 +28,159 @@ public class Server {
 	private static ServerSocket serverSocket = null;
 	// En boolean som avgör om servern lyssnar på anslutningar
 	private static boolean listening = true;
+	// En ConcurrentHashMap som länkar ett IP till en OutputStream
+	private static ConcurrentHashMap<String, OutputStream> hashMap;
+	private static Socket clientSocket = null;
+	private List<ModelInterface> list = null;
+	private Database db = null;
+
+	// private static List<ModelInterface> unsentList = null;
 
 	public static void main(String[] args) {
-		/*try {
+		new Server();
+	}
+
+	public Server() {
+		try {
+			db = new Database();
+			// unsentList = new ArrayList<ModelInterface>();
+			hashMap = new ConcurrentHashMap<String, OutputStream>();
 			serverSocket = new ServerSocket(port);
-			
+
 			// Skapar en ny tråd som lyssnar på kommandon
-			new ServerTerminal().start();
+			new ServerTerminal(this).start();
 			// Lyssnar på anslutningar och skapar en ny tråd per anslutning så
 			// länge servern lyssnar efter anslutningar
 			while (listening) {
-				new MultiServerThread(serverSocket.accept()).start();
+				clientSocket = serverSocket.accept();
+				OutputStream out = clientSocket.getOutputStream();
+				new MultiServerThread(clientSocket, this).start();
+				hashMap.put(clientSocket.getInetAddress().toString(), out);
 			}
 			// Stänger socketen, anslutningar är inte längre tillåtna
 			serverSocket.close();
 		} catch (IOException e) {
 			System.out.println(e);
-		}*/
-		Database db = new Database();
-		// Testa att lägga till i DB
-		db.addToDB(new Contact("Nise",Long.valueOf("0130123"),"nisse@gdsasdf","s","A","Skön lirare","192.168.1.1"));
-		byte[] fakeImage = null;
-		db.addToDB(new Assignment("Katt i träd", Long.valueOf("12423423"),Long.valueOf("23423425"),"Kalle", "Nisse", "En katt i ett träd", "2 dagar", "Ej påbörjat", fakeImage, "Alstättersgata", "Lekplats"));
-		db.addToDB(new MessageModel("Hejsan svejsan jättemycket!!!", "Kalle"));
-		
-		// Testa att hämta från databasen
-		List<ModelInterface> testList = db.getAllFromDB(new MessageModel());
-		for (ModelInterface m : testList) {
-			// Hämta gammalt meddelande
-			MessageModel mess = (MessageModel) m;
-			
-			// Skapa ett uppdaterat meddelande
-			MessageModel messUpdate = new MessageModel(mess.getId(), "mjuhu","höns",mess.getMessageTimeStamp());
-			
-			// Skriv det uppdaterade objektet till databasen
-			db.updateModel(messUpdate);
 		}
-		
-		testList = db.getAllFromDB(new Contact());
-		for (ModelInterface m : testList) {
+	}
+
+	/**
+	 * Skickar till en specifik klient
+	 * 
+	 * @param stringToBeSent
+	 *            Strängen som ska skickas
+	 * @param receiver
+	 *            Mottagarens namn
+	 */
+	public void send(String stringToBeSent, String receiver) {
+		list = db.getAllFromDB(new Contact());
+		for (ModelInterface m : list) {
 			Contact cont = (Contact) m;
-			
-			Contact contUpd = new Contact(cont.getId(),"Nise",Long.valueOf("0130123"),"nisse@gdsasdf","s","A","Dålig lirare","192.168.1.1");
-			db.updateModel(contUpd);
+			if (receiver.equals(cont.getContactName())) {
+				// Om mottagaren är ansluten så skickas strängen
+				if (hashMap.keySet().contains("/" + cont.getInetAddress())) {
+					PrintWriter pr = new PrintWriter(hashMap.get("/"
+							+ cont.getInetAddress()), true);
+					pr.println(stringToBeSent);
+				} else {
+//					cont.addUnsentItem(stringToBeSent);
+//					db.addToDB(cont); // UPDATE FUNGERAR EJ?
+				}
+			}
 		}
-		
-		
-		testList = db.getAllFromDB(new Assignment());
-		for (ModelInterface m : testList) {
-			Assignment ass = (Assignment) m;
-			
-			Assignment assUpd = new Assignment(ass.getId(),"Katt i hav", Long.valueOf("12423423"),Long.valueOf("23423425"),"Kalle", "Nisse", "En katt i ett träd", "2 dagar", "Ej påbörjat", fakeImage, "Alstättersgata", "Lekplats");
-			
-			db.updateModel(assUpd);
+	}
+
+	/**
+	 * Skickar till alla som är anslutna i systemet
+	 * 
+	 * @param stringToBeSent
+	 *            Strängen som ska skickas
+	 */
+	public void sendToAll(String stringToBeSent) {
+		list = db.getAllFromDB(new Contact());
+		for (ModelInterface m : list) {
+			Contact cont = (Contact) m;
+			if (hashMap.keySet().contains("/" + cont.getInetAddress())) {
+				PrintWriter pr = new PrintWriter(hashMap.get("/"
+						+ cont.getInetAddress()), true);
+				pr.println(stringToBeSent);
+			} else {
+//				cont.addUnsentItem(stringToBeSent);
+			}
 		}
-		
-		System.out.println("Antal meddelanden: " + db.getDBCount(new MessageModel()));
-		System.out.println("Antal kontakter: " + db.getDBCount(new Contact()));
-		System.out.println("Antal uppdrag: " + db.getDBCount(new Assignment()));
-		
-		
+	}
+
+	/**
+	 * Skickar till alla som är anslutna i systemet förutom den som skickade
+	 * strängen
+	 * 
+	 * @param stringToBeSent
+	 *            Strängen som ska skickas
+	 * @param sendersIP
+	 *            IP:t på användaren som skickade strängen
+	 */
+	public void sendToAllExceptTheSender(String stringToBeSent, String sendersIP) {
+		list = db.getAllFromDB(new Contact());
+		for (ModelInterface m : list) {
+			Contact cont = (Contact) m;
+			if (!sendersIP.equals("/" + cont.getInetAddress())) {
+				if (hashMap.keySet().contains("/" + cont.getInetAddress())) {
+					PrintWriter pr = new PrintWriter(hashMap.get("/"
+							+ cont.getInetAddress()), true);
+					pr.println(stringToBeSent);
+				} else {
+//					cont.addUnsentItem(stringToBeSent);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Tar bort en användare från hashMapen
+	 * 
+	 * @param string
+	 *            IP:t på användaren
+	 */
+	public synchronized void removeClient(String usersIP) {
+		hashMap.remove(usersIP);
+	}
+
+	/*
+	 * public synchronized void addUnsentItem(ModelInterface m) {
+	 * unsentList.add(m); }
+	 */
+
+	public void sendUnsentItems(Contact receiver) {
+		if (receiver != null) {
+			list = db.getAllFromDB(new Contact());
+			for (ModelInterface m : list) {
+				Contact cont = (Contact) m;
+				if (receiver.getContactName().equals(cont.getContactName())) {
+					receiver = cont;
+				}
+			}
+			if (receiver != null) {
+				System.out.println(receiver.getContactName() + " "
+						+ receiver.getUnsentQueue());
+			}
+			if (receiver != null && !receiver.getUnsentQueue().isEmpty()) {
+				System.out.println("kön är inte tom");
+				PrintWriter pr = new PrintWriter(hashMap.get("/"
+						+ receiver.getInetAddress()), true);
+				for (String s : receiver.getUnsentQueue()) {
+					System.out.println("@Server(162): " + s);
+					pr.println(s);
+					receiver.removeUnsentItem(s);
+				}
+			}
+		}
+		/*
+		 * if (!unsentList.isEmpty()) { for (ModelInterface m : unsentList) { if
+		 * (m.getDatabaseRepresentation().equals("message")) { MessageModel msg
+		 * = (MessageModel) m; if (msg.getReciever().toString()
+		 * .equals(reciever.getContactName())) {
+		 * System.out.println("sending old data"); pr.println(new
+		 * Gson().toJson(msg)); unsentList.remove(msg); } } } }
+		 */
 	}
 }

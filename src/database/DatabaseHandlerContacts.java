@@ -7,7 +7,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 import model.Contact;
 import model.ModelInterface;
@@ -28,16 +30,12 @@ public class DatabaseHandlerContacts extends DatabaseHandler{
             con = DriverManager.getConnection(url, user, password);
             
             // SQL-frågan
-            pst = con.prepareStatement("INSERT INTO contact(Name, PhoneNumber, Email, ClearanceLevel, Classification, Comment, InetAddress) VALUES(?,?,?,?,?,?,?)");
+            pst = con.prepareStatement("INSERT INTO contact(Name, InetAddress, UnsentQueue) VALUES(?,?,?)");
             
             // Sätt in rätt värden till rätt plats i frågan
             pst.setString(1, contact.getContactName());
-            pst.setString(2, Long.toString(contact.getContactPhoneNumber()));
-            pst.setString(3, contact.getContactEmail());
-            pst.setString(4, contact.getContactClearanceLevel());
-            pst.setString(5, contact.getContactClassification());
-            pst.setString(6, contact.getContactComment());
-            pst.setString(7, contact.getInetAddress());
+            pst.setString(2, contact.getInetAddress());
+            pst.setString(3, contact.getUnsentQueueString());
            
             // Utför frågan och lägg till objektet i databasen
             pst.executeUpdate();
@@ -72,14 +70,11 @@ public class DatabaseHandlerContacts extends DatabaseHandler{
             while (rs.next()) {
             	// Hämta och skapa ett nytt Contact-objekt samt lägg
             	// till det i returnList
-            	returnList.add((ModelInterface) new Contact(rs.getInt(1),
-            						rs.getString(2),
-            						Long.valueOf(rs.getString(3)),
-            						rs.getString(4),
-            						rs.getString(5),
-            						rs.getString(6),
-            						rs.getString(7),
-            						rs.getString(8)));
+            	returnList.add((ModelInterface) new Contact(rs.getInt(1), // Id
+            						rs.getString(2), // Name
+            						rs.getString(3), // Inetaddress
+            						getUnsentQueueFromString(rs.getString(4)))); 
+            						
             }
 
         } catch (SQLException ex) {
@@ -117,12 +112,8 @@ public class DatabaseHandlerContacts extends DatabaseHandler{
             // Sätt in rätt värden till rätt plats i frågan och uppdatera dessa
             st.executeUpdate("UPDATE " + contact.getDatabaseRepresentation() + 
             		" SET Name = \"" + contact.getContactName() +
-            		"\", PhoneNumber = \"" + contact.getContactPhoneNumber() + 
-            		"\", Email = \"" + contact.getContactEmail() + 
-            		"\", ClearanceLevel = \"" + contact.getContactClearanceLevel() + 
-            		"\", Classification = \"" + contact.getContactClassification() + 
-            		"\", Comment = \"" + contact.getContactComment() +
             		"\", InetAddress = \"" + contact.getInetAddress() +
+            		"\", UnsentQueue = \"" + contact.getUnsentQueueString() +
             		"\" WHERE Id = " + contact.getId());
             
             // Commita db-uppdateringarna (?)
@@ -146,5 +137,15 @@ public class DatabaseHandlerContacts extends DatabaseHandler{
             }
         }
 		
+	}
+	
+	private Queue<String> getUnsentQueueFromString(String unsentQueueString){
+		// Gör om strängar med agenter på uppdrag till en lista
+		Queue<String> unsentQueue = new LinkedList<String>();
+		String[] unsentArray = unsentQueueString.split("/");
+		for (String unsent : unsentArray) {
+			unsentQueue.add(unsent);
+		}
+		return unsentQueue;
 	}
 }
