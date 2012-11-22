@@ -10,7 +10,7 @@ public class JettyServer {
 		this(16783);
 	}
 
-	public JettyServer(Integer runningPort) {
+	public JettyServer(int runningPort) {
 		System.out.println("Är jag startad 1? " + server.isStarted());
 		server = new Server(runningPort);
 		System.out.println("Är jag startad 2? " + server.isStarted());
