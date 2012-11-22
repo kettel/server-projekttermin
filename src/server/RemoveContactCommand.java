@@ -19,11 +19,12 @@ public class RemoveContactCommand implements CommandInterface {
 	Scanner in = new Scanner(System.in);
 
 	public RemoveContactCommand() {
-		list = db.getAllFromDB(new Contact());
+		
 	}
 
 	@Override
 	public void commandTask() {
+		list = db.getAllFromDB(new Contact());
 		System.out.print("Namn på kontakt som ska tas bort: ");
 		String contactToBeDeleted = in.nextLine();
 		System.out.print("Är du säker på att du vill ta bort "
