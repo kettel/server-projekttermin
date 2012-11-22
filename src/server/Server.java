@@ -48,14 +48,16 @@ public class Server {
 
 		contexts.setHandlers(new Handler[] { new AppContextBuilder()
 				.buildWebAppContext() });
-
+		
 		final JettyServer jettyServer = new JettyServer();
 		jettyServer.setHandler(contexts);
+		System.out.println("Startat JS? " + jettyServer.isStarted());
 		Runnable runner = new Runnable() {
 			@Override
 			public void run() {
 				try {
 					jettyServer.start();
+					System.out.println("Startat JS-tråden? " + jettyServer.isStarted());
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
