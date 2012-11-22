@@ -65,7 +65,7 @@ public class MultiServerThread extends Thread {
 	public void run() {
 
 		try {
-			// server.sendUnsentItems(thisContact);
+			server.sendUnsentItems(thisContact);
 			// if (thisContact != null) {
 			// System.out.println(thisContact.getUnsentQueue());
 			// }
@@ -163,9 +163,10 @@ public class MultiServerThread extends Thread {
 		try {
 			Assignment assignmentFromJson = (new Gson()).fromJson(assignment,
 					Assignment.class);
-//			server.sendToAllExceptTheSender(assignment, socket.getInetAddress().toString());
+			// server.sendToAllExceptTheSender(assignment,
+			// socket.getInetAddress().toString());
 			server.sendToAll(assignment);
-					
+
 			// Lägger in kontakten i databasen
 			db.addToDB(assignmentFromJson);
 			Calendar cal = Calendar.getInstance();
@@ -173,7 +174,9 @@ public class MultiServerThread extends Thread {
 			SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
 			System.out.println("<" + socket.getInetAddress() + ":"
 					+ socket.getPort() + "	" + sdf.format(cal.getTime())
-					+ "> assignment from  " + assignmentFromJson.getSender() + ": " + assignmentFromJson.getName() + "	" + assignmentFromJson.getAssignmentStatus());
+					+ "> assignment from  " + assignmentFromJson.getSender()
+					+ ": " + assignmentFromJson.getName() + "	"
+					+ assignmentFromJson.getAssignmentStatus());
 		} catch (Exception e) {
 			System.out.println(e);
 		}
@@ -192,7 +195,8 @@ public class MultiServerThread extends Thread {
 		try {
 			Contact contactFromJson = (new Gson()).fromJson(contact,
 					Contact.class);
-			server.sendToAllExceptTheSender(contact, socket.getInetAddress().toString());
+			server.sendToAllExceptTheSender(contact, socket.getInetAddress()
+					.toString());
 			// Lägger in uppdraget i databasen
 			db.updateModel(contactFromJson);
 		} catch (Exception e) {
