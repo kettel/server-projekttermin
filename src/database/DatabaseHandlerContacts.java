@@ -30,7 +30,7 @@ public class DatabaseHandlerContacts extends DatabaseHandler{
             con = DriverManager.getConnection(url, user, password);
             
             // SQL-frågan
-            pst = con.prepareStatement("INSERT INTO contact(Name, InetAddress, UnsentQueue) VALUES(?,?,?)");
+            pst = con.prepareStatement("INSERT INTO contact(Name, InetAddress) VALUES(?,?)");
             
             // Sätt in rätt värden till rätt plats i frågan
             pst.setString(1, contact.getContactName());
