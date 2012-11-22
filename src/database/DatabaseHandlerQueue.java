@@ -20,41 +20,6 @@ public class DatabaseHandlerQueue extends DatabaseHandler {
 	private ResultSet rs = null;
 	private PreparedStatement pst = null;
 
-	public void push(QueueItem q) {
-		try {
-			// Initiera en anslutning till databasen
-			con = DriverManager.getConnection(url, user, password);
-
-			// SQL-frågan
-			pst = con
-					.prepareStatement("INSERT INTO queue(ContactID, json) VALUES(?,?)");
-
-			// Sätt in rätt värden till rätt plats i frågan
-			pst.setString(1, Long.toString(q.getContactId()));
-			pst.setString(2, q.getJSON());
-
-			// Utför frågan och lägg till objektet i databasen
-			pst.executeUpdate();
-
-		} catch (SQLException ex) {
-			System.out.println("Fel: " + ex);
-		} finally {
-			try {
-				if (rs != null) {
-					rs.close();
-				}
-				if (st != null) {
-					st.close();
-				}
-				if (con != null) {
-					con.close();
-				}
-
-			} catch (SQLException ex) {
-			}
-		}
-	}
-
 	public QueueItem pop() {
 		QueueItem poppedItem = null;
 		try {
@@ -107,8 +72,39 @@ public class DatabaseHandlerQueue extends DatabaseHandler {
 
 	@Override
 	public void addModel(ModelInterface m) {
-		// TODO Auto-generated method stub
+		QueueItem q = (QueueItem) m;
+		try {
+			// Initiera en anslutning till databasen
+			con = DriverManager.getConnection(url, user, password);
 
+			// SQL-frågan
+			pst = con
+					.prepareStatement("INSERT INTO queue(ContactID, json) VALUES(?,?)");
+
+			// Sätt in rätt värden till rätt plats i frågan
+			pst.setString(1, Long.toString(q.getContactId()));
+			pst.setString(2, q.getJSON());
+
+			// Utför frågan och lägg till objektet i databasen
+			pst.executeUpdate();
+
+		} catch (SQLException ex) {
+			System.out.println("Fel: " + ex);
+		} finally {
+			try {
+				if (rs != null) {
+					rs.close();
+				}
+				if (st != null) {
+					st.close();
+				}
+				if (con != null) {
+					con.close();
+				}
+
+			} catch (SQLException ex) {
+			}
+		}
 	}
 
 	@Override

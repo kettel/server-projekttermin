@@ -10,6 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import model.Contact;
 import model.ModelInterface;
+import model.QueueItem;
 import database.Database;
 
 /**
@@ -46,7 +47,18 @@ public class Server {
 			// unsentList = new ArrayList<ModelInterface>();
 			hashMap = new ConcurrentHashMap<String, OutputStream>();
 			serverSocket = new ServerSocket(port);
-
+			
+			// Testa kö-db
+			// Lägg till i kö
+			db.addToDB(new QueueItem(8,"kjghjkfg"));
+			db.addToDB(new QueueItem(195,"kjghjkfg"));
+			db.addToDB(new QueueItem(193,"kjghjkfg"));
+			// Hämta från kön
+			List<ModelInterface> retList =  db.getAllFromDB(new QueueItem(8));
+			System.out.println("Antal returnerade objekt: " + retList.size());
+			// poppa ett element från kön
+			db.popFromQueue();
+			
 			// Skapar en ny tråd som lyssnar på kommandon
 			new ServerTerminal(this).start();
 			// Lyssnar på anslutningar och skapar en ny tråd per anslutning så

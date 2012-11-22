@@ -26,6 +26,10 @@ public class Database {
 			DatabaseHandlerMessages dhm = new DatabaseHandlerMessages();
 			dhm.addModel(m);
 		}
+		else if(dbRep.equalsIgnoreCase("queueItem")){
+			DatabaseHandlerQueue dhq = new DatabaseHandlerQueue();
+			dhq.addModel(m);
+		}
 	}
 	
 	/**
@@ -120,14 +124,6 @@ public class Database {
 		}
 	}
 	
-	/**
-	 * Pusha ett kö-objekt på databasen.
-	 * @param q
-	 */
-	public void pushToQueue(QueueItem q){
-		DatabaseHandlerQueue dhq = new DatabaseHandlerQueue();
-		dhq.push(q);
-	}
 	
 	/**
 	 * Poppa kö-objekt från kön

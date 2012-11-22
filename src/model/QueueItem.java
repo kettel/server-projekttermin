@@ -10,6 +10,10 @@ public class QueueItem implements ModelInterface{
 
 	public QueueItem(){}
 	
+	public QueueItem(long contactId){
+		this.contactId = contactId;
+	}
+	
 	public QueueItem(long contactId, String jSON) {
 		this.contactId = contactId;
 		this.json = jSON;
