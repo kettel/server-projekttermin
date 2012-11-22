@@ -61,7 +61,7 @@ public class CreateContactCommand implements CommandInterface {
 				if(alreadyExists == false){
 					// Lägger till den nya kontakten till databasen
 				db.addToDB(newContact);
-				db.addToDB(new LoginModel(newContact.getId(), pw));
+				db.addToDB(new LoginModel(200, pw));
 				}
 				
 				System.out.println("Kontakt sparad.");
