@@ -17,6 +17,10 @@ import model.QueueItem;
 
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
+import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.eclipse.jetty.servlet.ServletHolder;
+
+import GCM.HomeServlet;
 
 import database.Database;
 
@@ -49,6 +53,10 @@ public class Server {
 
 		contexts.setHandlers(new Handler[] { new AppContextBuilder()
 				.buildWebAppContext() });
+		ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
+        context.setContextPath("/");
+        context.getServer().setHandler(context);
+        context.addServlet(new ServletHolder(new HomeServlet()), "/servlet");
 		final JettyServer jettyServer = new JettyServer();
 		jettyServer.setHandler(contexts);
 		Runnable runner = new Runnable() {
