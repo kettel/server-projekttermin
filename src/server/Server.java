@@ -49,15 +49,15 @@ public class Server {
 	public static void main(String[] args) {
 		
 		
-		ContextHandlerCollection contexts = new ContextHandlerCollection();
-
-		contexts.setHandlers(new Handler[] { new AppContextBuilder()
-				.buildWebAppContext() });
+//		ContextHandlerCollection contexts = new ContextHandlerCollection();
+//
+//		contexts.setHandlers(new Handler[] { new AppContextBuilder()
+//				.buildWebAppContext() });
 		ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
         context.setContextPath("/");
         context.addServlet(new ServletHolder(new HomeServlet()), "/servlet");
 		final JettyServer jettyServer = new JettyServer();
-		jettyServer.setHandler(contexts);
+//		jettyServer.setHandler(contexts);
 		jettyServer.getServer().setHandler(context);
 		Runnable runner = new Runnable() {
 			@Override
