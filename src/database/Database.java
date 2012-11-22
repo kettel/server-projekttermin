@@ -102,6 +102,10 @@ public class Database {
 			DatabaseHandlerMessages dhm = new DatabaseHandlerMessages();
 			dhm.removeModel(m.getDatabaseRepresentation(), Long.toString(m.getId()));
 		}
+		else if(dbRep.equalsIgnoreCase("queueItem")){
+			DatabaseHandlerQueue dhq = new DatabaseHandlerQueue();
+			dhq.removeModel("queue", Long.toString(m.getId()));
+		}
 	}
 	
 	/**
@@ -122,17 +126,6 @@ public class Database {
 			DatabaseHandlerMessages dhm = new DatabaseHandlerMessages();
 			dhm.updateModel(m);
 		}
-	}
-	
-	
-	/**
-	 * Poppa kö-objekt från kön
-	 * @return QueueItem	Det kö-element som ligger högst upp i kön.
-	 */
-	public QueueItem popFromQueue(){
-		DatabaseHandlerQueue dhq = new DatabaseHandlerQueue();
-		QueueItem returnItem = dhq.pop();
-		return returnItem;
 	}
 
 }
