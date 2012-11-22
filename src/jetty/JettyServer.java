@@ -12,6 +12,7 @@ public class JettyServer {
 
 	public JettyServer(Integer runningPort) {
 		server = new Server(runningPort);
+		System.out.println("Är jag startad? " + server.isStarted());
 	}
 
 	public void setHandler(ContextHandlerCollection contexts) {
