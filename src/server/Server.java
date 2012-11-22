@@ -8,6 +8,7 @@ import java.net.Socket;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
+import jetty.JettyServer;
 import model.Contact;
 import model.ModelInterface;
 import model.QueueItem;
@@ -37,6 +38,13 @@ public class Server {
 
 	public static void main(String[] args) {
 		new Server();
+		JettyServer js=new JettyServer();
+		try {
+			js.start();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public Server() {
