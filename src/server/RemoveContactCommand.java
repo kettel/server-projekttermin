@@ -15,9 +15,10 @@ import database.Database;
  */
 public class RemoveContactCommand implements CommandInterface {
 
-	Database db = new Database();
+	private Database db = new Database();
 	private List<ModelInterface> list = null;
-	Scanner in = new Scanner(System.in);
+	private Scanner in = new Scanner(System.in);
+	private boolean foundContact = false;
 
 	public RemoveContactCommand() {
 
@@ -40,9 +41,11 @@ public class RemoveContactCommand implements CommandInterface {
 					db.deleteFromDB(cont);
 					System.out.println("Kontakten " + contactToBeDeleted
 							+ " har blivit borttagen.");
-				} else {
-					System.out.println("Kontakten hittades inte.");
+					foundContact = true;
 				}
+			}
+			if(!foundContact){
+				System.out.println("Kontakten hittades inte.");
 			}
 		} else {
 			System.out.println("Felaktig inmatning.");
