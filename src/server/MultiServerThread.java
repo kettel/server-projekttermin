@@ -115,7 +115,7 @@ public class MultiServerThread extends Thread {
 			handleContact(input);
 		} else if (input.equals("Heart")) {
 		} else {
-			System.out.println("<" + socket.getInetAddress() + "> Did not recognise inputtype.");
+			System.out.println("<" + socket.getInetAddress() + "> Did not recognise inputtype.	" + inputLine);
 		}
 	}
 

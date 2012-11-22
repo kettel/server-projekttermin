@@ -152,19 +152,23 @@ public class Server {
 	 * Återsänder data som inte kommat fram till en viss mottagare
 	 * 
 	 * @param receiver
-	 * 			Kontakten som datan sänds till
+	 *            Kontakten som datan sänds till
 	 */
 	public void sendUnsentItems(Contact receiver) {
 		if (receiver != null) {
-			list = db.getAllFromDB(new QueueItem(receiver.getId()));
-			if (!list.isEmpty()) {
-				PrintWriter pr = new PrintWriter(hashMap.get("/"
-						+ receiver.getInetAddress()), true);
-				for (ModelInterface m : list) {
-					QueueItem qItem = (QueueItem) m;
-					pr.println(qItem.getJSON());
-					db.deleteFromDB(qItem);
+			try {
+				list = db.getAllFromDB(new QueueItem(receiver.getId()));
+				if (!list.isEmpty()) {
+					PrintWriter pr = new PrintWriter(hashMap.get("/"
+							+ receiver.getInetAddress()), true);
+					for (ModelInterface m : list) {
+						QueueItem qItem = (QueueItem) m;
+						pr.println(qItem.getJSON());
+						db.deleteFromDB(qItem);
+					}
 				}
+			} catch (Exception e) {
+				System.err.println(e);
 			}
 		}
 	}
