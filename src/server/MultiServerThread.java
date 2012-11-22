@@ -10,6 +10,7 @@ import java.util.List;
 
 import model.Assignment;
 import model.Contact;
+import model.LoginModel;
 import model.MessageModel;
 import model.ModelInterface;
 
@@ -33,6 +34,8 @@ public class MultiServerThread extends Thread {
 	private boolean connected = true;
 	private Server server = null;
 	private Contact thisContact;
+	private List<ModelInterface> list;
+	private List<ModelInterface> hashList;
 
 	/**
 	 * Konstruktorn, tar emot en socket för porten vi lyssnar på och en Server
@@ -113,6 +116,10 @@ public class MultiServerThread extends Thread {
 			handleAssignment(input);
 		} else if (input.contains("\"databaseRepresentation\":\"contact\"")) {
 			handleContact(input);
+		} else if (input.contains("\"databaseRepresentation\":\"authentication\"")) {
+			if(!handleLogin(input)){
+				connected = false;
+			}
 		} else if (input.equals("Heart")) {
 		} else {
 			System.out.println("<" + socket.getInetAddress() + "> Did not recognise inputtype.	" + inputLine);
@@ -197,5 +204,32 @@ public class MultiServerThread extends Thread {
 		} catch (Exception e) {
 			System.out.println(e);
 		}
+	}
+	
+	private boolean handleLogin(String login) {
+		try{
+			LoginModel loginFromJson = (new Gson().fromJson(login, LoginModel.class));
+			list = db.getAllFromDB(new Contact());
+			hashList = db.getAllFromDB(new LoginModel());
+			for (ModelInterface m : list) {
+				Contact cont = (Contact) m;
+				if(loginFromJson.getUserName().equals(cont.getContactName())){
+					for (ModelInterface mi : hashList) {
+						LoginModel logMod = (LoginModel) mi;
+						if(loginFromJson.getPassword().equals(logMod.getPassword())){
+							cont.setInetAddress(socket.getInetAddress().toString());
+							loginFromJson.setIsAccessGranted(true);
+							String response = new Gson().toJson(loginFromJson);
+							server.send(response, cont.getContactName());
+							return true;
+						}
+					}
+				}
+			}
+			
+		}catch(Exception e){
+			System.out.println(e);
+		}
+		return false;
 	}
 }

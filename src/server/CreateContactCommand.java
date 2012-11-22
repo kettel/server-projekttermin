@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import model.Contact;
+import model.LoginModel;
 import model.ModelInterface;
 
 import com.google.gson.Gson;
@@ -35,7 +36,9 @@ public class CreateContactCommand implements CommandInterface {
 			newContact.setContactName(in.nextLine());
 			System.out.print("Kontaktens IP: ");
 			newContact.setInetAddress(in.nextLine());
-
+			System.out.print("Kontaktens lösenord: ");
+			String pw = in.nextLine();
+			System.out.println("");
 			System.out
 					.print("Är du nöjd med din nya insättning av kontakt? (y/n): ");
 			String yesOrNo = in.nextLine();
@@ -58,6 +61,7 @@ public class CreateContactCommand implements CommandInterface {
 				if(alreadyExists == false){
 					// Lägger till den nya kontakten till databasen
 				db.addToDB(newContact);
+				db.addToDB(new LoginModel(200, pw));
 				}
 				
 				System.out.println("Kontakt sparad.");
