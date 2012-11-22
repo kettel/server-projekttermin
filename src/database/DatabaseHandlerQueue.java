@@ -79,7 +79,7 @@ public class DatabaseHandlerQueue extends DatabaseHandler {
 
 			// SQL-frågan
 			pst = con
-					.prepareStatement("INSERT INTO queue(ContactID, json) VALUES(?,?)");
+					.prepareStatement("INSERT INTO queue(contact_Id, json) VALUES(?,?)");
 
 			// Sätt in rätt värden till rätt plats i frågan
 			pst.setString(1, Long.toString(q.getContactId()));
