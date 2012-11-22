@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import model.ModelInterface;
+import model.QueueItem;
 
 public class Database {
 	
@@ -70,6 +71,10 @@ public class Database {
 			DatabaseHandlerMessages dhm = new DatabaseHandlerMessages();
 			returnList = dhm.getAllModels(m);
 		}
+		else if(dbRep.equalsIgnoreCase("queueItem")){
+			DatabaseHandlerQueue dhq = new DatabaseHandlerQueue();
+			returnList = dhq.getAllModels(m);
+		}
 		return returnList;
 	}
 	
@@ -113,6 +118,25 @@ public class Database {
 			DatabaseHandlerMessages dhm = new DatabaseHandlerMessages();
 			dhm.updateModel(m);
 		}
+	}
+	
+	/**
+	 * Pusha ett kö-objekt på databasen.
+	 * @param q
+	 */
+	public void pushToQueue(QueueItem q){
+		DatabaseHandlerQueue dhq = new DatabaseHandlerQueue();
+		dhq.push(q);
+	}
+	
+	/**
+	 * Poppa kö-objekt från kön
+	 * @return QueueItem	Det kö-element som ligger högst upp i kön.
+	 */
+	public QueueItem popFromQueue(){
+		DatabaseHandlerQueue dhq = new DatabaseHandlerQueue();
+		QueueItem returnItem = dhq.pop();
+		return returnItem;
 	}
 
 }

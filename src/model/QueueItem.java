@@ -1,7 +1,8 @@
 package model;
 
-public class QueueItem {
+public class QueueItem implements ModelInterface{
 	private long id = -1;
+	private String databaseRepresentation = "queueItem";
 	
 	private long contactId = -1;
 	
@@ -26,6 +27,16 @@ public class QueueItem {
 
 	public String getJSON() {
 		return json;
+	}
+
+	@Override
+	public String getDatabaseRepresentation() {
+		return databaseRepresentation;
+	}
+
+	@Override
+	public long getId() {
+		return id;
 	}
 	
 }
