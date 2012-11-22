@@ -30,7 +30,7 @@ public class DatabaseHandlerMessages extends DatabaseHandler{
             con = DriverManager.getConnection(url, user, password);
             
             // SQL-frågan
-            pst = con.prepareStatement("INSERT INTO message(Content, Receiver, Sender, MessageTimestamp, IsRead, Sent) VALUES(?,?,?,?,?,?)");
+            pst = con.prepareStatement("INSERT INTO message(Content, Receiver, Sender, MessageTimestamp, IsRead) VALUES(?,?,?,?,?)");
             
             // Sätt in rätt värden till rätt plats i frågan
             pst.setString(1, message.getMessageContent().toString());
@@ -38,7 +38,6 @@ public class DatabaseHandlerMessages extends DatabaseHandler{
             pst.setString(3, message.getSender());
             pst.setString(4, Long.toString(message.getMessageTimeStamp()));
             pst.setString(5, Boolean.toString(message.isRead()));
-            pst.setString(6, Boolean.toString(message.sent()));
            
             // Utför frågan och lägg till objektet i databasen
             pst.executeUpdate();
@@ -78,7 +77,6 @@ public class DatabaseHandlerMessages extends DatabaseHandler{
 						rs.getString(4), // Sender
 						Long.valueOf(rs.getString(5)), // Timestamp
 						Boolean.parseBoolean(rs.getString(6))); // isRead
-            			Boolean.parseBoolean(rs.getString(7)); // Sent
             	returnList.add((ModelInterface) tempMess);
             }
 
@@ -120,7 +118,6 @@ public class DatabaseHandlerMessages extends DatabaseHandler{
             		"\", Receiver = \"" + message.getReciever() + 
             		"\", Sender = \"" + message.getSender() +
             		"\", IsRead = \"" + Boolean.toString(message.isRead()) +
-            		"\", Sent = \"" + Boolean.toString(message.isRead()) +
             		"\" WHERE Id = " + message.getId());
             				
             // Commita db-uppdateringarna (?)

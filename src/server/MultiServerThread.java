@@ -6,10 +6,12 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 
 import model.Assignment;
 import model.Contact;
 import model.MessageModel;
+import model.ModelInterface;
 
 import com.google.gson.Gson;
 
@@ -30,6 +32,7 @@ public class MultiServerThread extends Thread {
 
 	private boolean connected = true;
 	private Server server = null;
+	private Contact thisContact;
 
 	/**
 	 * Konstruktorn, tar emot en socket för porten vi lyssnar på och en Server
@@ -46,6 +49,14 @@ public class MultiServerThread extends Thread {
 		this.socket = socket;
 		this.server = server;
 		db = new Database();
+		List<ModelInterface> m = db.getAllFromDB(new Contact());
+		for (ModelInterface mi : m) {
+			Contact cont = (Contact) mi;
+			if (socket.getInetAddress().toString()
+					.equals("/" + cont.getInetAddress())) {
+				thisContact = cont;
+			}
+		}
 	}
 
 	/**
@@ -54,6 +65,8 @@ public class MultiServerThread extends Thread {
 	public void run() {
 
 		try {
+			server.sendUnsentItems(thisContact);
+
 			while (connected) {
 				// Buffrar ihop flera tecken från InputStreamen till en sträng
 				input = new BufferedReader(new InputStreamReader(
@@ -61,19 +74,18 @@ public class MultiServerThread extends Thread {
 
 				// Läser den buffrade strängen
 				inputLine = input.readLine();
-				if (inputLine.equals("exit")) {
-					connected = false;
-					break;
+				if (inputLine != null) {
+
+					if (inputLine.equals("exit")) {
+						connected = false;
+						break;
+					}
+
+					// Bestämmer vilken typ av input som kommer in. När det
+					// avgjorts
+					// sparas och/eller skickas input:en vidare.
+					handleTypeOfInput(inputLine);
 				}
-
-				Calendar cal = Calendar.getInstance();
-				cal.getTime();
-				SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-
-				// Bestämmer vilken typ av input som kommer in. När det
-				// avgjorts
-				// sparas och/eller skickas input:en vidare.
-				handleTypeOfInput(inputLine);
 			}
 			// Tar bort kontakten från hashMapen med de anslutna klienterna
 			server.removeClient(socket.getInetAddress().toString());
@@ -101,8 +113,9 @@ public class MultiServerThread extends Thread {
 			handleAssignment(input);
 		} else if (input.contains("\"databaseRepresentation\":\"contact\"")) {
 			handleContact(input);
+		} else if (input.equals("Heart")) {
 		} else {
-			System.out.println("Did not recognise inputtype.");
+			System.out.println("<" + socket.getInetAddress() + "> Did not recognise inputtype.	" + inputLine);
 		}
 	}
 
@@ -118,13 +131,18 @@ public class MultiServerThread extends Thread {
 		MessageModel msg = new MessageModel();
 		// Gson konverterar json-strängen till MessageModel-objektet igen
 		try {
-			msg = (new Gson()).fromJson(message, MessageModel.class);	
+			msg = (new Gson()).fromJson(message, MessageModel.class);
+			server.send(message, msg.getReciever().toString());
 			// Lägger in meddelandet i databasen
-			if(server.send(message, msg.getReciever().toString())){
-				msg.setSent(true);
-			}
-			
 			db.addToDB(msg);
+			Calendar cal = Calendar.getInstance();
+			cal.getTime();
+			SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+			System.out.println("<" + socket.getInetAddress() + ":"
+					+ socket.getPort() + "	" + sdf.format(cal.getTime())
+					+ "> message from  " + msg.getSender() + " to "
+					+ msg.getReciever() + ": " + msg.getMessageContent());
+
 		} catch (Exception e) {
 			System.out.println(e);
 		}
@@ -142,10 +160,18 @@ public class MultiServerThread extends Thread {
 		try {
 			Assignment assignmentFromJson = (new Gson()).fromJson(assignment,
 					Assignment.class);
+			server.sendToAllExceptTheSender(assignment, socket.getInetAddress().toString());
+
 			// Lägger in kontakten i databasen
-			db.addToDB(assignmentFromJson);			
-			server.sendToAllExceptTheSender(assignment, socket.getInetAddress()
-					.toString());
+			db.addToDB(assignmentFromJson);
+			Calendar cal = Calendar.getInstance();
+			cal.getTime();
+			SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+			System.out.println("<" + socket.getInetAddress() + ":"
+					+ socket.getPort() + "	" + sdf.format(cal.getTime())
+					+ "> assignment from  " + assignmentFromJson.getSender()
+					+ ": " + assignmentFromJson.getName() + "	"
+					+ assignmentFromJson.getAssignmentStatus());
 		} catch (Exception e) {
 			System.out.println(e);
 		}
@@ -164,9 +190,10 @@ public class MultiServerThread extends Thread {
 		try {
 			Contact contactFromJson = (new Gson()).fromJson(contact,
 					Contact.class);
+			server.sendToAllExceptTheSender(contact, socket.getInetAddress()
+					.toString());
 			// Lägger in uppdraget i databasen
 			db.updateModel(contactFromJson);
-			server.sendToAll(contact);
 		} catch (Exception e) {
 			System.out.println(e);
 		}

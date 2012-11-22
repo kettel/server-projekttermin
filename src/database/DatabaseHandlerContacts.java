@@ -70,6 +70,8 @@ public class DatabaseHandlerContacts extends DatabaseHandler{
             	returnList.add((ModelInterface) new Contact(rs.getInt(1), // Id
             						rs.getString(2), // Name
             						rs.getString(3))); // Inetaddress
+            						 
+            						
             }
 
         } catch (SQLException ex) {
@@ -132,4 +134,5 @@ public class DatabaseHandlerContacts extends DatabaseHandler{
         }
 		
 	}
+	
 }

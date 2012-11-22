@@ -1,7 +1,5 @@
 package model;
 
-import java.util.LinkedList;
-import java.util.Queue;
 
 public class Contact implements ModelInterface {
 
@@ -68,4 +66,5 @@ public class Contact implements ModelInterface {
 	public void setInetAddress(String inetAddress) {
 		this.inetAddress = inetAddress;
 	}
+	
 }

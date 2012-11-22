@@ -25,6 +25,14 @@ public class Database {
 			DatabaseHandlerMessages dhm = new DatabaseHandlerMessages();
 			dhm.addModel(m);
 		}
+		else if(dbRep.equalsIgnoreCase("queueItem")){
+			DatabaseHandlerQueue dhq = new DatabaseHandlerQueue();
+			dhq.addModel(m);
+		}
+		else if(dbRep.equalsIgnoreCase("login")){
+			DatabaseHandlerLogin dhl = new DatabaseHandlerLogin();
+			dhl.addModel(m);
+		}
 	}
 	
 	/**
@@ -70,6 +78,14 @@ public class Database {
 			DatabaseHandlerMessages dhm = new DatabaseHandlerMessages();
 			returnList = dhm.getAllModels(m);
 		}
+		else if(dbRep.equalsIgnoreCase("queueItem")){
+			DatabaseHandlerQueue dhq = new DatabaseHandlerQueue();
+			returnList = dhq.getAllModels(m);
+		}
+		else if(dbRep.equalsIgnoreCase("login")){
+			DatabaseHandlerLogin dhl = new DatabaseHandlerLogin();
+			returnList = dhl.getAllModels(m);
+		}
 		return returnList;
 	}
 	
@@ -92,6 +108,14 @@ public class Database {
 			System.out.println("Ska ta bort meddelande "+Long.toString(m.getId()) + ". Från " + m.getDatabaseRepresentation());
 			DatabaseHandlerMessages dhm = new DatabaseHandlerMessages();
 			dhm.removeModel(m.getDatabaseRepresentation(), Long.toString(m.getId()));
+		}
+		else if(dbRep.equalsIgnoreCase("queueItem")){
+			DatabaseHandlerQueue dhq = new DatabaseHandlerQueue();
+			dhq.removeModel("queue", Long.toString(m.getId()));
+		}
+		else if(dbRep.equalsIgnoreCase("login")){
+			DatabaseHandlerLogin dhl = new DatabaseHandlerLogin();
+			dhl.removeModel(m.getDatabaseRepresentation(), Long.toString(m.getId()));
 		}
 	}
 	

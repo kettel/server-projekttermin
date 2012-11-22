@@ -11,6 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import jetty.JettyServer;
 import model.Contact;
 import model.ModelInterface;
+import model.QueueItem;
 import database.Database;
 
 /**
@@ -49,6 +50,7 @@ public class Server {
 	public Server() {
 		try {
 			db = new Database();
+			// unsentList = new ArrayList<ModelInterface>();
 			hashMap = new ConcurrentHashMap<String, OutputStream>();
 			serverSocket = new ServerSocket(port);
 
@@ -74,28 +76,26 @@ public class Server {
 	 * 
 	 * @param stringToBeSent
 	 *            Strängen som ska skickas
-	 * @param reciever
+	 * @param receiver
 	 *            Mottagarens namn
 	 */
-	public boolean send(String stringToBeSent, String reciever) {
-		System.out.println("hashMap empty: " + hashMap.isEmpty() + " keySet: "
-				+ hashMap.keySet());
+	public void send(String stringToBeSent, String receiver) {
 		list = db.getAllFromDB(new Contact());
 		for (ModelInterface m : list) {
 			Contact cont = (Contact) m;
-			if (reciever.equals(cont.getContactName())) {
+			if (receiver.equals(cont.getContactName())) {
 				// Om mottagaren är ansluten så skickas strängen
 				if (hashMap.keySet().contains("/" + cont.getInetAddress())) {
 					PrintWriter pr = new PrintWriter(hashMap.get("/"
 							+ cont.getInetAddress()), true);
 					pr.println(stringToBeSent);
-					return true;
 				} else {
-					return false;
+					QueueItem qItem = new QueueItem(cont.getId(),
+							stringToBeSent);
+					db.addToDB(qItem);
 				}
 			}
 		}
-		return false;
 	}
 
 	/**
@@ -112,6 +112,9 @@ public class Server {
 				PrintWriter pr = new PrintWriter(hashMap.get("/"
 						+ cont.getInetAddress()), true);
 				pr.println(stringToBeSent);
+			} else {
+				QueueItem qItem = new QueueItem(cont.getId(), stringToBeSent);
+				db.addToDB(qItem);
 			}
 		}
 	}
@@ -129,17 +132,18 @@ public class Server {
 		list = db.getAllFromDB(new Contact());
 		for (ModelInterface m : list) {
 			Contact cont = (Contact) m;
-			if (!sendersIP.equals("/" + cont.getInetAddress())
-					&& hashMap.keySet().contains("/" + cont.getInetAddress())) {
-				PrintWriter pr = new PrintWriter(hashMap.get("/"
-						+ cont.getInetAddress()), true);
-				pr.println(stringToBeSent);
+			if (!sendersIP.equals("/" + cont.getInetAddress())) {
+				if (hashMap.keySet().contains("/" + cont.getInetAddress())) {
+					PrintWriter pr = new PrintWriter(hashMap.get("/"
+							+ cont.getInetAddress()), true);
+					pr.println(stringToBeSent);
+				} else {
+					QueueItem qItem = new QueueItem(cont.getId(),
+							stringToBeSent);
+					db.addToDB(qItem);
+				}
 			}
 		}
-	}
-	
-	public void sendWhenReconnected(String stringToBeSent, Contact reciever){
-		
 	}
 
 	/**
@@ -148,7 +152,32 @@ public class Server {
 	 * @param string
 	 *            IP:t på användaren
 	 */
-	public void removeClient(String usersIP) {
+	public synchronized void removeClient(String usersIP) {
 		hashMap.remove(usersIP);
+	}
+
+	/**
+	 * Återsänder data som inte kommat fram till en viss mottagare
+	 * 
+	 * @param receiver
+	 *            Kontakten som datan sänds till
+	 */
+	public void sendUnsentItems(Contact receiver) {
+		if (receiver != null) {
+			try {
+				list = db.getAllFromDB(new QueueItem(receiver.getId()));
+				if (!list.isEmpty()) {
+					PrintWriter pr = new PrintWriter(hashMap.get("/"
+							+ receiver.getInetAddress()), true);
+					for (ModelInterface m : list) {
+						QueueItem qItem = (QueueItem) m;
+						pr.println(qItem.getJSON());
+						db.deleteFromDB(qItem);
+					}
+				}
+			} catch (Exception e) {
+				System.err.println(e);
+			}
+		}
 	}
 }

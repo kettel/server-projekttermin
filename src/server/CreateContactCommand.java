@@ -1,8 +1,10 @@
 package server;
 
+import java.util.List;
 import java.util.Scanner;
 
 import model.Contact;
+import model.ModelInterface;
 
 import com.google.gson.Gson;
 
@@ -15,9 +17,11 @@ import database.Database;
  */
 public class CreateContactCommand implements CommandInterface {
 
-	Database db = new Database();
-	Scanner in = new Scanner(System.in);
-	Server server;
+	private Database db = new Database();
+	private Scanner in = new Scanner(System.in);
+	private Server server;
+	private List<ModelInterface> list;
+	private boolean alreadyExists = false; 
 
 	public CreateContactCommand(Server server) {
 		this.server = server;
@@ -42,8 +46,20 @@ public class CreateContactCommand implements CommandInterface {
 			} else if (yesOrNo.equals("y")) {
 				String contact = new Gson().toJson(newContact);
 				server.sendToAll(contact);
-				// Lägger till den nya kontakten till databasen
+				list = db.getAllFromDB(new Contact());
+				for (ModelInterface m : list) {
+					Contact cont = (Contact) m;
+					if(newContact.getContactName().equals(cont.getContactName())){
+						cont.setInetAddress(newContact.getInetAddress());
+						db.updateModel(cont);
+						alreadyExists = true;
+					}
+				}
+				if(alreadyExists == false){
+					// Lägger till den nya kontakten till databasen
 				db.addToDB(newContact);
+				}
+				
 				System.out.println("Kontakt sparad.");
 			} else {
 				System.out.println("Felaktig inmatning.");
