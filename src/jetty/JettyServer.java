@@ -34,4 +34,7 @@ public class JettyServer {
 	public boolean isStopped() {
 		return server.isStopped();
 	}
+	public Server getServer(){
+		return server;
+	}
 }

@@ -55,10 +55,10 @@ public class Server {
 				.buildWebAppContext() });
 		ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
         context.setContextPath("/");
-        context.getServer().setHandler(context);
         context.addServlet(new ServletHolder(new HomeServlet()), "/servlet");
 		final JettyServer jettyServer = new JettyServer();
 		jettyServer.setHandler(contexts);
+		jettyServer.getServer().setHandler(context);
 		Runnable runner = new Runnable() {
 			@Override
 			public void run() {
