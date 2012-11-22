@@ -1,5 +1,6 @@
 package server;
 
+import java.awt.EventQueue;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
@@ -8,10 +9,15 @@ import java.net.Socket;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
+import jetty.AppContextBuilder;
 import jetty.JettyServer;
 import model.Contact;
 import model.ModelInterface;
 import model.QueueItem;
+
+import org.eclipse.jetty.server.Handler;
+import org.eclipse.jetty.server.handler.ContextHandlerCollection;
+
 import database.Database;
 
 /**
@@ -38,13 +44,25 @@ public class Server {
 
 	public static void main(String[] args) {
 		new Server();
-		JettyServer js=new JettyServer();
-		try {
-			js.start();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		ContextHandlerCollection contexts = new ContextHandlerCollection();
+
+		contexts.setHandlers(new Handler[] { new AppContextBuilder()
+				.buildWebAppContext() });
+
+		final JettyServer jettyServer = new JettyServer();
+		jettyServer.setHandler(contexts);
+		Runnable runner = new Runnable() {
+			@Override
+			public void run() {
+				try {
+					jettyServer.start();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		};
+		EventQueue.invokeLater(runner);
 	}
 
 	public Server() {
