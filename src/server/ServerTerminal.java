@@ -39,8 +39,7 @@ public class ServerTerminal extends Thread {
 				getAllContacts.commandTask();
 			} else if(command.equals(removeContact.commandLine())){
 				removeContact.commandTask();
-			}
-			else if(command.equals("gcm")){
+			}else if(command.equals("gcm")){
 				new GCM().sendMessage();
 			}else {
 			
