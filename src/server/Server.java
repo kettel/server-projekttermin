@@ -156,6 +156,7 @@ public class Server {
 	 */
 	public void sendUnsentItems(Contact receiver) {
 		if (receiver != null) {
+			int lulz = 0;
 			try {
 				list = db.getAllFromDB(new QueueItem(receiver.getId()));
 				if (!list.isEmpty()) {
@@ -164,7 +165,9 @@ public class Server {
 					for (ModelInterface m : list) {
 						QueueItem qItem = (QueueItem) m;
 						pr.println(qItem.getJSON());
+						lulz++;
 						db.deleteFromDB(qItem);
+						System.out.println("@Server(170): "+ lulz);
 					}
 				}
 			} catch (Exception e) {
