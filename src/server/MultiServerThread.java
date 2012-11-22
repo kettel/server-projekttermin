@@ -165,7 +165,7 @@ public class MultiServerThread extends Thread {
 					Assignment.class);
 			// server.sendToAllExceptTheSender(assignment,
 			// socket.getInetAddress().toString());
-			server.sendToAll(assignment);
+			server.sendToAllExceptTheSender(assignment, socket.getInetAddress().toString());
 
 			// Lägger in kontakten i databasen
 			db.addToDB(assignmentFromJson);
