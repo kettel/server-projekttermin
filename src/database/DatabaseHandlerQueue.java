@@ -45,10 +45,16 @@ public class DatabaseHandlerQueue extends DatabaseHandler {
 
 			// Och öppna igen
 			con = DriverManager.getConnection(url, user, password);
-			// Ta bort det hämtade objektet
-			pst = con.prepareStatement("DELETE FROM queue WHERE Id = "
+            st = con.createStatement();
+            
+            // Sätt autocommit till falskt
+            con.setAutoCommit(false);
+            
+            // Sätt in rätt värden till rätt plats i frågan och uppdatera dessa
+            st.executeUpdate("DELETE FROM queue WHERE Id = "
 					+ Long.toString(lastId));
-			rs = pst.executeQuery();
+            // Commita db-uppdateringarna (?)
+            con.commit();
 
 		} catch (SQLException ex) {
 			System.out.println("Fel: " + ex);
