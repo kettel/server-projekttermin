@@ -43,12 +43,13 @@ public class Server {
 	private Database db = null;
 
 	public static void main(String[] args) {
-		new Server();
+		
+		
 		ContextHandlerCollection contexts = new ContextHandlerCollection();
 
 		contexts.setHandlers(new Handler[] { new AppContextBuilder()
 				.buildWebAppContext() });
-		
+		System.out.println("Ska starta Jetty-Server");
 		final JettyServer jettyServer = new JettyServer();
 		jettyServer.setHandler(contexts);
 		System.out.println("Startat JS? " + jettyServer.isStarted());
@@ -65,6 +66,7 @@ public class Server {
 			}
 		};
 		EventQueue.invokeLater(runner);
+		new Server();
 	}
 
 	public Server() {
