@@ -9,21 +9,24 @@ import database.Database;
 
 /**
  * Ett kommando för att ta bort en kontakt ur databasen
+ * 
  * @author kristoffer
- *
+ * 
  */
 public class RemoveContactCommand implements CommandInterface {
 
-	Database db = new Database();
+	private Database db = new Database();
 	private List<ModelInterface> list = null;
-	Scanner in = new Scanner(System.in);
+	private Scanner in = new Scanner(System.in);
+	private boolean foundContact = false;
 
 	public RemoveContactCommand() {
-		list = db.getAllFromDB(new Contact());
+
 	}
 
 	@Override
 	public void commandTask() {
+		list = db.getAllFromDB(new Contact());
 		System.out.print("Namn på kontakt som ska tas bort: ");
 		String contactToBeDeleted = in.nextLine();
 		System.out.print("Är du säker på att du vill ta bort "
@@ -38,7 +41,11 @@ public class RemoveContactCommand implements CommandInterface {
 					db.deleteFromDB(cont);
 					System.out.println("Kontakten " + contactToBeDeleted
 							+ " har blivit borttagen.");
+					foundContact = true;
 				}
+			}
+			if(!foundContact){
+				System.out.println("Kontakten hittades inte.");
 			}
 		} else {
 			System.out.println("Felaktig inmatning.");

@@ -66,9 +66,6 @@ public class MultiServerThread extends Thread {
 
 		try {
 			server.sendUnsentItems(thisContact);
-			// if (thisContact != null) {
-			// System.out.println(thisContact.getUnsentQueue());
-			// }
 
 			while (connected) {
 				// Buffrar ihop flera tecken från InputStreamen till en sträng
@@ -118,7 +115,7 @@ public class MultiServerThread extends Thread {
 			handleContact(input);
 		} else if (input.equals("Heart")) {
 		} else {
-			System.out.println("Did not recognise inputtype.");
+			System.out.println("<" + socket.getInetAddress() + "> Did not recognise inputtype.	" + inputLine);
 		}
 	}
 
@@ -163,9 +160,7 @@ public class MultiServerThread extends Thread {
 		try {
 			Assignment assignmentFromJson = (new Gson()).fromJson(assignment,
 					Assignment.class);
-			// server.sendToAllExceptTheSender(assignment,
-			// socket.getInetAddress().toString());
-			server.sendToAll(assignment);
+			server.sendToAllExceptTheSender(assignment, socket.getInetAddress().toString());
 
 			// Lägger in kontakten i databasen
 			db.addToDB(assignmentFromJson);

@@ -9,7 +9,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import model.Contact;
 import model.ModelInterface;
 import model.QueueItem;
 
