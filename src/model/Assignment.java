@@ -38,7 +38,7 @@ public class Assignment implements ModelInterface {
 	// Behöver hjälp)
 	private AssignmentStatus assignmentStatus;
 	// Bild kopplat till uppdraget
-	private Object cameraImage;
+	private byte[] cameraImage;
 	// Gatunamn för platsen där uppdraget utspelas
 	private String streetName;
 	// Platsnamn där uppdraget utspelas
@@ -338,7 +338,7 @@ public class Assignment implements ModelInterface {
 	}
 
 	public byte[] getCameraImage() {
-		return null;
+		return cameraImage;
 	}
 
 	public String getAssignmentDescription() {

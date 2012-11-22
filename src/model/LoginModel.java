@@ -4,7 +4,9 @@ public class LoginModel implements ModelInterface {
 	private long id = -1;
 	private String databaseRepresentation = "login";
 	private long contactId = -1;
+	private String userName;
 	private String password = new String();
+	private boolean isAccessGranted;
 
 	public LoginModel() {}
 	
@@ -35,6 +37,18 @@ public class LoginModel implements ModelInterface {
 
 	public String getPassword() {
 		return password;
+	}
+	
+	public String getUserName(){
+		return userName;
+	}
+	
+	public boolean getIsAccessGranted(){
+		return isAccessGranted;
+	}
+	
+	public void setIsAccessGranted(boolean b){
+		isAccessGranted = b;
 	}
 
 }
