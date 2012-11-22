@@ -9,8 +9,9 @@ import database.Database;
 
 /**
  * Ett kommando för att ta bort en kontakt ur databasen
+ * 
  * @author kristoffer
- *
+ * 
  */
 public class RemoveContactCommand implements CommandInterface {
 
@@ -19,7 +20,7 @@ public class RemoveContactCommand implements CommandInterface {
 	Scanner in = new Scanner(System.in);
 
 	public RemoveContactCommand() {
-		
+
 	}
 
 	@Override
@@ -39,6 +40,8 @@ public class RemoveContactCommand implements CommandInterface {
 					db.deleteFromDB(cont);
 					System.out.println("Kontakten " + contactToBeDeleted
 							+ " har blivit borttagen.");
+				} else {
+					System.out.println("Kontakten hittades inte.");
 				}
 			}
 		} else {
