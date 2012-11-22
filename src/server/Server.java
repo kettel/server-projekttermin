@@ -84,6 +84,8 @@ public class Server {
 							+ cont.getInetAddress()), true);
 					pr.println(stringToBeSent);
 				} else {
+					QueueItem qItem = new QueueItem(cont.getId(), stringToBeSent);
+					db.addToDB(qItem);
 //					cont.addUnsentItem(stringToBeSent);
 //					db.addToDB(cont); // UPDATE FUNGERAR EJ?
 				}
@@ -106,6 +108,8 @@ public class Server {
 						+ cont.getInetAddress()), true);
 				pr.println(stringToBeSent);
 			} else {
+				QueueItem qItem = new QueueItem(cont.getId(), stringToBeSent);
+				db.addToDB(qItem);
 //				cont.addUnsentItem(stringToBeSent);
 			}
 		}
@@ -130,6 +134,8 @@ public class Server {
 							+ cont.getInetAddress()), true);
 					pr.println(stringToBeSent);
 				} else {
+					QueueItem qItem = new QueueItem(cont.getId(), stringToBeSent);
+					db.addToDB(qItem);
 //					cont.addUnsentItem(stringToBeSent);
 				}
 			}
@@ -150,30 +156,37 @@ public class Server {
 	 * public synchronized void addUnsentItem(ModelInterface m) {
 	 * unsentList.add(m); }
 	 */
-	/*
+	
 	public void sendUnsentItems(Contact receiver) {
 		if (receiver != null) {
-			list = db.getAllFromDB(new Contact());
-			for (ModelInterface m : list) {
-				Contact cont = (Contact) m;
-				if (receiver.getContactName().equals(cont.getContactName())) {
-					receiver = cont;
-				}
+			list = db.getAllFromDB(new QueueItem(receiver.getId()));
+			PrintWriter pr = new PrintWriter(hashMap.get("/" + receiver.getInetAddress()), true);
+			for(ModelInterface m : list){
+				QueueItem qItem = (QueueItem) m;
+				pr.println(qItem.getJSON());
+				db.deleteFromDB(qItem);
 			}
-			if (receiver != null) {
-				System.out.println(receiver.getContactName() + " "
-						+ receiver.getUnsentQueue());
-			}
-			if (receiver != null && !receiver.getUnsentQueue().isEmpty()) {
-				System.out.println("kön är inte tom");
-				PrintWriter pr = new PrintWriter(hashMap.get("/"
-						+ receiver.getInetAddress()), true);
-				for (String s : receiver.getUnsentQueue()) {
-					System.out.println("@Server(162): " + s);
-					pr.println(s);
-					receiver.removeUnsentItem(s);
-				}
-			}
+//			list = db.getAllFromDB(new Contact());
+//			for (ModelInterface m : list) {
+//				Contact cont = (Contact) m;
+//				if (receiver.getContactName().equals(cont.getContactName())) {
+//					receiver = cont;
+//				}
+//			}
+//			if (receiver != null) {
+//				System.out.println(receiver.getContactName() + " "
+//						+ receiver.getUnsentQueue());
+//			}
+//			if (receiver != null && !receiver.getUnsentQueue().isEmpty()) {
+//				System.out.println("kön är inte tom");
+//				PrintWriter pr = new PrintWriter(hashMap.get("/"
+//						+ receiver.getInetAddress()), true);
+//				for (String s : receiver.getUnsentQueue()) {
+//					System.out.println("@Server(162): " + s);
+//					pr.println(s);
+//					receiver.removeUnsentItem(s);
+//				}
+//			}
 		}
 		/*
 		 * if (!unsentList.isEmpty()) { for (ModelInterface m : unsentList) { if
@@ -182,6 +195,6 @@ public class Server {
 		 * .equals(reciever.getContactName())) {
 		 * System.out.println("sending old data"); pr.println(new
 		 * Gson().toJson(msg)); unsentList.remove(msg); } } } }
-		 
-	}*/
+		 */
+	}
 }
