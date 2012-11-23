@@ -46,13 +46,17 @@ public class Server {
 	private Database db = null;
 
 	public static void main(String[] args) {
-		
-		ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
-        context.setContextPath("/");
-        context.addServlet(new ServletHolder(new HomeServlet()), "/home");
-        context.addServlet(new ServletHolder(new RegisterServlet()), "/register");
-        context.addServlet(new ServletHolder(new UnregisterServlet()), "/unregister");
-        context.addServlet(new ServletHolder(new SendAllMessagesServlet()), "/sendAll");
+
+		ServletContextHandler context = new ServletContextHandler(
+				ServletContextHandler.SESSIONS);
+		context.setContextPath("/");
+		context.addServlet(new ServletHolder(new HomeServlet()), "/home");
+		context.addServlet(new ServletHolder(new RegisterServlet()),
+				"/register");
+		context.addServlet(new ServletHolder(new UnregisterServlet()),
+				"/unregister");
+		context.addServlet(new ServletHolder(new SendAllMessagesServlet()),
+				"/sendAll");
 		final JettyServer jettyServer = new JettyServer();
 		jettyServer.getServer().setHandler(context);
 		Runnable runner = new Runnable() {
@@ -131,7 +135,8 @@ public class Server {
 		for (ModelInterface m : list) {
 			Contact cont = (Contact) m;
 			if (hashMap.keySet().contains(cont.getInetAddress())) {
-				PrintWriter pr = new PrintWriter(hashMap.get(cont.getInetAddress()), true);
+				PrintWriter pr = new PrintWriter(hashMap.get(cont
+						.getInetAddress()), true);
 				pr.println(stringToBeSent);
 			} else {
 				QueueItem qItem = new QueueItem(cont.getId(), stringToBeSent);
@@ -155,7 +160,8 @@ public class Server {
 			Contact cont = (Contact) m;
 			if (!sendersIP.equals(cont.getInetAddress())) {
 				if (hashMap.keySet().contains(cont.getInetAddress())) {
-					PrintWriter pr = new PrintWriter(hashMap.get(cont.getInetAddress()), true);
+					PrintWriter pr = new PrintWriter(hashMap.get(cont
+							.getInetAddress()), true);
 					pr.println(stringToBeSent);
 				} else {
 					QueueItem qItem = new QueueItem(cont.getId(),
@@ -187,7 +193,8 @@ public class Server {
 			try {
 				list = db.getAllFromDB(new QueueItem(receiver.getId()));
 				if (!list.isEmpty()) {
-					PrintWriter pr = new PrintWriter(hashMap.get(receiver.getInetAddress()), true);
+					PrintWriter pr = new PrintWriter(hashMap.get(receiver
+							.getInetAddress()), true);
 					for (ModelInterface m : list) {
 						QueueItem qItem = (QueueItem) m;
 						pr.println(qItem.getJSON());
