@@ -216,7 +216,6 @@ public class MultiServerThread extends Thread {
 					AuthenticationModel.class));
 			list = db.getAllFromDB(new Contact());
 			hashList = db.getAllFromDB(new LoginModel());
-			String test = new Gson().toJson(loginFromJson);
 			for (ModelInterface m : list) {
 				Contact cont = (Contact) m;
 				if (loginFromJson.getUserName().equals(cont.getContactName())) {
