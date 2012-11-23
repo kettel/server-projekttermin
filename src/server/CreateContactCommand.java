@@ -39,7 +39,6 @@ public class CreateContactCommand implements CommandInterface {
 			// System.out.print("Kontaktens IP: ");
 			// newContact.setInetAddress(in.nextLine());
 			String pw = readPw();
-			System.out.println("");
 			System.out
 					.print("Är du nöjd med din nya insättning av kontakt? (y/n): ");
 			String yesOrNo = in.nextLine();
