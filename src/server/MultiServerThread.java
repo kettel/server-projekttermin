@@ -220,6 +220,7 @@ public class MultiServerThread extends Thread {
 			hashList = db.getAllFromDB(new LoginModel());
 			for (ModelInterface m : list) {
 				Contact cont = (Contact) m;
+				System.out.println("@MultiServerThread(213): " + loginFromJson.getUserName() + " compared to " + cont.getContactName());
 				if (loginFromJson.getUserName().equals(cont.getContactName())) {
 					System.out
 							.println("@MultiServerThread(219): ANVÄNDAREN FINNS");
