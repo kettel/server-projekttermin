@@ -73,7 +73,6 @@ public class Server {
 	public Server() {
 		try {
 			db = new Database();
-			// unsentList = new ArrayList<ModelInterface>();
 			hashMap = new ConcurrentHashMap<String, OutputStream>();
 			serverSocket = new ServerSocket(port);
 
