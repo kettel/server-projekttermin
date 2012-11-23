@@ -48,8 +48,8 @@ public class Server {
 		
 		ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
         context.setContextPath("/");
-        context.addServlet(new ServletHolder(new HomeServlet()), "/servlet");
-        context.addServlet(new ServletHolder(new RegisterServlet()), "/register");
+        //context.addServlet(new ServletHolder(new HomeServlet()), "/servlet");
+        //context.addServlet(new ServletHolder(new RegisterServlet()), "/register");
         //context.addServlet(new ServletHolder(new SendAllMessagesServlet()), "/servlet/sendAll");
 		final JettyServer jettyServer = new JettyServer();
 		jettyServer.getServer().setHandler(context);
