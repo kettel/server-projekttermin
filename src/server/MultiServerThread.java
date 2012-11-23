@@ -6,17 +6,16 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Iterator;
 import java.util.List;
 
 import model.Assignment;
+import model.AuthenticationModel;
 import model.Contact;
 import model.LoginModel;
 import model.MessageModel;
 import model.ModelInterface;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 
 import database.Database;
 
@@ -215,9 +214,9 @@ public class MultiServerThread extends Thread {
 	private boolean handleLogin(String login) {
 		try {
 			System.out.println("@MultiServerThread(216): LOGIN");
-			LoginModel loginFromJson = (new Gson().fromJson(login,
-					LoginModel.class));
-			System.out.println("@MultiServerThread(219): " + loginFromJson.getDatabaseRepresentation() +" " + loginFromJson.getUserName() + " " + loginFromJson.getPassword());
+			AuthenticationModel loginFromJson = (new Gson().fromJson(login,
+					AuthenticationModel.class));
+			System.out.println("@MultiServerThread(219): " + loginFromJson.getDatabaseRepresentation() +" " + loginFromJson.getUserName() + " " + loginFromJson.getPasswordHash());
 			list = db.getAllFromDB(new Contact());
 			System.out.println("@MultiServerThread(221)");
 			hashList = db.getAllFromDB(new LoginModel());
@@ -234,8 +233,8 @@ public class MultiServerThread extends Thread {
 					for (ModelInterface mi : hashList) {
 						System.out.println("@MultiServerThread(231)");
 						LoginModel logMod = (LoginModel) mi;
-						System.out.println("@MultiServerThread(233): " + loginFromJson.getPassword() + " compared to " + logMod.getPassword());
-						if (loginFromJson.getPassword().equals(
+						System.out.println("@MultiServerThread(233): " + loginFromJson.getPasswordHash() + " compared to " + logMod.getPassword());
+						if (loginFromJson.getPasswordHash().equals(
 								logMod.getPassword())) {
 							System.out
 									.println("@MultiServerThread(213): PW KORREKT");
