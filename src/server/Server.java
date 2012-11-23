@@ -9,21 +9,17 @@ import java.net.Socket;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
-import jetty.AppContextBuilder;
 import jetty.JettyServer;
 import model.Contact;
 import model.ModelInterface;
 import model.QueueItem;
 
-import org.eclipse.jetty.server.Handler;
-import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 
 import GCM.HomeServlet;
 import GCM.RegisterServlet;
 import GCM.SendAllMessagesServlet;
-
 import database.Database;
 
 /**
@@ -50,18 +46,12 @@ public class Server {
 
 	public static void main(String[] args) {
 		
-		
-//		ContextHandlerCollection contexts = new ContextHandlerCollection();
-//
-//		contexts.setHandlers(new Handler[] { new AppContextBuilder()
-//				.buildWebAppContext() });
 		ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
         context.setContextPath("/");
         context.addServlet(new ServletHolder(new HomeServlet()), "/servlet");
         context.addServlet(new ServletHolder(new RegisterServlet()), "/servlet");
-        context.addServlet(new ServletHolder(new SendAllMessagesServlet()), "/servlet/sendAll");
+        //context.addServlet(new ServletHolder(new SendAllMessagesServlet()), "/servlet/sendAll");
 		final JettyServer jettyServer = new JettyServer();
-//		jettyServer.setHandler(contexts);
 		jettyServer.getServer().setHandler(context);
 		Runnable runner = new Runnable() {
 			@Override
