@@ -112,8 +112,7 @@ public class Server {
 			if (receiver.equals(cont.getContactName())) {
 				// Om mottagaren är ansluten så skickas strängen
 				if (hashMap.keySet().contains(cont.getInetAddress())) {
-					PrintWriter pr = new PrintWriter(hashMap.get("/"
-							+ cont.getInetAddress()), true);
+					PrintWriter pr = new PrintWriter(hashMap.get(cont.getInetAddress()), true);
 					pr.println(stringToBeSent);
 				} else {
 					QueueItem qItem = new QueueItem(cont.getId(),
