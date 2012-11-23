@@ -101,7 +101,7 @@ public class DatabaseHandlerLogin extends DatabaseHandler {
 		List<ModelInterface> returnList = new ArrayList<ModelInterface>();
 		try {
             con = DriverManager.getConnection(url, user, password);
-            pst = con.prepareStatement("SELECT * FROM message");
+            pst = con.prepareStatement("SELECT * FROM login");
             rs = pst.executeQuery();
             
             while (rs.next()) {
