@@ -57,7 +57,7 @@ public class MultiServerThread extends Thread {
 		for (ModelInterface mi : m) {
 			Contact cont = (Contact) mi;
 			if (socket.getInetAddress().toString()
-					.equals("/" + cont.getInetAddress())) {
+					.equals(cont.getInetAddress())) {
 				thisContact = cont;
 			}
 		}
@@ -78,7 +78,6 @@ public class MultiServerThread extends Thread {
 
 				// Läser den buffrade strängen
 				inputLine = input.readLine();
-				 System.out.println("<" + socket.getInetAddress().toString() + "> " + inputLine);
 				if (inputLine != null) {
 
 					if (inputLine.equals("exit")) {
@@ -213,31 +212,18 @@ public class MultiServerThread extends Thread {
 
 	private boolean handleLogin(String login) {
 		try {
-			System.out.println("@MultiServerThread(216): LOGIN");
 			AuthenticationModel loginFromJson = (new Gson().fromJson(login,
 					AuthenticationModel.class));
-			System.out.println("@MultiServerThread(219): " + loginFromJson.getDatabaseRepresentation() +" " + loginFromJson.getUserName() + " " + loginFromJson.getPasswordHash());
 			list = db.getAllFromDB(new Contact());
-			System.out.println("@MultiServerThread(221)");
 			hashList = db.getAllFromDB(new LoginModel());
-			System.out.println("@MultiServerThread(223)");
 			String test = new Gson().toJson(loginFromJson);
-			System.out.println("test: " + test);
 			for (ModelInterface m : list) {
-				System.out.println("@MultiServerThread(225)");
 				Contact cont = (Contact) m;
-				System.out.println("@MultiServerThread(227): " + loginFromJson.getUserName() + " compared to " + cont.getContactName());
 				if (loginFromJson.getUserName().equals(cont.getContactName())) {
-					System.out
-							.println("@MultiServerThread(219): ANVÄNDAREN FINNS");
 					for (ModelInterface mi : hashList) {
-						System.out.println("@MultiServerThread(231)");
 						LoginModel logMod = (LoginModel) mi;
-						System.out.println("@MultiServerThread(233): " + loginFromJson.getPasswordHash() + " compared to " + logMod.getPassword());
 						if (loginFromJson.getPasswordHash().equals(
 								logMod.getPassword())) {
-							System.out
-									.println("@MultiServerThread(213): PW KORREKT");
 							cont.setInetAddress(socket.getInetAddress()
 									.toString());
 							db.updateModel(cont);
@@ -251,7 +237,6 @@ public class MultiServerThread extends Thread {
 			}
 
 		} catch (Exception e) {
-			System.out.println("FÅNGA FELET");
 			System.out.println(e);
 		}
 		return false;
