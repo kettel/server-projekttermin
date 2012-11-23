@@ -83,8 +83,11 @@ public class Database {
 			returnList = dhq.getAllModels(m);
 		}
 		else if(dbRep.equalsIgnoreCase("login")){
+			System.out.println("@Database(86)");
 			DatabaseHandlerLogin dhl = new DatabaseHandlerLogin();
+			System.out.println("@Database(88)");
 			returnList = dhl.getAllModels(m);
+			System.out.println("@Database(90)");
 		}
 		return returnList;
 	}
