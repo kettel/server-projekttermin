@@ -212,7 +212,7 @@ public class MultiServerThread extends Thread {
 	}
 
 	private boolean handleLogin(String login) {
-		try {
+//		try {
 			System.out.println("@MultiServerThread(212): LOGIN");
 			LoginModel loginFromJson = (new Gson().fromJson(login,
 					LoginModel.class));
@@ -242,9 +242,10 @@ public class MultiServerThread extends Thread {
 				}
 			}
 
-		} catch (Exception e) {
-			System.out.println(e);
-		}
+//		} catch (Exception e) {
+//			System.out.println("FÅNGA FELET");
+//			System.out.println(e);
+//		}
 		return false;
 	}
 }
