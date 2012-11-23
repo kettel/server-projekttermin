@@ -77,8 +77,7 @@ public class MultiServerThread extends Thread {
 
 				// Läser den buffrade strängen
 				inputLine = input.readLine();
-				// System.out.println("<" + socket.getInetAddress().toString() +
-				// "> " + inputLine);
+				 System.out.println("<" + socket.getInetAddress().toString() + "> " + inputLine);
 				if (inputLine != null) {
 
 					if (inputLine.equals("exit")) {
@@ -212,15 +211,19 @@ public class MultiServerThread extends Thread {
 	}
 
 	private boolean handleLogin(String login) {
-//		try {
-			System.out.println("@MultiServerThread(212): LOGIN");
+		try {
+			System.out.println("@MultiServerThread(216): LOGIN");
 			LoginModel loginFromJson = (new Gson().fromJson(login,
 					LoginModel.class));
+			System.out.println("@MultiServerThread(219)");
 			list = db.getAllFromDB(new Contact());
+			System.out.println("@MultiServerThread(221)");
 			hashList = db.getAllFromDB(new LoginModel());
+			System.out.println("@MultiServerThread(223)");
 			for (ModelInterface m : list) {
+				System.out.println("@MultiServerThread(225)");
 				Contact cont = (Contact) m;
-				System.out.println("@MultiServerThread(213): " + loginFromJson.getUserName() + " compared to " + cont.getContactName());
+				System.out.println("@MultiServerThread(227): " + loginFromJson.getUserName() + " compared to " + cont.getContactName());
 				if (loginFromJson.getUserName().equals(cont.getContactName())) {
 					System.out
 							.println("@MultiServerThread(219): ANVÄNDAREN FINNS");
@@ -242,10 +245,10 @@ public class MultiServerThread extends Thread {
 				}
 			}
 
-//		} catch (Exception e) {
-//			System.out.println("FÅNGA FELET");
-//			System.out.println(e);
-//		}
+		} catch (Exception e) {
+			System.out.println("FÅNGA FELET");
+			System.out.println(e);
+		}
 		return false;
 	}
 }
