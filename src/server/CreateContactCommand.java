@@ -52,6 +52,7 @@ public class CreateContactCommand implements CommandInterface {
 				String contact = new Gson().toJson(newContact);
 				server.sendToAll(contact);
 				addToLogin(newContact, pw);
+				System.out.println("PASSWORD : " +pw);
 				System.out.println("Kontakt sparad.");
 				}else{
 					System.out.println("En kontakt med det namnet finns redan.");
