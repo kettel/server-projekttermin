@@ -230,7 +230,7 @@ public class MultiServerThread extends Thread {
 					for (ModelInterface mi : hashList) {
 						System.out.println("@MultiServerThread(231)");
 						LoginModel logMod = (LoginModel) mi;
-						System.out.println("@MultiServerThread(233)");
+						System.out.println("@MultiServerThread(233): " + loginFromJson.getPassword() + " compared to " + logMod.getPassword());
 						if (loginFromJson.getPassword().equals(
 								logMod.getPassword())) {
 							System.out
