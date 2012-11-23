@@ -20,6 +20,7 @@ import org.eclipse.jetty.servlet.ServletHolder;
 import GCM.HomeServlet;
 import GCM.RegisterServlet;
 import GCM.SendAllMessagesServlet;
+import GCM.UnregisterServlet;
 import database.Database;
 
 /**
@@ -48,8 +49,9 @@ public class Server {
 		
 		ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
         context.setContextPath("/");
-        //context.addServlet(new ServletHolder(new HomeServlet()), "/servlet");
-        //context.addServlet(new ServletHolder(new RegisterServlet()), "/register");
+        context.addServlet(new ServletHolder(new HomeServlet()), "/home");
+        context.addServlet(new ServletHolder(new RegisterServlet()), "/register");
+        context.addServlet(new ServletHolder(new UnregisterServlet()), "/unregister");
         //context.addServlet(new ServletHolder(new SendAllMessagesServlet()), "/servlet/sendAll");
 		final JettyServer jettyServer = new JettyServer();
 		jettyServer.getServer().setHandler(context);
