@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Iterator;
 import java.util.List;
 
 import model.Assignment;
@@ -15,6 +16,7 @@ import model.MessageModel;
 import model.ModelInterface;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 
 import database.Database;
 
@@ -220,6 +222,8 @@ public class MultiServerThread extends Thread {
 			System.out.println("@MultiServerThread(221)");
 			hashList = db.getAllFromDB(new LoginModel());
 			System.out.println("@MultiServerThread(223)");
+			String test = new Gson().toJson(loginFromJson);
+			System.out.println("test: " + test);
 			for (ModelInterface m : list) {
 				System.out.println("@MultiServerThread(225)");
 				Contact cont = (Contact) m;
