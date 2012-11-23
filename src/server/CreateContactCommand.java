@@ -95,9 +95,9 @@ public class CreateContactCommand implements CommandInterface {
 	
 	private String readPw(){
 		char[] pw;
-		if((console = System.console()) != null && (pw = console.readPassword("Password: ")) != null){
+		if((console = System.console()) != null && (pw = console.readPassword("[%s]", "Password: ")) != null){
 			java.util.Arrays.fill(pw, ' ');
-			return pw.toString();
+			return String.valueOf(pw);
 		}
 		return null;
 	}
