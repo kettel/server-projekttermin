@@ -228,7 +228,9 @@ public class MultiServerThread extends Thread {
 					System.out
 							.println("@MultiServerThread(219): ANVÄNDAREN FINNS");
 					for (ModelInterface mi : hashList) {
+						System.out.println("@MultiServerThread(231)");
 						LoginModel logMod = (LoginModel) mi;
+						System.out.println("@MultiServerThread(233)");
 						if (loginFromJson.getPassword().equals(
 								logMod.getPassword())) {
 							System.out
