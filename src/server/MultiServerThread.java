@@ -218,6 +218,7 @@ public class MultiServerThread extends Thread {
 						LoginModel logMod = (LoginModel) mi;
 						if(loginFromJson.getPassword().equals(logMod.getPassword())){
 							cont.setInetAddress(socket.getInetAddress().toString());
+							db.updateModel(cont);
 							loginFromJson.setIsAccessGranted(true);
 							String response = new Gson().toJson(loginFromJson);
 							server.send(response, cont.getContactName());
