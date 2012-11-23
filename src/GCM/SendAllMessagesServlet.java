@@ -59,7 +59,7 @@ public class SendAllMessagesServlet extends BaseServlet {
   protected Sender newSender(ServletConfig config) {
     String key = (String) config.getServletContext()
         .getAttribute(ApiKeyInitializer.ATTRIBUTE_ACCESS_KEY);
-    return new Sender(key);
+    return new Sender("AIzaSyDm4alrdLjfaZTVqIyLB2YstGiR62_46hk");
   }
 
   /**
