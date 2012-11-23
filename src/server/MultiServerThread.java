@@ -77,7 +77,8 @@ public class MultiServerThread extends Thread {
 
 				// Läser den buffrade strängen
 				inputLine = input.readLine();
-				System.out.println("<" + socket.getInetAddress().toString() + "> " + inputLine);
+				// System.out.println("<" + socket.getInetAddress().toString() +
+				// "> " + inputLine);
 				if (inputLine != null) {
 
 					if (inputLine.equals("exit")) {
@@ -117,13 +118,15 @@ public class MultiServerThread extends Thread {
 			handleAssignment(input);
 		} else if (input.contains("\"databaseRepresentation\":\"contact\"")) {
 			handleContact(input);
-		} else if (input.contains("\"databaseRepresentation\":\"authentication\"")) {
-			if(!handleLogin(input)){
+		} else if (input
+				.contains("\"databaseRepresentation\":\"authentication\"")) {
+			if (!handleLogin(input)) {
 				connected = false;
 			}
 		} else if (input.equals("Heart")) {
 		} else {
-			System.out.println("<" + socket.getInetAddress() + "> Did not recognise inputtype.	" + inputLine);
+			System.out.println("<" + socket.getInetAddress()
+					+ "> Did not recognise inputtype.	" + inputLine);
 		}
 	}
 
@@ -168,7 +171,8 @@ public class MultiServerThread extends Thread {
 		try {
 			Assignment assignmentFromJson = (new Gson()).fromJson(assignment,
 					Assignment.class);
-			server.sendToAllExceptTheSender(assignment, socket.getInetAddress().toString());
+			server.sendToAllExceptTheSender(assignment, socket.getInetAddress()
+					.toString());
 
 			// Lägger in kontakten i databasen
 			db.addToDB(assignmentFromJson);
@@ -206,19 +210,27 @@ public class MultiServerThread extends Thread {
 			System.out.println(e);
 		}
 	}
-	
+
 	private boolean handleLogin(String login) {
-		try{
-			LoginModel loginFromJson = (new Gson().fromJson(login, LoginModel.class));
+		try {
+			System.out.println("@MultiServerThread(212): LOGIN");
+			LoginModel loginFromJson = (new Gson().fromJson(login,
+					LoginModel.class));
 			list = db.getAllFromDB(new Contact());
 			hashList = db.getAllFromDB(new LoginModel());
 			for (ModelInterface m : list) {
 				Contact cont = (Contact) m;
-				if(loginFromJson.getUserName().equals(cont.getContactName())){
+				if (loginFromJson.getUserName().equals(cont.getContactName())) {
+					System.out
+							.println("@MultiServerThread(219): ANVÄNDAREN FINNS");
 					for (ModelInterface mi : hashList) {
 						LoginModel logMod = (LoginModel) mi;
-						if(loginFromJson.getPassword().equals(logMod.getPassword())){
-							cont.setInetAddress(socket.getInetAddress().toString());
+						if (loginFromJson.getPassword().equals(
+								logMod.getPassword())) {
+							System.out
+									.println("@MultiServerThread(213): PW KORREKT");
+							cont.setInetAddress(socket.getInetAddress()
+									.toString());
 							db.updateModel(cont);
 							loginFromJson.setIsAccessGranted(true);
 							String response = new Gson().toJson(loginFromJson);
@@ -228,8 +240,8 @@ public class MultiServerThread extends Thread {
 					}
 				}
 			}
-			
-		}catch(Exception e){
+
+		} catch (Exception e) {
 			System.out.println(e);
 		}
 		return false;
