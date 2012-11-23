@@ -215,7 +215,7 @@ public class MultiServerThread extends Thread {
 			System.out.println("@MultiServerThread(216): LOGIN");
 			LoginModel loginFromJson = (new Gson().fromJson(login,
 					LoginModel.class));
-			System.out.println("@MultiServerThread(219)");
+			System.out.println("@MultiServerThread(219): " + loginFromJson.getDatabaseRepresentation() +" " + loginFromJson.getUserName() + " " + loginFromJson.getPassword());
 			list = db.getAllFromDB(new Contact());
 			System.out.println("@MultiServerThread(221)");
 			hashList = db.getAllFromDB(new LoginModel());
