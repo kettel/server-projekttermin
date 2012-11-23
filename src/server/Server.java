@@ -52,7 +52,7 @@ public class Server {
         context.addServlet(new ServletHolder(new HomeServlet()), "/home");
         context.addServlet(new ServletHolder(new RegisterServlet()), "/register");
         context.addServlet(new ServletHolder(new UnregisterServlet()), "/unregister");
-        //context.addServlet(new ServletHolder(new SendAllMessagesServlet()), "/servlet/sendAll");
+        context.addServlet(new ServletHolder(new SendAllMessagesServlet()), "/servlet/sendAll");
 		final JettyServer jettyServer = new JettyServer();
 		jettyServer.getServer().setHandler(context);
 		Runnable runner = new Runnable() {
