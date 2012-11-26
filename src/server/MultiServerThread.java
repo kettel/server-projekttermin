@@ -183,7 +183,6 @@ public class MultiServerThread extends Thread {
 					+ "> assignment from  " + assignmentFromJson.getSender()
 					+ ": " + assignmentFromJson.getName() + "	"
 					+ assignmentFromJson.getAssignmentStatus());
-			System.out.println("Innan hämntning av assignments från db");
 			list = db.getAllFromDB(new Assignment());
 			for(ModelInterface m : list){
 				Assignment ass = (Assignment)m;

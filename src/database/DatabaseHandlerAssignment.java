@@ -158,21 +158,24 @@ public class DatabaseHandlerAssignment extends DatabaseHandler {
 		try {
 			con = DriverManager.getConnection(url, user, password);
 			pst = con.prepareStatement("SELECT Id," + 
-					" AES_DECRYPT(Name,"	+ AES_PASSWORD + ")," 
-					+ "AES_DECRYPT(Latitude," + AES_PASSWORD+ ")," 
-					+ "AES_DECRYPT(Longitude," + AES_PASSWORD + "),"
-					+ "AES_DECRYPT(Region," + AES_PASSWORD + "),"
-					+ "AES_DECRYPT(Agents," + AES_PASSWORD + "),"
-					+ "AES_DECRYPT(Sender," + AES_PASSWORD + "),"
-					+ "AES_DECRYPT(ExternalMission," + AES_PASSWORD + "),"
-					+ "AES_DECRYPT(Description," + AES_PASSWORD + "),"
-					+ "AES_DECRYPT(Timespan," + AES_PASSWORD + "),"
-					+ "AES_DECRYPT(Status," + AES_PASSWORD + "),"
-					+ "AES_DECRYPT(Cameraimage," + AES_PASSWORD + "),"
-					+ "AES_DECRYPT(Streetname," + AES_PASSWORD + "),"
-					+ "AES_DECRYPT(Sitename," + AES_PASSWORD + "),"
-					+ "AES_DECRYPT(Timestamp," + AES_PASSWORD + ") FROM "
+					" AES_DECRYPT(Name,?)," 
+					+ "AES_DECRYPT(Latitude,?)," 
+					+ "AES_DECRYPT(Longitude,?),"
+					+ "AES_DECRYPT(Region,?),"
+					+ "AES_DECRYPT(Agents,?),"
+					+ "AES_DECRYPT(Sender,?),"
+					+ "AES_DECRYPT(ExternalMission,?),"
+					+ "AES_DECRYPT(Description,?),"
+					+ "AES_DECRYPT(Timespan,?),"
+					+ "AES_DECRYPT(Status,?),"
+					+ "AES_DECRYPT(Cameraimage,?),"
+					+ "AES_DECRYPT(Streetname,?),"
+					+ "AES_DECRYPT(Sitename,?),"
+					+ "AES_DECRYPT(Timestamp,?) FROM "
 					+ m.getDatabaseRepresentation());
+			for(int i = 1; i < 15; i++){
+				pst.setString(i, AES_PASSWORD);
+			}
 			rs = pst.executeQuery();
 
 			while (rs.next()) {
