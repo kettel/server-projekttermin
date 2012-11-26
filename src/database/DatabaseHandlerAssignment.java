@@ -177,7 +177,7 @@ public class DatabaseHandlerAssignment extends DatabaseHandler {
 				pst.setString(i, AES_PASSWORD);
 			}
 			rs = pst.executeQuery();
-			System.out.println("Storlek? "+rs.getRow());
+			System.out.println("Storlek? "+pst.toString());
 			while (rs.next()) {
 				// Hämta och skapa ett nytt Contact-objekt samt lägg
 				// till det i returnList
