@@ -171,20 +171,35 @@ public class DatabaseHandlerAssignment extends DatabaseHandler {
 				// till det i returnList
 				System.out.println("Bild? " + rs.getBytes(12));
 				long id = Long.valueOf(rs.getInt(1));
+				System.out.println("Id: " + id);
 				String name = rs.getString(2);
+				System.out.println("name: " + name);
 				double lat = Double.valueOf(rs.getString(3));
+				System.out.println("lat: " + lat);
 				double lon = Double.valueOf(rs.getString(4));
+				System.out.println("lon: " + lon);
 				String region = rs.getString(5);
+				System.out.println("region: " + region);
 				List<Contact> agents = getAgentsFromString(rs.getString(6));
+				System.out.println("agents: " + agents.toString());
 				String sender = rs.getString(7);
+				System.out.println("sender: " + sender);
 				boolean extMission = Boolean.parseBoolean(rs.getString(8));
+				System.out.println("extMission: " + extMission);
 				String desc = rs.getString(9);
+				System.out.println("desc: " + desc);
 				String timespan = rs.getString(10);
+				System.out.println("timespan: " + timespan);
 				AssignmentStatus astatus = AssignmentStatus.valueOf(rs.getString(11));
+				System.out.println("assignment status: " + astatus);
 				byte[] camImg = rs.getBytes(12);
+				System.out.println("camImg: " + camImg.toString());
 				String strName = rs.getString(13);
+				System.out.println("strName: " + strName);
 				String siteName = rs.getString(14);
+				System.out.println("siteName: " + siteName);
 				Long timestamp = Long.valueOf(rs.getString(15));
+				System.out.println("timestamp: " + timestamp);
 				returnList.add((ModelInterface) new Assignment(id,name,lat,lon,region,agents,sender,extMission,desc,timespan,astatus,camImg,strName,siteName,timestamp));
 				System.out.println("Hit borde den inte komma");
 			}
