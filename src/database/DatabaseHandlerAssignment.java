@@ -227,7 +227,7 @@ public class DatabaseHandlerAssignment extends DatabaseHandler {
 	private List<Contact> getAgentsFromString(String agentString) {
 		// Gör om strängar med agenter på uppdrag till en lista
 		List<Contact> agents = new ArrayList<Contact>();
-		if (agentString != null || agentString.length() > 0) {
+		if (agentString.length() > 0) {
 			System.out.println("agentString: " + agentString);
 			String[] agentArray = agentString.split("\\");
 			for (String agent : agentArray) {
