@@ -394,7 +394,7 @@ public class Assignment implements ModelInterface {
 		List<Contact> receivers = this.agents;
 		for (Contact contact : receivers) {
 			agents.concat(/*contact.getContactName() + ":"
-					+ */contact/*.getInetAddress()*/ + "/");
+					+ */contact/*.getInetAddress()*/ + "\\");
 		}
 		return agents;
 	}
