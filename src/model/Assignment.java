@@ -393,8 +393,7 @@ public class Assignment implements ModelInterface {
 		String agents = new String();
 		List<Contact> receivers = this.agents;
 		for (Contact contact : receivers) {
-			agents.concat(/*contact.getContactName() + ":"
-					+ */contact/*.getInetAddress()*/ + "\\");
+			agents = contact.getContactName() + ":"+contact.getInetAddress() + "\\";
 		}
 		return agents;
 	}
