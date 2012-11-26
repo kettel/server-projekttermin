@@ -33,21 +33,14 @@ public class DatabaseHandlerAssignment extends DatabaseHandler {
 			pst = con
 					.prepareStatement("INSERT INTO "
 							+ m.getDatabaseRepresentation()
-							+ "(Name , Latitude , Longitude , Region , Agents , ExternalMission , Sender , Description , Timespan , Status , Cameraimage , Streetname , Sitename , Timestamp) " +
-							"VALUES (AES_ENCRYPT(?,?)," +
-									"AES_ENCRYPT(?,?)," +
-									"AES_ENCRYPT(?,?)," +
-									"AES_ENCRYPT(?,?)," +
-									"AES_ENCRYPT(?,?)," +
-									"AES_ENCRYPT(?,?)," +
-									"AES_ENCRYPT(?,?)," +
-									"AES_ENCRYPT(?,?)," +
-									"AES_ENCRYPT(?,?)," +
-									"AES_ENCRYPT(?,?)," +
-									"AES_ENCRYPT(?,?)," +
-									"AES_ENCRYPT(?,?)," +
-									"AES_ENCRYPT(?,?)," +
-									"AES_ENCRYPT(?,?))");
+							+ "(Name , Latitude , Longitude , Region , Agents , ExternalMission , Sender , Description , Timespan , Status , Cameraimage , Streetname , Sitename , Timestamp) "
+							+ "VALUES (AES_ENCRYPT(?,?)," + "AES_ENCRYPT(?,?),"
+							+ "AES_ENCRYPT(?,?)," + "AES_ENCRYPT(?,?),"
+							+ "AES_ENCRYPT(?,?)," + "AES_ENCRYPT(?,?),"
+							+ "AES_ENCRYPT(?,?)," + "AES_ENCRYPT(?,?),"
+							+ "AES_ENCRYPT(?,?)," + "AES_ENCRYPT(?,?),"
+							+ "AES_ENCRYPT(?,?)," + "AES_ENCRYPT(?,?),"
+							+ "AES_ENCRYPT(?,?)," + "AES_ENCRYPT(?,?))");
 
 			// Sätt in rätt värden till rätt plats i frågan
 			pst.setString(1, ass.getName());
@@ -157,33 +150,29 @@ public class DatabaseHandlerAssignment extends DatabaseHandler {
 		List<ModelInterface> returnList = new ArrayList<ModelInterface>();
 		try {
 			con = DriverManager.getConnection(url, user, password);
-			pst = con.prepareStatement("SELECT Id," + 
-					" AES_DECRYPT(Name,?)," 
-					+ "AES_DECRYPT(Latitude,?)," 
-					+ "AES_DECRYPT(Longitude,?),"
-					+ "AES_DECRYPT(Region,?),"
-					+ "AES_DECRYPT(Agents,?),"
+			pst = con.prepareStatement("SELECT Id," + " AES_DECRYPT(Name,?),"
+					+ "AES_DECRYPT(Latitude,?)," + "AES_DECRYPT(Longitude,?),"
+					+ "AES_DECRYPT(Region,?)," + "AES_DECRYPT(Agents,?),"
 					+ "AES_DECRYPT(Sender,?),"
 					+ "AES_DECRYPT(ExternalMission,?),"
 					+ "AES_DECRYPT(Description,?),"
-					+ "AES_DECRYPT(Timespan,?),"
-					+ "AES_DECRYPT(Status,?),"
+					+ "AES_DECRYPT(Timespan,?)," + "AES_DECRYPT(Status,?),"
 					+ "AES_DECRYPT(Cameraimage,?),"
-					+ "AES_DECRYPT(Streetname,?),"
-					+ "AES_DECRYPT(Sitename,?),"
+					+ "AES_DECRYPT(Streetname,?)," + "AES_DECRYPT(Sitename,?),"
 					+ "AES_DECRYPT(Timestamp,?) FROM "
 					+ m.getDatabaseRepresentation());
-			for(int i = 1; i < 15; i++){
+			for (int i = 1; i < 15; i++) {
 				pst.setString(i, AES_PASSWORD);
 			}
 			rs = pst.executeQuery();
-			
+
 			while (rs.next()) {
 				System.out.println("Storlek? " + rs.toString());
 				// Hämta och skapa ett nytt Contact-objekt samt lägg
 				// till det i returnList
-				for(int i = 1; i< 16; i++){
-					System.out.println("Jag kom till pos: " + i + " och jag heter: " + rs.getString(i));
+				for (int i = 1; i < 16; i++) {
+					System.out.println("Jag kom till pos: " + i
+							+ " och jag heter: " + rs.getString(i));
 				}
 				returnList.add((ModelInterface) new Assignment(rs.getInt(1), // Id
 						rs.getString(2),// Namn
@@ -225,11 +214,13 @@ public class DatabaseHandlerAssignment extends DatabaseHandler {
 	private List<Contact> getAgentsFromString(String agentString) {
 		// Gör om strängar med agenter på uppdrag till en lista
 		List<Contact> agents = new ArrayList<Contact>();
-		String[] agentArray = agentString.split("/");
-		for (String agent : agentArray) {
-			// Dela upp kontakten så man kommer åt namn och IP
-			String[] contactArray = agent.split(":");
-			agents.add(new Contact(contactArray[0], contactArray[1]));
+		if (agentString != null) {
+			String[] agentArray = agentString.split("/");
+			for (String agent : agentArray) {
+				// Dela upp kontakten så man kommer åt namn och IP
+				String[] contactArray = agent.split(":");
+				agents.add(new Contact(contactArray[0], contactArray[1]));
+			}
 		}
 		return agents;
 	}
