@@ -177,8 +177,10 @@ public class DatabaseHandlerAssignment extends DatabaseHandler {
 				pst.setString(i, AES_PASSWORD);
 			}
 			rs = pst.executeQuery();
-			System.out.println("Storlek? "+rs.getFetchSize());
+			
 			while (rs.next()) {
+				System.out.println("Storlek? " + rs.getFetchSize());
+				System.out.println("Storlek 2? " + rs.getRow());
 				// Hämta och skapa ett nytt Contact-objekt samt lägg
 				// till det i returnList
 				returnList.add((ModelInterface) new Assignment(rs.getInt(1), // Id
