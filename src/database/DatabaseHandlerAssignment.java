@@ -107,19 +107,19 @@ public class DatabaseHandlerAssignment extends DatabaseHandler {
 			con.setAutoCommit(false);
 
 			String updateString = "UPDATE " + ass.getDatabaseRepresentation()
-					+ " SET Name = AES_ENCRYPT(\"" + ass.getName() + "\","+AES_PASSWORD+"), " +
-					"Latitude = AES_ENCRYPT(\"" + Double.toString(ass.getLat()) + "\","+AES_PASSWORD+")," +
-					" Longitude = AES_ENCRYPT(\"" + Double.toString(ass.getLon()) + "\","+AES_PASSWORD+")," +
-					" Region = AES_ENCRYPT(\"" + ass.getRegion() + "\","+AES_PASSWORD+")," +
-					" Agents = AES_ENCRYPT(\"" + ass.getAgentsString() + "\","+AES_PASSWORD+")," +
-					" Sender = AES_ENCRYPT(\"" + ass.getSender() + "\","+AES_PASSWORD+")," +
-					" ExternalMission = AES_ENCRYPT(\""	+ Boolean.toString(ass.isExternalMission()) + "\","+AES_PASSWORD+")," +
-					" Description = AES_ENCRYPT(\"" + ass.getAssignmentDescription()+ "\","+AES_PASSWORD+")," + 
-					" Timespan = AES_ENCRYPT(\"" + ass.getAssignmentStatus() + "\","+AES_PASSWORD+")," +
-					" Status = AES_ENCRYPT(\"" + ass.getAssignmentStatus().toString()+ "\","+AES_PASSWORD+")," +
-					" Cameraimage = AES_ENCRYPT(\"" + ass.getCameraImage()+ "\","+AES_PASSWORD+")," +
-					" Streetname = AES_ENCRYPT(\"" + ass.getStreetName()+ "\","+AES_PASSWORD+")," +
-					" Sitename = AES_ENCRYPT(\"" + ass.getSiteName()+ "\","+AES_PASSWORD+")" +
+					+ " SET Name = AES_ENCRYPT(\"" + ass.getName() + "\",\""+AES_PASSWORD+"\"), " +
+					"Latitude = AES_ENCRYPT(\"" + Double.toString(ass.getLat()) + "\",\""+AES_PASSWORD+"\")," +
+					" Longitude = AES_ENCRYPT(\"" + Double.toString(ass.getLon()) + "\",\""+AES_PASSWORD+"\")," +
+					" Region = AES_ENCRYPT(\"" + ass.getRegion() + "\",\""+AES_PASSWORD+"\")," +
+					" Agents = AES_ENCRYPT(\"" + ass.getAgentsString() + "\",\""+AES_PASSWORD+"\")," +
+					" Sender = AES_ENCRYPT(\"" + ass.getSender() + "\",\""+AES_PASSWORD+"\")," +
+					" ExternalMission = AES_ENCRYPT(\""	+ Boolean.toString(ass.isExternalMission()) + "\",\""+AES_PASSWORD+"\")," +
+					" Description = AES_ENCRYPT(\"" + ass.getAssignmentDescription()+ "\",\""+AES_PASSWORD+"\")," + 
+					" Timespan = AES_ENCRYPT(\"" + ass.getAssignmentStatus() + "\",\""+AES_PASSWORD+"\")," +
+					" Status = AES_ENCRYPT(\"" + ass.getAssignmentStatus().toString()+ "\",\""+AES_PASSWORD+"\")," +
+					" Cameraimage = AES_ENCRYPT(\"" + ass.getCameraImage()+ "\",\""+AES_PASSWORD+"\")," +
+					" Streetname = AES_ENCRYPT(\"" + ass.getStreetName()+ "\",\""+AES_PASSWORD+"\")," +
+					" Sitename = AES_ENCRYPT(\"" + ass.getSiteName()+ "\",\""+AES_PASSWORD+"\")" +
 					" WHERE Id = " + ass.getId();
 			System.out.println("UpdateString: " + updateString);
 			// Sätt in rätt värden till rätt plats i frågan och uppdatera dessa
