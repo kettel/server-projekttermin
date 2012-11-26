@@ -2,7 +2,7 @@
 CREATE DATABASE TDDD36;
 USE TDDD36;
 CREATE USER 'serverUser'@'localhost' IDENTIFIED BY 'handdukMandel';
-GRANT ALL PRIVILEGES ON TDDD36 TO serverUser;
+GRANT ALL PRIVILEGES ON TDDD36 TO serverUser WITH GRANT OPTION;
 # Logga ut
 exit;
 # Logga in som serverUser
