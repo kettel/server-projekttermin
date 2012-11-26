@@ -182,6 +182,9 @@ public class DatabaseHandlerAssignment extends DatabaseHandler {
 				System.out.println("Storlek? " + rs.toString());
 				// Hämta och skapa ett nytt Contact-objekt samt lägg
 				// till det i returnList
+				for(int i = 1; i< 16; i++){
+					System.out.println("Jag kom till pos: " + i + " och jag heter: " + rs.getString(i));
+				}
 				returnList.add((ModelInterface) new Assignment(rs.getInt(1), // Id
 						rs.getString(2),// Namn
 						Double.valueOf(rs.getString(3)), // Lat
