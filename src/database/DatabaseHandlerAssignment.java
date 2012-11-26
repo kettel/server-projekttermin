@@ -167,25 +167,25 @@ public class DatabaseHandlerAssignment extends DatabaseHandler {
 			rs = pst.executeQuery();
 
 			while (rs.next()) {
-				System.out.println("Storlek? " + rs.toString());
 				// Hämta och skapa ett nytt Contact-objekt samt lägg
 				// till det i returnList
 				System.out.println("Bild? " + rs.getBytes(12));
-				returnList.add((ModelInterface) new Assignment(rs.getInt(1), // Id
-						rs.getString(2),// Namn
-						Double.valueOf(rs.getString(3)), // Lat
-						Double.valueOf(rs.getString(4)), // Lon
-						rs.getString(5), // Region
-						getAgentsFromString(rs.getString(6)), // Agents
-						rs.getString(7), // Sender
-						Boolean.parseBoolean(rs.getString(8)), // ExternalMission
-						rs.getString(9), // Desc
-						rs.getString(10), // Timespan
-						AssignmentStatus.valueOf(rs.getString(11)), // Status
-						rs.getBytes(12), // CameraImage
-						rs.getString(13), // Streetname
-						rs.getString(14), // Sitename
-						Long.valueOf(rs.getString(15)))); // Timestamp
+				long id = Long.valueOf(rs.getInt(1));
+				String name = rs.getString(2);
+				double lat = Double.valueOf(rs.getString(3));
+				double lon = Double.valueOf(rs.getString(4));
+				String region = rs.getString(5);
+				List<Contact> agents = getAgentsFromString(rs.getString(6));
+				String sender = rs.getString(7);
+				boolean extMission = Boolean.parseBoolean(rs.getString(8));
+				String desc = rs.getString(9);
+				String timespan = rs.getString(10);
+				AssignmentStatus astatus = AssignmentStatus.valueOf(rs.getString(11));
+				byte[] camImg = rs.getBytes(12);
+				String strName = rs.getString(13);
+				String siteName = rs.getString(14);
+				Long timestamp = Long.valueOf(rs.getString(15));
+				returnList.add((ModelInterface) new Assignment(id,name,lat,lon,region,agents,sender,extMission,desc,timespan,astatus,camImg,strName,siteName,timestamp));
 				System.out.println("Hit borde den inte komma");
 			}
 
