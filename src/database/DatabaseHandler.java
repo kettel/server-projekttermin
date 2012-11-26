@@ -19,6 +19,7 @@ public abstract class DatabaseHandler {
 	protected String url = "jdbc:mysql://localhost:3306/TDDD36";
 	protected String user = "serverUser";
 	protected String password = "handdukMandel";
+	protected final String AES_PASSWORD = "testpassword";
 	
     /**
      * Lägg till en modell till databasen.
