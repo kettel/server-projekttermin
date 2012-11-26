@@ -158,7 +158,6 @@ public class Server {
 		for (ModelInterface m : list) {
 			Contact cont = (Contact) m;
 			if (!sendersIP.equals(cont.getInetAddress())) {
-				System.out.println("keySet: " + hashMap.keySet() + "  cont.getInet: " + cont.getInetAddress());
 				if (hashMap.keySet().contains(cont.getInetAddress())) {
 					PrintWriter pr = new PrintWriter(hashMap.get(cont
 							.getInetAddress()), true);
