@@ -174,11 +174,10 @@ public class DatabaseHandlerAssignment extends DatabaseHandler {
 					+ "AES_DECRYPT(Timestamp,?) FROM "
 					+ m.getDatabaseRepresentation());
 			for(int i = 1; i < 15; i++){
-				System.out.println(i + AES_PASSWORD);
 				pst.setString(i, AES_PASSWORD);
 			}
 			rs = pst.executeQuery();
-
+			System.out.println("Storlek? "+rs.getRow());
 			while (rs.next()) {
 				// Hämta och skapa ett nytt Contact-objekt samt lägg
 				// till det i returnList
