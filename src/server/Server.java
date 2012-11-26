@@ -79,26 +79,6 @@ public class Server {
 
 	public Server() {
 		try {
-			db = new Database();
-			hashMap = new ConcurrentHashMap<String, OutputStream>();
-			serverSocket = new ServerSocket(port);
-			long id = 210;
-			String name = "kalle";
-			double lat = 0;
-			double lon = 1;
-			String region = new String();
-			List<Contact> agents = new ArrayList<Contact>();
-			String sender = new String();
-			boolean extMission = false;
-			String desc = new String();
-			String timespan = new String();
-			AssignmentStatus astatus = AssignmentStatus.FINISHED;
-			byte[] camImg = new byte[10];
-			String strName = new String();
-			String siteName = new String();
-			Long timestamp = Long.valueOf(1);
-			db.updateModel(new Assignment(id,name,lat,lon,region,agents,sender,extMission,desc,timespan,astatus,camImg,strName,siteName,timestamp));
-			
 			// Skapar en ny tråd som lyssnar på kommandon
 			new ServerTerminal(this).start();
 			// Lyssnar på anslutningar och skapar en ny tråd per anslutning så

@@ -28,12 +28,14 @@ public class DatabaseHandlerContacts extends DatabaseHandler{
             con = DriverManager.getConnection(url, user, password);
             
             // SQL-frågan
-            pst = con.prepareStatement("INSERT INTO contact(Name, InetAddress) VALUES(?,?)");
+            pst = con.prepareStatement("INSERT INTO contact(Name, InetAddress) VALUES (AES_ENCRYPT(?,?)," + "AES_ENCRYPT(?,?))");
             
             // Sätt in rätt värden till rätt plats i frågan
             pst.setString(1, contact.getContactName());
-            pst.setString(2, contact.getInetAddress());
-           
+            pst.setString(2, AES_PASSWORD);
+            pst.setString(3, contact.getInetAddress());
+            pst.setString(4, AES_PASSWORD);
+            
             // Utför frågan och lägg till objektet i databasen
             pst.executeUpdate();
 
@@ -61,7 +63,11 @@ public class DatabaseHandlerContacts extends DatabaseHandler{
 		List<ModelInterface> returnList = new ArrayList<ModelInterface>();
 		try {
             con = DriverManager.getConnection(url, user, password);
-            pst = con.prepareStatement("SELECT * FROM "+m.getDatabaseRepresentation());
+            pst = con.prepareStatement("SELECT Id," + " AES_DECRYPT(Name,?),"
+            + "AES_DECRYPT(InetAddress,?) FROM " + m.getDatabaseRepresentation());
+            for(int i = 1; i < 3; i ++){
+            	pst.setString(i, AES_PASSWORD);
+            }
             rs = pst.executeQuery();
 
             while (rs.next()) {
@@ -108,9 +114,9 @@ public class DatabaseHandlerContacts extends DatabaseHandler{
             
             // Sätt in rätt värden till rätt plats i frågan och uppdatera dessa
             st.executeUpdate("UPDATE " + contact.getDatabaseRepresentation() + 
-            		" SET Name = \"" + contact.getContactName() +
-            		"\", InetAddress = \"" + contact.getInetAddress() +
-            		"\" WHERE Id = " + contact.getId());
+            		" SET Name = AES_ENCRYPT(\"" + contact.getContactName() + "\",\""+AES_PASSWORD+"\"), " +
+            		" InetAddress = AES_ENCRYPT(\"" + contact.getInetAddress() + "\",\""+AES_PASSWORD+"\")," +
+            		" WHERE Id = " + contact.getId());
             
             // Commita db-uppdateringarna (?)
             con.commit();
