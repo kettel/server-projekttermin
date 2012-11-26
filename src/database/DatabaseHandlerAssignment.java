@@ -174,6 +174,7 @@ public class DatabaseHandlerAssignment extends DatabaseHandler {
 					+ "AES_DECRYPT(Timestamp,?) FROM "
 					+ m.getDatabaseRepresentation());
 			for(int i = 1; i < 15; i++){
+				System.out.println(i + AES_PASSWORD);
 				pst.setString(i, AES_PASSWORD);
 			}
 			rs = pst.executeQuery();
