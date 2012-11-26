@@ -228,6 +228,7 @@ public class DatabaseHandlerAssignment extends DatabaseHandler {
 		// Gör om strängar med agenter på uppdrag till en lista
 		List<Contact> agents = new ArrayList<Contact>();
 		if (agentString != null) {
+			System.out.println("agentString: " + agentString);
 			String[] agentArray = agentString.split("\\");
 			for (String agent : agentArray) {
 				// Dela upp kontakten så man kommer åt namn och IP
