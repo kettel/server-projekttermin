@@ -2,7 +2,7 @@
 CREATE DATABASE TDDD36;
 USE TDDD36;
 CREATE USER 'serverUser'@'localhost' IDENTIFIED BY 'handdukMandel';
-GRANT ALL PRIVILEGES ON TDDD36 FOR serverUser;
+GRANT ALL PRIVILEGES ON TDDD36 TO serverUser;
 DROP TABLE IF EXISTS message, contact, assignment;
 
 # Ställ in alla tabeller korrekt
