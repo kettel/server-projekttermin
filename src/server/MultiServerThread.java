@@ -4,9 +4,22 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
+import java.security.KeyManagementException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
+
+import javax.net.ServerSocketFactory;
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLServerSocket;
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.TrustManagerFactory;
 
 import model.Assignment;
 import model.Contact;
@@ -36,6 +49,12 @@ public class MultiServerThread extends Thread {
 	private Contact thisContact;
 	private List<ModelInterface> list;
 	private List<ModelInterface> hashList;
+	char keystorepass[] = "password".toCharArray();
+	char keypassword[] = "password".toCharArray();
+	char truststorepass[] = "password".toCharArray();
+	SSLServerSocket serverSocket = null;
+	SSLSocket client;
+	private static final int port = 17234;
 
 	/**
 	 * Konstruktorn, tar emot en socket fÃ¶r porten vi lyssnar pÃ¥ och en Server
@@ -49,8 +68,54 @@ public class MultiServerThread extends Thread {
 	 */
 	public MultiServerThread(Socket socket, Server server) {
 		super("MultiServerThread");
-		this.socket = socket;
-		this.server = server;
+		try {
+			//Läser truststoren och låser up den. kollar att clienten har rätt cert
+			KeyStore ts = KeyStore.getInstance("JKS");
+			ts.load(MultiServerThread.class.getResourceAsStream("cert/servertruststore.jks"),truststorepass);
+			//laddar truststoren så vi kan använda den
+			TrustManagerFactory tmf = TrustManagerFactory
+                    .getInstance(TrustManagerFactory.getDefaultAlgorithm());
+            tmf.init(ts);
+			//Keystoren gör samma sak som truststoren bara det är det serven ger ut till clienten
+			KeyStore ks = KeyStore.getInstance("JKS");
+			ks.load(MultiServerThread.class.getResourceAsStream("cert/server.jks"),keystorepass);
+			KeyManagerFactory kmf =
+				KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
+			kmf.init(ks, keypassword);
+			//ställer in tls med keystoren och truststoren
+			SSLContext sslcontext =
+					SSLContext.getInstance("TLS");
+			sslcontext.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);
+			//gör en server socket med tls
+			ServerSocketFactory ssf = sslcontext.getServerSocketFactory();
+
+			serverSocket = (SSLServerSocket)
+			ssf.createServerSocket(port);
+			
+			 // Alla dessa catch kan kastas om man vill men håller dom så länge
+	
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.out.println("Could not listen on port "+socket);
+		} catch (KeyStoreException e) {
+			System.out.println("Could not get key store");
+		} catch (NoSuchAlgorithmException e) {
+			System.out.println("There is no algorithm in ks.load");
+			e.printStackTrace();
+		} catch (CertificateException e) {
+			e.printStackTrace();
+		} catch (UnrecoverableKeyException e) {
+			System.out.println("kmf.init() no key");
+		} catch (KeyManagementException e) {
+			System.out.println("sslcontext.init keymanagementexception");
+		}
+		try {
+			//klart att skicka över om deta klara sig
+			client = (SSLSocket) serverSocket.accept();
+		}catch (IOException e) {
+			//bör kunna kasta detta sen om det är ivägen
+		System.out.println("Accept failed on "+port);
+		}
 		db = new Database();
 		List<ModelInterface> m = db.getAllFromDB(new Contact());
 		for (ModelInterface mi : m) {
