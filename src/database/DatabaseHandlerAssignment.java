@@ -170,7 +170,7 @@ public class DatabaseHandlerAssignment extends DatabaseHandler {
 				System.out.println("Storlek? " + rs.toString());
 				// Hämta och skapa ett nytt Contact-objekt samt lägg
 				// till det i returnList
-				for (int i = 1; i < 16; i++) {
+				for (int i = 1; i < 18; i++) {
 					System.out.println("Jag kom till pos: " + i
 							+ " och jag heter: " + rs.getString(i));
 				}
