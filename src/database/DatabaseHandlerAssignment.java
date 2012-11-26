@@ -33,36 +33,51 @@ public class DatabaseHandlerAssignment extends DatabaseHandler {
 			pst = con
 					.prepareStatement("INSERT INTO "
 							+ m.getDatabaseRepresentation()
-							+ "(Name , Latitude , Longitude , Region , Agents , ExternalMission , Sender , Description , Timespan , Status , Cameraimage , Streetname , Sitename , Timestamp) VALUES(AES_ENCRYPT(?,"
-							+ AES_PASSWORD + "),AES_ENCRYPT(?," + AES_PASSWORD
-							+ "),AES_ENCRYPT(?," + AES_PASSWORD
-							+ "),AES_ENCRYPT(?," + AES_PASSWORD
-							+ "),AES_ENCRYPT(?," + AES_PASSWORD
-							+ "),AES_ENCRYPT(?," + AES_PASSWORD
-							+ "),AES_ENCRYPT(?," + AES_PASSWORD
-							+ "),AES_ENCRYPT(?," + AES_PASSWORD
-							+ "),AES_ENCRYPT(?," + AES_PASSWORD
-							+ "),AES_ENCRYPT(?," + AES_PASSWORD
-							+ "),AES_ENCRYPT(?," + AES_PASSWORD
-							+ "),AES_ENCRYPT(?," + AES_PASSWORD
-							+ "),AES_ENCRYPT(?," + AES_PASSWORD
-							+ "),AES_ENCRYPT(?," + AES_PASSWORD + "))");
+							+ "(Name , Latitude , Longitude , Region , Agents , ExternalMission , Sender , Description , Timespan , Status , Cameraimage , Streetname , Sitename , Timestamp) " +
+							"VALUES (AES_ENCRYPT(?,?)," +
+									"AES_ENCRYPT(?,?)," +
+									"AES_ENCRYPT(?,?)," +
+									"AES_ENCRYPT(?,?)," +
+									"AES_ENCRYPT(?,?)," +
+									"AES_ENCRYPT(?,?)," +
+									"AES_ENCRYPT(?,?)," +
+									"AES_ENCRYPT(?,?)," +
+									"AES_ENCRYPT(?,?)," +
+									"AES_ENCRYPT(?,?)," +
+									"AES_ENCRYPT(?,?)," +
+									"AES_ENCRYPT(?,?)," +
+									"AES_ENCRYPT(?,?)," +
+									"AES_ENCRYPT(?,?))");
 
 			// Sätt in rätt värden till rätt plats i frågan
 			pst.setString(1, ass.getName());
-			pst.setString(2, Double.toString(ass.getLat()));
-			pst.setString(3, Double.toString(ass.getLon()));
-			pst.setString(4, ass.getRegion());
-			pst.setString(5, ass.getAgentsString());
-			pst.setString(6, ass.getSender());
-			pst.setString(7, Boolean.toString(ass.isExternalMission()));
-			pst.setString(8, ass.getAssignmentDescription());
-			pst.setString(9, ass.getTimeSpan());
-			pst.setString(10, ass.getAssignmentStatus().toString());
-			pst.setBytes(11, ass.getCameraImage());
-			pst.setString(12, ass.getStreetName());
-			pst.setString(13, ass.getSiteName());
-			pst.setString(14, Long.toString(ass.getTimeStamp()));
+			pst.setString(2, AES_PASSWORD);
+			pst.setString(3, Double.toString(ass.getLat()));
+			pst.setString(4, AES_PASSWORD);
+			pst.setString(5, Double.toString(ass.getLon()));
+			pst.setString(6, AES_PASSWORD);
+			pst.setString(7, ass.getRegion());
+			pst.setString(8, AES_PASSWORD);
+			pst.setString(9, ass.getAgentsString());
+			pst.setString(10, AES_PASSWORD);
+			pst.setString(11, ass.getSender());
+			pst.setString(12, AES_PASSWORD);
+			pst.setString(13, Boolean.toString(ass.isExternalMission()));
+			pst.setString(14, AES_PASSWORD);
+			pst.setString(15, ass.getAssignmentDescription());
+			pst.setString(16, AES_PASSWORD);
+			pst.setString(17, ass.getTimeSpan());
+			pst.setString(18, AES_PASSWORD);
+			pst.setString(19, ass.getAssignmentStatus().toString());
+			pst.setString(20, AES_PASSWORD);
+			pst.setBytes(21, ass.getCameraImage());
+			pst.setString(22, AES_PASSWORD);
+			pst.setString(23, ass.getStreetName());
+			pst.setString(24, AES_PASSWORD);
+			pst.setString(25, ass.getSiteName());
+			pst.setString(26, AES_PASSWORD);
+			pst.setString(27, Long.toString(ass.getTimeStamp()));
+			pst.setString(28, AES_PASSWORD);
 
 			// Utför frågan och lägg till objektet i databasen
 			pst.executeUpdate();
