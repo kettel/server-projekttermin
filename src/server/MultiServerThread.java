@@ -183,12 +183,6 @@ public class MultiServerThread extends Thread {
 					+ "> assignment from  " + assignmentFromJson.getSender()
 					+ ": " + assignmentFromJson.getName() + "	"
 					+ assignmentFromJson.getAssignmentStatus());
-			list = db.getAllFromDB(new Assignment());
-			for(ModelInterface m : list){
-				Assignment ass = (Assignment)m;
-				String temp = new Gson().toJson(ass);
-				System.out.println("Decrypted assignment: " + temp);
-			}
 		} catch (Exception e) {
 			System.out.println(e);
 		}

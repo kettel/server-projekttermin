@@ -106,22 +106,24 @@ public class DatabaseHandlerAssignment extends DatabaseHandler {
 			// Sätt autocommit till falskt
 			con.setAutoCommit(false);
 
+			String updateString = "UPDATE " + ass.getDatabaseRepresentation()
+					+ " SET Name = AES_ENCRYPT(\"" + ass.getName() + "\","+AES_PASSWORD+"), " +
+					"Latitude = AES_ENCRYPT(\"" + Double.toString(ass.getLat()) + "\","+AES_PASSWORD+")," +
+					" Longitude = AES_ENCRYPT(\"" + Double.toString(ass.getLon()) + "\","+AES_PASSWORD+")," +
+					" Region = AES_ENCRYPT(\"" + ass.getRegion() + "\","+AES_PASSWORD+")," +
+					" Agents = AES_ENCRYPT(\"" + ass.getAgentsString() + "\","+AES_PASSWORD+")," +
+					" Sender = AES_ENCRYPT(\"" + ass.getSender() + "\","+AES_PASSWORD+")," +
+					" ExternalMission = AES_ENCRYPT(\""	+ Boolean.toString(ass.isExternalMission()) + "\","+AES_PASSWORD+")," +
+					" Description = AES_ENCRYPT(\"" + ass.getAssignmentDescription()+ "\","+AES_PASSWORD+")," + 
+					" Timespan = AES_ENCRYPT(\"" + ass.getAssignmentStatus() + "\","+AES_PASSWORD+")," +
+					" Status = AES_ENCRYPT(\"" + ass.getAssignmentStatus().toString()+ "\","+AES_PASSWORD+")," +
+					" Cameraimage = AES_ENCRYPT(\"" + ass.getCameraImage()+ "\","+AES_PASSWORD+")," +
+					" Streetname = AES_ENCRYPT(\"" + ass.getStreetName()+ "\","+AES_PASSWORD+")," +
+					" Sitename = AES_ENCRYPT(\"" + ass.getSiteName()+ "\","+AES_PASSWORD+")" +
+					" WHERE Id = " + ass.getId();
+			System.out.println("UpdateString: " + updateString);
 			// Sätt in rätt värden till rätt plats i frågan och uppdatera dessa
-			st.executeUpdate("UPDATE " + ass.getDatabaseRepresentation()
-					+ " SET Name = \"" + ass.getName() + "\", Latitude = \""
-					+ Double.toString(ass.getLat()) + "\", Longitude = \""
-					+ Double.toString(ass.getLon()) + "\", Region = \""
-					+ ass.getRegion() + "\", Agents = \""
-					+ ass.getAgentsString() + "\", Sender = \""
-					+ ass.getSender() + "\", ExternalMission = \""
-					+ Boolean.toString(ass.isExternalMission())
-					+ "\", Description = \"" + ass.getAssignmentDescription()
-					+ "\", Timespan = \"" + ass.getAssignmentStatus()
-					+ "\", Status = \"" + ass.getAssignmentStatus().toString()
-					+ "\", Cameraimage = \"" + ass.getCameraImage()
-					+ "\", Streetname = \"" + ass.getStreetName()
-					+ "\", Sitename = \"" + ass.getSiteName()
-					+ "\" WHERE Id = " + ass.getId());
+			st.executeUpdate(updateString);
 
 			// Commita db-uppdateringarna (?)
 			con.commit();
@@ -169,39 +171,22 @@ public class DatabaseHandlerAssignment extends DatabaseHandler {
 			while (rs.next()) {
 				// Hämta och skapa ett nytt Contact-objekt samt lägg
 				// till det i returnList
-				System.out.println("Bild? " + rs.getBytes(12));
 				long id = Long.valueOf(rs.getInt(1));
-				System.out.println("Id: " + id);
 				String name = rs.getString(2);
-				System.out.println("name: " + name);
 				double lat = Double.valueOf(rs.getString(3));
-				System.out.println("lat: " + lat);
 				double lon = Double.valueOf(rs.getString(4));
-				System.out.println("lon: " + lon);
 				String region = rs.getString(5);
-				System.out.println("region: " + region);
 				List<Contact> agents = getAgentsFromString(rs.getString(6));
-				System.out.println("agents: " + agents.toString());
 				String sender = rs.getString(7);
-				System.out.println("sender: " + sender);
 				boolean extMission = Boolean.parseBoolean(rs.getString(8));
-				System.out.println("extMission: " + extMission);
 				String desc = rs.getString(9);
-				System.out.println("desc: " + desc);
 				String timespan = rs.getString(10);
-				System.out.println("timespan: " + timespan);
 				AssignmentStatus astatus = AssignmentStatus.valueOf(rs.getString(11));
-				System.out.println("assignment status: " + astatus);
 				byte[] camImg = rs.getBytes(12);
-				System.out.println("camImg: " + camImg.toString());
 				String strName = rs.getString(13);
-				System.out.println("strName: " + strName);
 				String siteName = rs.getString(14);
-				System.out.println("siteName: " + siteName);
 				Long timestamp = Long.valueOf(rs.getString(15));
-				System.out.println("timestamp: " + timestamp);
 				returnList.add((ModelInterface) new Assignment(id,name,lat,lon,region,agents,sender,extMission,desc,timespan,astatus,camImg,strName,siteName,timestamp));
-				System.out.println("Hit borde den inte komma");
 			}
 
 		} catch (SQLException ex) {
@@ -228,13 +213,10 @@ public class DatabaseHandlerAssignment extends DatabaseHandler {
 		// Gör om strängar med agenter på uppdrag till en lista
 		List<Contact> agents = new ArrayList<Contact>();
 		if (agentString.length() > 0) {
-			System.out.println("agentString: " + agentString);
 			String[] agentArray = agentString.split("\\");
 			for (String agent : agentArray) {
 				// Dela upp kontakten så man kommer åt namn och IP
 				String[] contactArray = agent.split(":");
-				System.out.println("contactArray[0]: " + contactArray[0]);
-				System.out.println("contactArray[1]: " + contactArray[1]);
 				agents.add(new Contact(contactArray[0], contactArray[1]));
 			}
 		}

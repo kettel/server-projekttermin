@@ -6,10 +6,13 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 import jetty.JettyServer;
+import model.Assignment;
+import model.AssignmentStatus;
 import model.Contact;
 import model.ModelInterface;
 import model.QueueItem;
@@ -79,7 +82,23 @@ public class Server {
 			db = new Database();
 			hashMap = new ConcurrentHashMap<String, OutputStream>();
 			serverSocket = new ServerSocket(port);
-
+			long id = 210;
+			String name = "kalle";
+			double lat = 0;
+			double lon = 1;
+			String region = new String();
+			List<Contact> agents = new ArrayList<Contact>();
+			String sender = new String();
+			boolean extMission = false;
+			String desc = new String();
+			String timespan = new String();
+			AssignmentStatus astatus = AssignmentStatus.FINISHED;
+			byte[] camImg = new byte[10];
+			String strName = new String();
+			String siteName = new String();
+			Long timestamp = Long.valueOf(1);
+			db.updateModel(new Assignment(id,name,lat,lon,region,agents,sender,extMission,desc,timespan,astatus,camImg,strName,siteName,timestamp));
+			
 			// Skapar en ny tråd som lyssnar på kommandon
 			new ServerTerminal(this).start();
 			// Lyssnar på anslutningar och skapar en ny tråd per anslutning så
