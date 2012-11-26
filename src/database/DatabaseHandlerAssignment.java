@@ -186,6 +186,7 @@ public class DatabaseHandlerAssignment extends DatabaseHandler {
 						rs.getString(13), // Streetname
 						rs.getString(14), // Sitename
 						Long.valueOf(rs.getString(15)))); // Timestamp
+				System.out.println("Hit borde den inte komma");
 			}
 
 		} catch (SQLException ex) {
