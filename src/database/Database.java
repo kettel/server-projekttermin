@@ -9,31 +9,35 @@ import java.util.List;
 import model.ModelInterface;
 
 public class Database {
-	
+	private SendAll all=new SendAll();
 	/**
 	 * Lägg till ett uppdrag/kontakt/meddelande till rätt databas
 	 * @param m			ModellInterface av objekt som ska läggas till
 	 * @throws  
 	 */
 	public void addToDB(ModelInterface m) {
-		SendAll all=new SendAll();
-		try {
-			System.out.println("försöker köra doPost GCM");
-			all.doPost();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			System.out.println("fel med GCM doPost");
-			e.printStackTrace();
-		}
-		System.out.println("doPost klar");
 		String dbRep = m.getDatabaseRepresentation();
 		if (dbRep.equalsIgnoreCase("assignment")) {
 			DatabaseHandlerAssignment dha = new DatabaseHandlerAssignment();
 			dha.addModel(m);
+			try {
+				all.doPost();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				System.out.println("fel med GCM doPost");
+				e.printStackTrace();
+			}
 		}
 		else if(dbRep.equalsIgnoreCase("contact")){
 			DatabaseHandlerContacts dhc = new DatabaseHandlerContacts();
 			dhc.addModel(m);
+			try {
+				all.doPost();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				System.out.println("fel med GCM doPost");
+				e.printStackTrace();
+			}
 		}
 		else if(dbRep.equalsIgnoreCase("message")){
 			DatabaseHandlerMessages dhm = new DatabaseHandlerMessages();
