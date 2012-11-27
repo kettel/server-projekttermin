@@ -11,10 +11,13 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 import jetty.JettyServer;
+import model.Assignment;
+import model.AssignmentStatus;
 import model.Contact;
 import model.ModelInterface;
 import model.QueueItem;
@@ -77,10 +80,7 @@ public class Server {
 
 	public Server() {
 		try {
-			db = new Database();
-			hashMap = new ConcurrentHashMap<String, OutputStream>();
 			serverSocket = new ServerSocket(port);
-
 			// Skapar en ny tråd som lyssnar på kommandon
 			new ServerTerminal(this).start();
 			// Lyssnar på anslutningar och skapar en ny tråd per anslutning så
