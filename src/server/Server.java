@@ -70,6 +70,7 @@ public class Server {
 				}
 			}
 		};
+
 		EventQueue.invokeLater(runner);
 		new Server();
 	}

@@ -25,7 +25,6 @@ public class GetAllContactsCommand implements CommandInterface {
 		}
 	}
 
-	@Override
 	public String commandLine() {
 		return "allaKontakter";
 	}
