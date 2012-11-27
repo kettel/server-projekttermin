@@ -20,9 +20,11 @@ public class Database {
 	public void addToDB(ModelInterface m) {
 		SendAll all=new SendAll();
 		try {
+			System.out.println("försöker köra doPost GCM");
 			all.doPost();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
+			System.out.println("fel med GCM doPost");
 			e.printStackTrace();
 		}
 		String dbRep = m.getDatabaseRepresentation();
