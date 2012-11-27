@@ -79,6 +79,7 @@ public class Server {
 
 	public Server() {
 		try {
+			serverSocket = new ServerSocket(port);
 			// Skapar en ny tråd som lyssnar på kommandon
 			new ServerTerminal(this).start();
 			// Lyssnar på anslutningar och skapar en ny tråd per anslutning så
