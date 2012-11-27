@@ -70,13 +70,11 @@ public class CreateContactCommand implements CommandInterface {
 	}
 
 	private void addToLogin(Contact c, String password) {
-		System.out.println("addToLogin");
 		db.addToDB(c);
 		list = db.getAllFromDB(new Contact());
 		for (ModelInterface m : list) {
 			Contact cont = (Contact) m;
 			if (c.getContactName().equals(cont.getContactName())) {
-				System.out.println("addToDB");
 				db.addToDB(new LoginModel(cont.getId(), password));
 			}
 		}
