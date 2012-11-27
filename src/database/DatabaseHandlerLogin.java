@@ -103,7 +103,7 @@ public class DatabaseHandlerLogin extends DatabaseHandler {
 		List<ModelInterface> returnList = new ArrayList<ModelInterface>();
 		try {
             con = DriverManager.getConnection(url, user, password);
-            pst = con.prepareStatement("SELECT contact_Id, AES_DECRYPT(Password,?) FROM login");
+            pst = con.prepareStatement("SELECT Id, contact_Id, AES_DECRYPT(Password,?) FROM login");
             pst.setString(1, AES_PASSWORD);
             rs = pst.executeQuery();
             
