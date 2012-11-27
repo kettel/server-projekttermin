@@ -19,6 +19,12 @@ public class SendAll {
 
 	private static final Executor threadPool = Executors.newFixedThreadPool(5);
 
+	public SendAll() {
+		super();
+		// TODO Auto-generated constructor stub
+		sender=new Sender("AIzaSyDm4alrdLjfaZTVqIyLB2YstGiR62_46hk");
+	}
+
 	public void doPost() throws IOException {
 		List<String> devices = Datastore.getDevices();
 		String status;
