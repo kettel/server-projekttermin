@@ -25,7 +25,7 @@ public class Database {
 			System.out.println("fel med GCM doPost");
 			e.printStackTrace();
 		}
-		
+		System.out.println("doPost klar");
 		String dbRep = m.getDatabaseRepresentation();
 		if (dbRep.equalsIgnoreCase("assignment")) {
 			DatabaseHandlerAssignment dha = new DatabaseHandlerAssignment();
