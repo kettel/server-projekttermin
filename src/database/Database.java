@@ -13,7 +13,7 @@ public class Database {
 	 * @throws  
 	 */
 	public void addToDB(ModelInterface m) {
-		
+		System.out.println("db fel");
 		String dbRep = m.getDatabaseRepresentation();
 		if (dbRep.equalsIgnoreCase("assignment")) {
 			DatabaseHandlerAssignment dha = new DatabaseHandlerAssignment();
