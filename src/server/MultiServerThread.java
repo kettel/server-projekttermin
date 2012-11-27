@@ -53,13 +53,11 @@ public class MultiServerThread extends Thread {
 		this.socket = socket;
 		this.server = server;
 		db = new Database();
-		List<ModelInterface> m = db.getAllFromDB(new Contact());
-		for (ModelInterface mi : m) {
-			Contact cont = (Contact) mi;
-			if (socket.getInetAddress().toString()
-					.equals(cont.getInetAddress())) {
-				thisContact = cont;
-			}
+		if(socket.getInetAddress().toString().equals("/94.254.72.38")){
+			db.setReplicationStatus(false);
+		}
+		else {
+			db.setReplicationStatus(true);
 		}
 	}
 

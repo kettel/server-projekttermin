@@ -13,9 +13,17 @@ public class Database {
 	 * Lägg till ett uppdrag/kontakt/meddelande till rätt databas
 	 * @param m			ModellInterface av objekt som ska läggas till
 	 */
+	
+	private boolean replicateStatus = false;
+	
+	public void setReplicationStatus(boolean b){
+		replicateStatus = b;
+	}
 	public void addToDB(ModelInterface m){
 		String dbRep = m.getDatabaseRepresentation();
-		new ReplicationManager(m);
+		if(replicateStatus){
+			new ReplicationManager(m);
+		}
 		if (dbRep.equalsIgnoreCase("assignment")) {
 			DatabaseHandlerAssignment dha = new DatabaseHandlerAssignment();
 			dha.addModel(m);
