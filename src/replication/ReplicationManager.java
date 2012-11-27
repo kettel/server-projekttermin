@@ -1,5 +1,7 @@
 package replication;
 
+import javax.xml.stream.events.StartDocument;
+
 import model.ModelInterface;
 
 public class ReplicationManager {
@@ -8,6 +10,7 @@ public class ReplicationManager {
 
 	public ReplicationManager(ModelInterface m) {
 		replication = new Replication(18234);
+		replication.start();
 		replication.sendReplicationData(m);
 	}
 }
