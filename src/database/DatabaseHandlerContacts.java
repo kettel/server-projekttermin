@@ -114,7 +114,7 @@ public class DatabaseHandlerContacts extends DatabaseHandler{
             con.setAutoCommit(false);
             String update = "UPDATE " + contact.getDatabaseRepresentation() + 
             		" SET Name = AES_ENCRYPT(\"" + contact.getContactName() + "\",\""+AES_PASSWORD+"\"), " +
-            		" InetAddress = AES_ENCRYPT(\"" + contact.getInetAddress() + "\",\""+AES_PASSWORD+"\")," +
+            		" InetAddress = AES_ENCRYPT(\"" + contact.getInetAddress() + "\",\""+AES_PASSWORD+"\")" +
             		" WHERE Id = " + contact.getId();
             System.out.println(update);
             // Sätt in rätt värden till rätt plats i frågan och uppdatera dessa
