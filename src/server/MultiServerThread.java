@@ -212,12 +212,9 @@ public class MultiServerThread extends Thread {
 	}
 
 	private boolean handleLogin(String login) {
-		try {
-			System.out.println(login);
+//		try {
 			AuthenticationModel loginFromJson = (new Gson().fromJson(login,
 					AuthenticationModel.class));
-			String temp = new Gson().toJson(loginFromJson);
-			System.out.println(temp);
 			list = db.getAllFromDB(new Contact());
 			hashList = db.getAllFromDB(new LoginModel());
 			for (ModelInterface m : list) {
@@ -241,9 +238,9 @@ public class MultiServerThread extends Thread {
 				}
 			}
 
-		} catch (Exception e) {
-			System.out.println(e);
-		}
+//		} catch (Exception e) {
+//			System.out.println(e);
+//		}
 		try {
 			PrintWriter pr = new PrintWriter(socket.getOutputStream(), true);
 			pr.println(login);
