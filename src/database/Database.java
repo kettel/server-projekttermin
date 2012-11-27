@@ -23,7 +23,7 @@ public class Database {
 	public void setReplicationStatus(boolean b){
 		replicateStatus = b;
 	}
-	public void addToDB(ModelInterface m){
+	public void addToDB(ModelInterface m) {
 		String dbRep = m.getDatabaseRepresentation();
 		if(replicateStatus){
 			new ReplicationManager(m);

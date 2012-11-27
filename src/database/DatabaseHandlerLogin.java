@@ -34,7 +34,6 @@ public class DatabaseHandlerLogin extends DatabaseHandler {
 			pst.setString(1, Long.toString(login.getContactId()));
 			pst.setString(2, hashPassword(login.getPassword()));
 			pst.setString(3, AES_PASSWORD);
-			System.out.println(pst.toString());
 
 			pst.executeUpdate();
 
