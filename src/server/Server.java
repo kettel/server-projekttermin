@@ -1,5 +1,10 @@
 package server;
 
+import gcm.HomeServlet;
+import gcm.RegisterServlet;
+import gcm.SendAllMessagesServlet;
+import gcm.UnregisterServlet;
+
 import java.awt.EventQueue;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -20,10 +25,6 @@ import model.QueueItem;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 
-import GCM.HomeServlet;
-import GCM.RegisterServlet;
-import GCM.SendAllMessagesServlet;
-import GCM.UnregisterServlet;
 import database.Database;
 
 /**
