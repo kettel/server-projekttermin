@@ -112,13 +112,13 @@ public class DatabaseHandlerContacts extends DatabaseHandler{
             
             // Sätt autocommit till falskt
             con.setAutoCommit(false);
-            
-            // Sätt in rätt värden till rätt plats i frågan och uppdatera dessa
-            st.executeUpdate("UPDATE " + contact.getDatabaseRepresentation() + 
+            String update = "UPDATE " + contact.getDatabaseRepresentation() + 
             		" SET Name = AES_ENCRYPT(\"" + contact.getContactName() + "\",\""+AES_PASSWORD+"\"), " +
             		" InetAddress = AES_ENCRYPT(\"" + contact.getInetAddress() + "\",\""+AES_PASSWORD+"\")," +
-            		" WHERE Id = " + contact.getId());
-            System.out.println(st.toString());
+            		" WHERE Id = " + contact.getId();
+            System.out.println(update);
+            // Sätt in rätt värden till rätt plats i frågan och uppdatera dessa
+            st.executeUpdate(update);
             // Commita db-uppdateringarna (?)
             con.commit();
             
