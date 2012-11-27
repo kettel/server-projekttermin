@@ -63,7 +63,7 @@ public class DatabaseHandlerContacts extends DatabaseHandler{
 		List<ModelInterface> returnList = new ArrayList<ModelInterface>();
 		try {
             con = DriverManager.getConnection(url, user, password);
-            pst = con.prepareStatement("SELECT Id," + " AES_DECRYPT(Name,?),"
+            pst = con.prepareStatement("SELECT Id, AES_DECRYPT(Name,?),"
             + "AES_DECRYPT(InetAddress,?) FROM " + m.getDatabaseRepresentation());
             for(int i = 1; i < 3; i ++){
             	pst.setString(i, AES_PASSWORD);
