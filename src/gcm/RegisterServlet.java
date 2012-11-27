@@ -38,6 +38,7 @@ public class RegisterServlet extends BaseServlet {
       throws ServletException {
     String regId = getParameter(req, PARAMETER_REG_ID);
     Datastore.register(regId);
+    System.out.println("GCM: reggar");
     setSuccess(resp);
   }
 
