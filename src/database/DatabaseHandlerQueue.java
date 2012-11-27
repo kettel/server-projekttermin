@@ -19,13 +19,14 @@ public class DatabaseHandlerQueue extends DatabaseHandler {
 	private ResultSet rs = null;
 	private PreparedStatement pst = null;
 
-	public QueueItem pop() { //**********FIXA MED AES************
+	public QueueItem pop() {
 		QueueItem poppedItem = null;
 		try {
 			con = DriverManager.getConnection(url, user, password);
 			// Hämta det sista objektet i tabellen queue.
 			pst = con
-					.prepareStatement("SELECT * FROM queue ORDER BY Id ASC LIMIT 1");
+					.prepareStatement("SELECT Id, contact_Id," + " AES_DECRYPT(json,?) FROM queue ORDER BY Id ASC LIMIT 1");
+			pst.setString(1, AES_PASSWORD);
 			rs = pst.executeQuery();
 
 			long lastId = -1;
@@ -132,7 +133,7 @@ public class DatabaseHandlerQueue extends DatabaseHandler {
 			// Hämta alla kö-objekt som finns i listan kopplat till önskad
 			// användare
 			pst = con
-					.prepareStatement("SELECT contact_Id," + " AES_DECRYPT(json,?) FROM queue WHERE contact_Id = "
+					.prepareStatement("SELECT Id, contact_Id," + " AES_DECRYPT(json,?) FROM queue WHERE contact_Id = "
 							+ Long.toString(q.getContactId())
 							+ " ORDER BY Id ASC");
 			pst.setString(1, AES_PASSWORD);
