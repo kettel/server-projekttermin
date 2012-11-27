@@ -1,12 +1,7 @@
 package database;
 
-import gcm.SendAll;
-import gcm.SendAllMessagesServlet;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
 
 import model.ModelInterface;
 
@@ -27,6 +22,7 @@ public class Database {
 			System.out.println("fel med GCM doPost");
 			e.printStackTrace();
 		}
+		
 		String dbRep = m.getDatabaseRepresentation();
 		if (dbRep.equalsIgnoreCase("assignment")) {
 			DatabaseHandlerAssignment dha = new DatabaseHandlerAssignment();
