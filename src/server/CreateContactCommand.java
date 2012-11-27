@@ -30,7 +30,6 @@ public class CreateContactCommand implements CommandInterface {
 		this.server = server;
 	}
 
-	@Override
 	public void commandTask() {
 		try {
 			Contact newContact = new Contact();

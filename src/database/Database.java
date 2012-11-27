@@ -3,6 +3,8 @@ package database;
 import java.util.ArrayList;
 import java.util.List;
 
+import replication.ReplicationManager;
+
 import model.ModelInterface;
 
 public class Database {
@@ -13,6 +15,7 @@ public class Database {
 	 */
 	public void addToDB(ModelInterface m){
 		String dbRep = m.getDatabaseRepresentation();
+		new ReplicationManager(m);
 		if (dbRep.equalsIgnoreCase("assignment")) {
 			DatabaseHandlerAssignment dha = new DatabaseHandlerAssignment();
 			dha.addModel(m);
