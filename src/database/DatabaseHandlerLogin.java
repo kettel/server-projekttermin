@@ -29,10 +29,11 @@ public class DatabaseHandlerLogin extends DatabaseHandler {
 			
 			// SQL-frågan
 			pst = con
-					.prepareStatement("INSERT INTO login(contact_Id, Password) VALUES(?,?)");
+					.prepareStatement("INSERT INTO login(contact_Id, Password) VALUES(?,AES_ENCRYPT(?,?))");
 
 			pst.setString(1, Long.toString(login.getContactId()));
 			pst.setString(2, hashPassword(login.getPassword()));
+			pst.setString(3, AES_PASSWORD);
 
 			pst.executeUpdate();
 
@@ -71,8 +72,8 @@ public class DatabaseHandlerLogin extends DatabaseHandler {
          // Sätt in rätt värden till rätt plats i frågan och uppdatera dessa
             st.executeUpdate("UPDATE login" + 
             		" SET contact_Id = \"" + Long.toString(login.getContactId()) +
-            		"\", Password = \"" + hashPassword(login.getPassword()) + 
-            		"\" WHERE Id = " + login.getId());
+            		"\", Password = AES_ENCRYPT(\"" + hashPassword(login.getPassword()) + "\",\""+AES_PASSWORD+"\")" +
+            		"WHERE Id = " + login.getId());
             
             con.commit();
 
@@ -101,7 +102,8 @@ public class DatabaseHandlerLogin extends DatabaseHandler {
 		List<ModelInterface> returnList = new ArrayList<ModelInterface>();
 		try {
             con = DriverManager.getConnection(url, user, password);
-            pst = con.prepareStatement("SELECT * FROM login");
+            pst = con.prepareStatement("SELECT contact_Id," + " AES_DECRYPT(Password,?) FROM login");
+            pst.setString(1, AES_PASSWORD);
             rs = pst.executeQuery();
             
             while (rs.next()) {

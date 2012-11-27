@@ -25,7 +25,8 @@ public class DatabaseHandlerQueue extends DatabaseHandler {
 			con = DriverManager.getConnection(url, user, password);
 			// Hämta det sista objektet i tabellen queue.
 			pst = con
-					.prepareStatement("SELECT * FROM queue ORDER BY Id ASC LIMIT 1");
+					.prepareStatement("SELECT Id, contact_Id," + " AES_DECRYPT(json,?) FROM queue ORDER BY Id ASC LIMIT 1");
+			pst.setString(1, AES_PASSWORD);
 			rs = pst.executeQuery();
 
 			long lastId = -1;
@@ -84,11 +85,12 @@ public class DatabaseHandlerQueue extends DatabaseHandler {
 
 			// SQL-frågan
 			pst = con
-					.prepareStatement("INSERT INTO queue(contact_Id, json) VALUES(?,?)");
+					.prepareStatement("INSERT INTO queue(contact_Id, json) VALUES(?,AES_ENCRYPT(?,?))");
 
 			// Sätt in rätt värden till rätt plats i frågan
 			pst.setString(1, Long.toString(q.getContactId()));
 			pst.setString(2, q.getJSON());
+			pst.setString(3, AES_PASSWORD);
 
 			// Utför frågan och lägg till objektet i databasen
 			pst.executeUpdate();
@@ -131,9 +133,10 @@ public class DatabaseHandlerQueue extends DatabaseHandler {
 			// Hämta alla kö-objekt som finns i listan kopplat till önskad
 			// användare
 			pst = con
-					.prepareStatement("SELECT * FROM queue WHERE contact_Id = "
+					.prepareStatement("SELECT Id, contact_Id," + " AES_DECRYPT(json,?) FROM queue WHERE contact_Id = "
 							+ Long.toString(q.getContactId())
 							+ " ORDER BY Id ASC");
+			pst.setString(1, AES_PASSWORD);
 			rs = pst.executeQuery();
 
 			// Gå igenom den funna mängden och lägg till kö-items till returlistan

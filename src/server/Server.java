@@ -1,15 +1,23 @@
 package server;
 
+import gcm.HomeServlet;
+import gcm.RegisterServlet;
+import gcm.SendAllMessagesServlet;
+import gcm.UnregisterServlet;
+
 import java.awt.EventQueue;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 import jetty.JettyServer;
+import model.Assignment;
+import model.AssignmentStatus;
 import model.Contact;
 import model.ModelInterface;
 import model.QueueItem;
@@ -17,10 +25,6 @@ import model.QueueItem;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 
-import GCM.HomeServlet;
-import GCM.RegisterServlet;
-import GCM.SendAllMessagesServlet;
-import GCM.UnregisterServlet;
 import database.Database;
 
 /**
@@ -76,10 +80,7 @@ public class Server {
 
 	public Server() {
 		try {
-			db = new Database();
-			hashMap = new ConcurrentHashMap<String, OutputStream>();
 			serverSocket = new ServerSocket(port);
-
 			// Skapar en ny tråd som lyssnar på kommandon
 			new ServerTerminal(this).start();
 			// Lyssnar på anslutningar och skapar en ny tråd per anslutning så
