@@ -54,7 +54,7 @@ public class MultiServerThread extends Thread {
 		this.socket = socket;
 		this.server = server;
 		db = new Database();
-		if(socket.getInetAddress().toString().equals("/94.254.72.38")){
+		if(socket.getInetAddress().toString().equals("/192.168.1.1")){
 			db.setReplicationStatus(false);
 		}
 		else {
