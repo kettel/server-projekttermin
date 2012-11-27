@@ -79,6 +79,8 @@ public class Server {
 
 	public Server() {
 		try {
+			db = new Database();
+			hashMap = new ConcurrentHashMap<String, OutputStream>();
 			serverSocket = new ServerSocket(port);
 			// Skapar en ny tråd som lyssnar på kommandon
 			new ServerTerminal(this).start();
