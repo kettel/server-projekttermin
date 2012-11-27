@@ -30,6 +30,7 @@ public class SendAll {
 		String status;
 		if (devices.isEmpty()) {
 			status = "Message ignored as there is no device registered!";
+			System.out.println("GCM: No devices");
 		} else {
 			// NOTE: check below is for demonstration purposes; a real
 			// application
