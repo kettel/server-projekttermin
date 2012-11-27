@@ -1,5 +1,9 @@
 package server;
 
+import gcm.HomeServlet;
+import gcm.RegisterServlet;
+import gcm.UnregisterServlet;
+
 import java.awt.EventQueue;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -17,10 +21,6 @@ import model.QueueItem;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 
-import GCM.HomeServlet;
-import GCM.RegisterServlet;
-import GCM.SendAllMessagesServlet;
-import GCM.UnregisterServlet;
 import database.Database;
 
 /**
@@ -55,8 +55,8 @@ public class Server {
 				"/register");
 		context.addServlet(new ServletHolder(new UnregisterServlet()),
 				"/unregister");
-		context.addServlet(new ServletHolder(new SendAllMessagesServlet()),
-				"/sendAll");
+//		context.addServlet(new ServletHolder(new SendAllMessagesServlet()),
+//				"/sendAll");
 		final JettyServer jettyServer = new JettyServer();
 		jettyServer.getServer().setHandler(context);
 		Runnable runner = new Runnable() {
