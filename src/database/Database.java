@@ -1,12 +1,7 @@
 package database;
 
-import gcm.SendAll;
-import gcm.SendAllMessagesServlet;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
 
 import model.ModelInterface;
 
@@ -18,13 +13,7 @@ public class Database {
 	 * @throws  
 	 */
 	public void addToDB(ModelInterface m) {
-		SendAll all=new SendAll();
-		try {
-			all.doPost();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
 		String dbRep = m.getDatabaseRepresentation();
 		if (dbRep.equalsIgnoreCase("assignment")) {
 			DatabaseHandlerAssignment dha = new DatabaseHandlerAssignment();
