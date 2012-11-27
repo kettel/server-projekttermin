@@ -103,7 +103,6 @@ public class DatabaseHandlerContacts extends DatabaseHandler{
 	@Override
 	public void updateModel(ModelInterface m) {
 		try {
-			System.out.println("nu ska vi uppdatera kontakten");
 			// Casta ModelInterface m till MessageModel
 			Contact contact= (Contact)m;
 			

@@ -230,8 +230,7 @@ public class MultiServerThread extends Thread {
 							loginFromJson.setIsAccessGranted(true);
 							String response = new Gson().toJson(loginFromJson);
 							server.send(response, cont.getContactName());
-							System.out
-									.println("response to login: " + response);
+							System.out.println(socket.getInetAddress().toString() + " connected.");
 							return true;
 						}
 					}
