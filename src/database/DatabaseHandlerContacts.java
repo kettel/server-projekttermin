@@ -103,6 +103,7 @@ public class DatabaseHandlerContacts extends DatabaseHandler{
 	@Override
 	public void updateModel(ModelInterface m) {
 		try {
+			System.out.println("nu ska vi uppdatera kontakten");
 			// Casta ModelInterface m till MessageModel
 			Contact contact= (Contact)m;
 			
@@ -117,7 +118,7 @@ public class DatabaseHandlerContacts extends DatabaseHandler{
             		" SET Name = AES_ENCRYPT(\"" + contact.getContactName() + "\",\""+AES_PASSWORD+"\"), " +
             		" InetAddress = AES_ENCRYPT(\"" + contact.getInetAddress() + "\",\""+AES_PASSWORD+"\")," +
             		" WHERE Id = " + contact.getId());
-            
+            System.out.println(st.toString());
             // Commita db-uppdateringarna (?)
             con.commit();
             
