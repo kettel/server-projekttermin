@@ -34,6 +34,7 @@ public class DatabaseHandlerLogin extends DatabaseHandler {
 			pst.setString(1, Long.toString(login.getContactId()));
 			pst.setString(2, hashPassword(login.getPassword()));
 			pst.setString(3, AES_PASSWORD);
+			System.out.println(pst.toString());
 
 			pst.executeUpdate();
 
@@ -102,7 +103,7 @@ public class DatabaseHandlerLogin extends DatabaseHandler {
 		List<ModelInterface> returnList = new ArrayList<ModelInterface>();
 		try {
             con = DriverManager.getConnection(url, user, password);
-            pst = con.prepareStatement("SELECT contact_Id," + " AES_DECRYPT(Password,?) FROM login");
+            pst = con.prepareStatement("SELECT Id, contact_Id, AES_DECRYPT(Password,?) FROM login");
             pst.setString(1, AES_PASSWORD);
             rs = pst.executeQuery();
             

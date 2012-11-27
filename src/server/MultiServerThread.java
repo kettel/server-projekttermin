@@ -212,23 +212,36 @@ public class MultiServerThread extends Thread {
 	}
 
 	private boolean handleLogin(String login) {
-		try {
+//		try {
 			AuthenticationModel loginFromJson = (new Gson().fromJson(login,
 					AuthenticationModel.class));
+			System.out.println("MST 218");
 			list = db.getAllFromDB(new Contact());
+			System.out.println("MST 220");
 			hashList = db.getAllFromDB(new LoginModel());
+			System.out.println("MST 222");
 			for (ModelInterface m : list) {
+				System.out.println("MST 224");
 				Contact cont = (Contact) m;
+				System.out.println("MST 226");
 				if (loginFromJson.getUserName().equals(cont.getContactName())) {
+					System.out.println("MST 228");
 					for (ModelInterface mi : hashList) {
+						System.out.println("MST 230");
 						LoginModel logMod = (LoginModel) mi;
+						System.out.println("MST 232");
 						if (loginFromJson.getPasswordHash().equals(
 								logMod.getPassword())) {
+							System.out.println("MST 235");
 							cont.setInetAddress(socket.getInetAddress()
 									.toString());
+							System.out.println("MST 238");
 							db.updateModel(cont);
+							System.out.println("MST 240");
 							loginFromJson.setIsAccessGranted(true);
+							System.out.println("MST 242");
 							String response = new Gson().toJson(loginFromJson);
+							System.out.println("MST 244");
 							server.send(response, cont.getContactName());
 							System.out
 									.println("response to login: " + response);
@@ -238,9 +251,9 @@ public class MultiServerThread extends Thread {
 				}
 			}
 
-		} catch (Exception e) {
-			System.out.println(e);
-		}
+//		} catch (Exception e) {
+//			System.out.println(e);
+//		}
 		try {
 			PrintWriter pr = new PrintWriter(socket.getOutputStream(), true);
 			pr.println(login);

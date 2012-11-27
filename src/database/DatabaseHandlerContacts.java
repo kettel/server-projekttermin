@@ -63,7 +63,7 @@ public class DatabaseHandlerContacts extends DatabaseHandler{
 		List<ModelInterface> returnList = new ArrayList<ModelInterface>();
 		try {
             con = DriverManager.getConnection(url, user, password);
-            pst = con.prepareStatement("SELECT Id," + " AES_DECRYPT(Name,?),"
+            pst = con.prepareStatement("SELECT Id, AES_DECRYPT(Name,?),"
             + "AES_DECRYPT(InetAddress,?) FROM " + m.getDatabaseRepresentation());
             for(int i = 1; i < 3; i ++){
             	pst.setString(i, AES_PASSWORD);
@@ -103,6 +103,7 @@ public class DatabaseHandlerContacts extends DatabaseHandler{
 	@Override
 	public void updateModel(ModelInterface m) {
 		try {
+			System.out.println("nu ska vi uppdatera kontakten");
 			// Casta ModelInterface m till MessageModel
 			Contact contact= (Contact)m;
 			
@@ -111,13 +112,13 @@ public class DatabaseHandlerContacts extends DatabaseHandler{
             
             // Sätt autocommit till falskt
             con.setAutoCommit(false);
-            
-            // Sätt in rätt värden till rätt plats i frågan och uppdatera dessa
-            st.executeUpdate("UPDATE " + contact.getDatabaseRepresentation() + 
+            String update = "UPDATE " + contact.getDatabaseRepresentation() + 
             		" SET Name = AES_ENCRYPT(\"" + contact.getContactName() + "\",\""+AES_PASSWORD+"\"), " +
-            		" InetAddress = AES_ENCRYPT(\"" + contact.getInetAddress() + "\",\""+AES_PASSWORD+"\")," +
-            		" WHERE Id = " + contact.getId());
-            
+            		" InetAddress = AES_ENCRYPT(\"" + contact.getInetAddress() + "\",\""+AES_PASSWORD+"\")" +
+            		" WHERE Id = " + contact.getId();
+            System.out.println(update);
+            // Sätt in rätt värden till rätt plats i frågan och uppdatera dessa
+            st.executeUpdate(update);
             // Commita db-uppdateringarna (?)
             con.commit();
             
