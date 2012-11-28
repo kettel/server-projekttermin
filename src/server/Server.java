@@ -115,10 +115,13 @@ public class Server {
 					PrintWriter pr = new PrintWriter(hashMap.get(cont
 							.getInetAddress()), true);
 					pr.println(stringToBeSent);
-				} else if(!stringToBeSent.contains("\"databaseRepresentation\":\"authentication\"")){
-					QueueItem qItem = new QueueItem(cont.getId(),
-							stringToBeSent);
-					db.addToDB(qItem);
+				} else {
+					if (!stringToBeSent
+							.contains("\"databaseRepresentation\":\"authentication\"")) {
+						QueueItem qItem = new QueueItem(cont.getId(),
+								stringToBeSent);
+						db.addToDB(qItem);
+					}
 				}
 			}
 		}
