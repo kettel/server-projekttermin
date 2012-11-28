@@ -55,8 +55,8 @@ public class Server {
 				"/register");
 		context.addServlet(new ServletHolder(new UnregisterServlet()),
 				"/unregister");
-//		context.addServlet(new ServletHolder(new SendAllMessagesServlet()),
-//				"/sendAll");
+		// context.addServlet(new ServletHolder(new SendAllMessagesServlet()),
+		// "/sendAll");
 		final JettyServer jettyServer = new JettyServer();
 		jettyServer.getServer().setHandler(context);
 		Runnable runner = new Runnable() {
@@ -112,9 +112,10 @@ public class Server {
 			if (receiver.equals(cont.getContactName())) {
 				// Om mottagaren är ansluten så skickas strängen
 				if (hashMap.keySet().contains(cont.getInetAddress())) {
-					PrintWriter pr = new PrintWriter(hashMap.get(cont.getInetAddress()), true);
+					PrintWriter pr = new PrintWriter(hashMap.get(cont
+							.getInetAddress()), true);
 					pr.println(stringToBeSent);
-				} else {
+				} else if(!stringToBeSent.contains("\"databaseRepresentation\":\"authentication\"")){
 					QueueItem qItem = new QueueItem(cont.getId(),
 							stringToBeSent);
 					db.addToDB(qItem);

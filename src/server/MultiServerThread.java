@@ -35,7 +35,6 @@ public class MultiServerThread extends Thread {
 
 	private boolean connected = true;
 	private Server server = null;
-	private Contact thisContact;
 	private List<ModelInterface> list;
 	private List<ModelInterface> hashList;
 
@@ -68,8 +67,6 @@ public class MultiServerThread extends Thread {
 	public void run() {
 
 		try {
-			server.sendUnsentItems(thisContact);
-
 			while (connected) {
 				// Buffrar ihop flera tecken från InputStreamen till en sträng
 				input = new BufferedReader(new InputStreamReader(
@@ -220,7 +217,7 @@ public class MultiServerThread extends Thread {
 				if (loginFromJson.getUserName().equals(cont.getContactName())) {
 					for (ModelInterface mi : hashList) {
 						LoginModel logMod = (LoginModel) mi;
-						if (loginFromJson.getPasswordHash().equals(
+						if (cont.getId() == logMod.getContactId() && loginFromJson.getPasswordHash().equals(
 								logMod.getPassword())) {
 							cont.setInetAddress(socket.getInetAddress()
 									.toString());
@@ -228,7 +225,8 @@ public class MultiServerThread extends Thread {
 							loginFromJson.setIsAccessGranted(true);
 							String response = new Gson().toJson(loginFromJson);
 							server.send(response, cont.getContactName());
-							System.out.println(socket.getInetAddress().toString() + " connected.");
+							System.out.println("<"+socket.getInetAddress().toString()+"> " + cont.getContactName() +" connected.");
+							server.sendUnsentItems(cont);
 							return true;
 						}
 					}
