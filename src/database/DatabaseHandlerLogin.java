@@ -109,7 +109,7 @@ public class DatabaseHandlerLogin extends DatabaseHandler {
             while (rs.next()) {
             	AuthenticationModel tempLogin = new AuthenticationModel(rs.getInt(1), // Id
 						Long.valueOf(rs.getString(2)), // contact_Id
-						rs.getString(4)); // Password
+						rs.getString(3)); // Password
             	returnList.add((ModelInterface) tempLogin);
             }
 
