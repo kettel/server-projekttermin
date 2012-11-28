@@ -88,6 +88,7 @@ public class Server {
 				clientSocket = serverSocket.accept();
 				OutputStream out = clientSocket.getOutputStream();
 				new MultiServerThread(clientSocket, this).start();
+				System.out.println("outputStream: "+ out);
 				hashMap.put(clientSocket.getInetAddress().toString(), out);
 			}
 			// Stänger socketen, anslutningar är inte längre tillåtna
