@@ -145,7 +145,7 @@ public class MultiServerThread extends Thread {
 			cal.getTime();
 			SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
 			System.out.println("<" + socket.getInetAddress() + ":"
-					+ socket.getPort() + "	" + sdf.format(cal.getTime())
+					+ socket.getPort() + " " + sdf.format(cal.getTime())
 					+ "> message from  " + msg.getSender() + " to "
 					+ msg.getReciever() + ": " + msg.getMessageContent());
 
@@ -175,7 +175,7 @@ public class MultiServerThread extends Thread {
 			cal.getTime();
 			SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
 			System.out.println("<" + socket.getInetAddress() + ":"
-					+ socket.getPort() + "	" + sdf.format(cal.getTime())
+					+ socket.getPort() + " " + sdf.format(cal.getTime())
 					+ "> assignment from  " + assignmentFromJson.getSender()
 					+ ": " + assignmentFromJson.getName() + "	"
 					+ assignmentFromJson.getAssignmentStatus());
@@ -208,7 +208,6 @@ public class MultiServerThread extends Thread {
 
 	private boolean handleLogin(String login) {
 		try {
-			System.out.println(login);
 			AuthenticationModel loginFromJson = (new Gson().fromJson(login,
 					AuthenticationModel.class));
 			list = db.getAllFromDB(new Contact());
@@ -240,7 +239,7 @@ public class MultiServerThread extends Thread {
 		try {
 			PrintWriter pr = new PrintWriter(socket.getOutputStream(), true);
 			pr.println(login);
-			System.out.println(socket.getInetAddress().toString() + " failed to login.");
+			System.out.println("<"+socket.getInetAddress().toString()+ "> failed to login.");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
