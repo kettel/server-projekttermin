@@ -114,7 +114,7 @@ public class Server {
 				if (hashMap.keySet().contains(cont.getInetAddress())) {
 					PrintWriter pr = new PrintWriter(hashMap.get(cont
 							.getInetAddress()), true);
-					pr.println(stringToBeSent+"\n");
+					pr.println(stringToBeSent);
 					System.out.println("Skickar: " + stringToBeSent);
 				} else {
 					if (!stringToBeSent

@@ -247,7 +247,7 @@ public class MultiServerThread extends Thread {
 							true);
 					pr.println(login);
 					System.out.println("<" + socket.getInetAddress().toString()
-							+ "> failed to login.\n");
+							+ "> failed to login.");
 				} catch (Exception e) {
 					System.out.println(e);
 				}
