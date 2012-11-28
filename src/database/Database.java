@@ -60,7 +60,7 @@ public class Database {
 		} else if (dbRep.equalsIgnoreCase("queueItem")) {
 			DatabaseHandlerQueue dhq = new DatabaseHandlerQueue();
 			dhq.addModel(m);
-		} else if (dbRep.equalsIgnoreCase("login")) {
+		} else if (dbRep.equalsIgnoreCase("authentication")) {
 			DatabaseHandlerLogin dhl = new DatabaseHandlerLogin();
 			dhl.addModel(m);
 		}
