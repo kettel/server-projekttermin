@@ -137,7 +137,9 @@ public class MultiServerThread extends Thread {
 		// Gson konverterar json-strängen till MessageModel-objektet igen
 		try {
 			msg = (new Gson()).fromJson(message, MessageModel.class);
-			server.send(message, msg.getReciever().toString());
+			if (!socket.getInetAddress().toString().equals(replicateServerIP)) {
+				server.send(message, msg.getReciever().toString());
+			}
 			// Lägger in meddelandet i databasen
 			db.addToDB(msg);
 			Calendar cal = Calendar.getInstance();
@@ -165,8 +167,10 @@ public class MultiServerThread extends Thread {
 		try {
 			Assignment assignmentFromJson = (new Gson()).fromJson(assignment,
 					Assignment.class);
-			server.sendToAllExceptTheSender(assignment, socket.getInetAddress()
-					.toString());
+			if (!socket.getInetAddress().toString().equals(replicateServerIP)) {
+				server.sendToAllExceptTheSender(assignment, socket
+						.getInetAddress().toString());
+			}
 
 			// Lägger in kontakten i databasen
 			db.addToDB(assignmentFromJson);
@@ -206,9 +210,9 @@ public class MultiServerThread extends Thread {
 	private boolean handleLogin(String login) {
 		try {
 			list = db.getAllFromDB(new Contact());
+			AuthenticationModel loginFromJson = (new Gson().fromJson(login,
+					AuthenticationModel.class));
 			if (!socket.getInetAddress().toString().equals(replicateServerIP)) {
-				AuthenticationModel loginFromJson = (new Gson().fromJson(login,
-						AuthenticationModel.class));
 				hashList = db.getAllFromDB(new AuthenticationModel());
 				for (ModelInterface m : list) {
 					Contact cont = (Contact) m;
@@ -247,13 +251,11 @@ public class MultiServerThread extends Thread {
 					System.out.println(e);
 				}
 			} else {
-				AuthenticationModel authModel = new Gson().fromJson(login,
-						AuthenticationModel.class);
 				for (ModelInterface m : list) {
 					Contact cont = (Contact) m;
-					if (authModel.getUserName().equals(cont.getContactName())) {
+					if (loginFromJson.getUserName().equals(cont.getContactName())) {
 						db.addToDB(new AuthenticationModel(cont.getId(),
-								authModel.getPasswordHash()));
+								loginFromJson.getPasswordHash()));
 					}
 				}
 
