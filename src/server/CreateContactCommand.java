@@ -4,8 +4,8 @@ import java.io.Console;
 import java.util.List;
 import java.util.Scanner;
 
+import model.AuthenticationModel;
 import model.Contact;
-import model.LoginModel;
 import model.ModelInterface;
 
 import com.google.gson.Gson;
@@ -75,7 +75,7 @@ public class CreateContactCommand implements CommandInterface {
 		for (ModelInterface m : list) {
 			Contact cont = (Contact) m;
 			if (c.getContactName().equals(cont.getContactName())) {
-				db.addToDB(new LoginModel(cont.getId(), password));
+				db.addToDB(new AuthenticationModel(cont.getId(), password));
 			}
 		}
 		db.setReplicationStatus(false);

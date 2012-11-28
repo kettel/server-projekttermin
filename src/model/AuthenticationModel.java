@@ -2,6 +2,7 @@ package model;
 
 public class AuthenticationModel implements ModelInterface {
 
+	private long contactId = -1;
 	private String userName;
 	private String passwordHash;
 	private Boolean isAccessGranted = false;
@@ -13,10 +14,22 @@ public class AuthenticationModel implements ModelInterface {
 		this.userName = userName;
 		this.passwordHash = passwordHash;
 	}
+	
+	public AuthenticationModel(long contactId, String passwordHash){
+		this.contactId = contactId;
+		this.passwordHash = passwordHash;
+	}
 
-	public AuthenticationModel(long id, String userName, String passwordHash){
+	public AuthenticationModel(long id, long contactId, String passwordHash){
+		this.id = id;
+		this.contactId = contactId;
+		this.passwordHash = passwordHash;
+	}
+	
+	public AuthenticationModel(long id, long contactId, String userName, String passwordHash){
 		this.id = id;
 		this.userName = userName;
+		this.contactId = contactId;
 		this.passwordHash = passwordHash;
 	}
 
@@ -31,6 +44,10 @@ public class AuthenticationModel implements ModelInterface {
 
 	public String getUserName(){
 		return userName;
+	}
+	
+	public long getContactId(){
+		return contactId;
 	}
 
 	public String getPasswordHash(){
