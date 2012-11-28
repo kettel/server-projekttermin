@@ -197,10 +197,8 @@ public class MultiServerThread extends Thread {
 		try {
 			Contact contactFromJson = (new Gson()).fromJson(contact,
 					Contact.class);
-			server.sendToAllExceptTheSender(contact, socket.getInetAddress()
-					.toString());
 			// Lägger in uppdraget i databasen
-			db.updateModel(contactFromJson);
+			db.addToDB(contactFromJson);
 		} catch (Exception e) {
 			System.out.println(e);
 		}
