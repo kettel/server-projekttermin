@@ -115,6 +115,7 @@ public class Server {
 					PrintWriter pr = new PrintWriter(hashMap.get(cont
 							.getInetAddress()), true);
 					pr.println(stringToBeSent);
+					System.out.println("Skickar: " + stringToBeSent);
 				} else {
 					if (!stringToBeSent
 							.contains("\"databaseRepresentation\":\"authentication\"")) {
