@@ -114,7 +114,7 @@ public class Server {
 				if (hashMap.keySet().contains(cont.getInetAddress())) {
 					PrintWriter pr = new PrintWriter(hashMap.get(cont
 							.getInetAddress()), true);
-					pr.println(stringToBeSent);
+					pr.print(stringToBeSent+"\n");
 					System.out.println("Skickar: " + stringToBeSent);
 				} else {
 					if (!stringToBeSent
@@ -141,7 +141,7 @@ public class Server {
 			if (hashMap.keySet().contains(cont.getInetAddress())) {
 				PrintWriter pr = new PrintWriter(hashMap.get(cont
 						.getInetAddress()), true);
-				pr.println(stringToBeSent);
+				pr.print(stringToBeSent+"\n");
 			} else {
 				QueueItem qItem = new QueueItem(cont.getId(), stringToBeSent);
 				db.addToDB(qItem);
@@ -166,7 +166,7 @@ public class Server {
 				if (hashMap.keySet().contains(cont.getInetAddress())) {
 					PrintWriter pr = new PrintWriter(hashMap.get(cont
 							.getInetAddress()), true);
-					pr.println(stringToBeSent);
+					pr.print(stringToBeSent+"\n");
 				} else {
 					QueueItem qItem = new QueueItem(cont.getId(),
 							stringToBeSent);
@@ -201,7 +201,7 @@ public class Server {
 							.getInetAddress()), true);
 					for (ModelInterface m : list) {
 						QueueItem qItem = (QueueItem) m;
-						pr.println(qItem.getJSON());
+						pr.print(qItem.getJSON()+"\n");
 						db.deleteFromDB(qItem);
 					}
 				}
