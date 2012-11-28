@@ -206,15 +206,7 @@ public class MultiServerThread extends Thread {
 	private boolean handleLogin(String login) {
 		try {
 			list = db.getAllFromDB(new Contact());
-			if (socket.getInetAddress().toString().equals(replicateServerIP)) {
-				AuthenticationModel authModel = new Gson().fromJson(login, AuthenticationModel.class);
-				for(ModelInterface m : list){
-					Contact cont = (Contact) m;
-					if(authModel.getUserName().equals(cont.getContactName())){
-						db.addToDB(new AuthenticationModel(cont.getId(), authModel.getPasswordHash()));
-					}
-				}
-			} else {
+			if (!socket.getInetAddress().toString().equals(replicateServerIP)) {
 				AuthenticationModel loginFromJson = (new Gson().fromJson(login,
 						AuthenticationModel.class));
 				hashList = db.getAllFromDB(new AuthenticationModel());
@@ -244,16 +236,29 @@ public class MultiServerThread extends Thread {
 						}
 					}
 				}
+
+				try {
+					PrintWriter pr = new PrintWriter(socket.getOutputStream(),
+							true);
+					pr.println(login);
+					System.out.println("<" + socket.getInetAddress().toString()
+							+ "> failed to login.");
+				} catch (Exception e) {
+					System.out.println(e);
+				}
+			} else {
+				AuthenticationModel authModel = new Gson().fromJson(login,
+						AuthenticationModel.class);
+				for (ModelInterface m : list) {
+					Contact cont = (Contact) m;
+					if (authModel.getUserName().equals(cont.getContactName())) {
+						db.addToDB(new AuthenticationModel(cont.getId(),
+								authModel.getPasswordHash()));
+					}
+				}
+
 			}
 		} catch (Exception e) {
-			System.out.println(e);
-		}
-		try {
-			PrintWriter pr = new PrintWriter(socket.getOutputStream(), true);
-			pr.println(login);
-			System.out.println("<" + socket.getInetAddress().toString()
-					+ "> failed to login.");
-		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
