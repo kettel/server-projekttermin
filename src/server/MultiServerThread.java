@@ -247,6 +247,7 @@ public class MultiServerThread extends Thread {
 					PrintWriter pr = new PrintWriter(socket.getOutputStream(),
 							true);
 					pr.print(login+"\n");
+					System.out.println("printing: " + login+"\n");
 					System.out.println("<" + socket.getInetAddress().toString()
 							+ "> failed to login.");
 				} catch (Exception e) {
