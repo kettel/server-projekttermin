@@ -6,9 +6,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import replication.ReplicationManager;
-
 import model.ModelInterface;
+import replication.ReplicationManager;
 
 public class Database {
 	private SendAll all=new SendAll();

@@ -1,7 +1,5 @@
 package replication;
 
-import javax.xml.stream.events.StartDocument;
-
 import model.ModelInterface;
 
 public class ReplicationManager {

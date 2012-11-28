@@ -35,5 +35,6 @@
 	<classpathentry kind="lib" path="lib/org.apache.jasper.glassfish-2.2.2.v201112011158.jar"/>
 	<classpathentry kind="lib" path="lib/org.apache.taglibs.standard.glassfish-1.2.0.v201112081803.jar"/>
 	<classpathentry kind="lib" path="lib/org.eclipse.jdt.core-3.7.1.jar"/>
+	<classpathentry kind="lib" path="lib/json-simple-1.1.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
