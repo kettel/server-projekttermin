@@ -114,7 +114,7 @@ public class Server {
 				if (hashMap.keySet().contains(cont.getInetAddress())) {
 					PrintWriter pr = new PrintWriter(hashMap.get(cont
 							.getInetAddress()), true);
-					pr.print(stringToBeSent+"\n");
+					pr.print(stringToBeSent+"\r\n");
 				} else {
 					if (!stringToBeSent
 							.contains("\"databaseRepresentation\":\"authentication\"")) {
