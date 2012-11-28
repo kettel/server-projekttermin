@@ -89,6 +89,7 @@ public class Server {
 				OutputStream out = clientSocket.getOutputStream();
 				new MultiServerThread(clientSocket, this).start();
 				hashMap.put(clientSocket.getInetAddress().toString(), out);
+				System.out.println("keySet: " + hashMap.keySet());
 			}
 			// Stänger socketen, anslutningar är inte längre tillåtna
 			serverSocket.close();
@@ -185,7 +186,7 @@ public class Server {
 	public synchronized void removeClient(String usersIP) {
 		hashMap.remove(usersIP);
 	}
-
+	
 	/**
 	 * Återsänder data som inte kommat fram till en viss mottagare
 	 * 
