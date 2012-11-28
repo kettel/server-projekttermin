@@ -115,6 +115,7 @@ public class Server {
 				if (hashMap.keySet().contains(cont.getInetAddress())) {
 					PrintWriter pr = new PrintWriter(hashMap.get(cont
 							.getInetAddress()), true);
+					System.out.println(hashMap.get(cont.getInetAddress()));
 					System.out.println("stringToBeSent: " + stringToBeSent);
 					pr.print(stringToBeSent+"\r\n");
 					System.out.println("här skickas skit");
