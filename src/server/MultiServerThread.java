@@ -85,6 +85,7 @@ public class MultiServerThread extends Thread {
 					// avgjorts
 					// sparas och/eller skickas input:en vidare.
 					handleTypeOfInput(inputLine);
+					connected = false;
 				}
 			}
 			// Tar bort kontakten från hashMapen med de anslutna klienterna
@@ -210,7 +211,6 @@ public class MultiServerThread extends Thread {
 
 	private boolean handleLogin(String login) {
 		try {
-			System.out.println("login: " +login);
 			list = db.getAllFromDB(new Contact());
 			AuthenticationModel loginFromJson = (new Gson().fromJson(login,
 					AuthenticationModel.class));
@@ -247,7 +247,6 @@ public class MultiServerThread extends Thread {
 					PrintWriter pr = new PrintWriter(socket.getOutputStream(),
 							true);
 					pr.print(login+"\n");
-					System.out.println("printing: " + login+"\n");
 					System.out.println("<" + socket.getInetAddress().toString()
 							+ "> failed to login.");
 				} catch (Exception e) {
