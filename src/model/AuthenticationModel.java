@@ -19,6 +19,12 @@ public class AuthenticationModel implements ModelInterface {
 		this.contactId = contactId;
 		this.passwordHash = passwordHash;
 	}
+	
+	public AuthenticationModel(long contactId, String userName, String passwordHash){
+		this.contactId = contactId;
+		this.userName = userName;
+		this.passwordHash = passwordHash;
+	}
 
 	public AuthenticationModel(long id, long contactId, String passwordHash){
 		this.id = id;

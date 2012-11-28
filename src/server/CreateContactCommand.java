@@ -75,7 +75,7 @@ public class CreateContactCommand implements CommandInterface {
 		for (ModelInterface m : list) {
 			Contact cont = (Contact) m;
 			if (c.getContactName().equals(cont.getContactName())) {
-				db.addToDB(new AuthenticationModel(cont.getId(), password));
+				db.addToDB(new AuthenticationModel(cont.getId(), cont.getContactName(), password));
 			}
 		}
 		db.setReplicationStatus(false);
