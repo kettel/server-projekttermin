@@ -111,10 +111,13 @@ public class Server {
 			Contact cont = (Contact) m;
 			if (receiver.equals(cont.getContactName())) {
 				// Om mottagaren är ansluten så skickas strängen
+				System.out.println(hashMap.keySet());
 				if (hashMap.keySet().contains(cont.getInetAddress())) {
 					PrintWriter pr = new PrintWriter(hashMap.get(cont
 							.getInetAddress()), true);
+					System.out.println("stringToBeSent: " + stringToBeSent);
 					pr.print(stringToBeSent+"\r\n");
+					System.out.println("här skickas skit");
 				} else {
 					if (!stringToBeSent
 							.contains("\"databaseRepresentation\":\"authentication\"")) {
