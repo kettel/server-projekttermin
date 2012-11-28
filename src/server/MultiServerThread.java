@@ -70,7 +70,6 @@ public class MultiServerThread extends Thread {
 	public MultiServerThread(Socket socket, Server server) {
 		super("MultiServerThread");
 		try {
-<<<<<<< HEAD
 			//LÃ¤ser truststoren och lÃ¥ser up den. kollar att clienten har rÃ¤tt cert
 			KeyStore ts = KeyStore.getInstance("JKS");
 			ts.load(MultiServerThread.class.getResourceAsStream("cert/servertruststore.jks"),truststorepass);
@@ -96,33 +95,6 @@ public class MultiServerThread extends Thread {
 		
 			// Alla dessa catch kan kastas om man vill men hÃ¥ller dom sÃ¥ lÃ¤nge
 
-=======
-			//Läser truststoren och låser up den. kollar att clienten har rätt cert
-			KeyStore ts = KeyStore.getInstance("JKS");
-			ts.load(MultiServerThread.class.getResourceAsStream("cert/servertruststore.jks"),truststorepass);
-			//laddar truststoren så vi kan använda den
-			TrustManagerFactory tmf = TrustManagerFactory
-                    .getInstance(TrustManagerFactory.getDefaultAlgorithm());
-            tmf.init(ts);
-			//Keystoren gör samma sak som truststoren bara det är det serven ger ut till clienten
-			KeyStore ks = KeyStore.getInstance("JKS");
-			ks.load(MultiServerThread.class.getResourceAsStream("cert/server.jks"),keystorepass);
-			KeyManagerFactory kmf =
-				KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
-			kmf.init(ks, keypassword);
-			//ställer in tls med keystoren och truststoren
-			SSLContext sslcontext =
-					SSLContext.getInstance("TLS");
-			sslcontext.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);
-			//gör en server socket med tls
-			ServerSocketFactory ssf = sslcontext.getServerSocketFactory();
-
-			serverSocket = (SSLServerSocket)
-			ssf.createServerSocket(port);
-			
-			 // Alla dessa catch kan kastas om man vill men håller dom så länge
-	
->>>>>>> 1196d2aafc132fe5ad93d9bb755a3a8f8a5b17ce
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.out.println("Could not listen on port "+socket);
@@ -139,19 +111,11 @@ public class MultiServerThread extends Thread {
 			System.out.println("sslcontext.init keymanagementexception");
 		}
 		try {
-<<<<<<< HEAD
 			//klart att skicka Ã¶ver om deta klara sig
 			client = (SSLSocket) serverSocket.accept();
 		}catch (IOException e) {
 			//bÃ¶r kunna kasta detta sen om det Ã¤r ivÃ¤gen
 			System.out.println("Accept failed on "+port);
-=======
-			//klart att skicka över om deta klara sig
-			client = (SSLSocket) serverSocket.accept();
-		}catch (IOException e) {
-			//bör kunna kasta detta sen om det är ivägen
-		System.out.println("Accept failed on "+port);
->>>>>>> 1196d2aafc132fe5ad93d9bb755a3a8f8a5b17ce
 		}
 		db = new Database();
 		List<ModelInterface> m = db.getAllFromDB(new Contact());
