@@ -34,7 +34,7 @@ import database.Database;
 public class Server {
 
 	// Porten som används för anslutningar till servern
-	private static final int port = 18234;
+	private static final int port = 17234;
 	// Tillåter klienter att ansluta till servern
 	private static ServerSocket serverSocket = null;
 	// En boolean som avgör om servern lyssnar på anslutningar
