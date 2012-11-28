@@ -213,23 +213,34 @@ public class MultiServerThread extends Thread {
 			list = db.getAllFromDB(new Contact());
 			AuthenticationModel loginFromJson = (new Gson().fromJson(login,
 					AuthenticationModel.class));
+			System.out.println("@MST 216");
 			if (!socket.getInetAddress().toString().equals(replicateServerIP)) {
+				System.out.println("@MST 218");
 				hashList = db.getAllFromDB(new AuthenticationModel());
+				System.out.println("@MST 220");
 				for (ModelInterface m : list) {
 					Contact cont = (Contact) m;
+					System.out.println("@MST 223");
 					if (loginFromJson.getUserName().equals(
 							cont.getContactName())) {
+						System.out.println("@MST 226");
 						for (ModelInterface mi : hashList) {
 							AuthenticationModel logMod = (AuthenticationModel) mi;
+							System.out.println("@MST 229");
 							if (cont.getId() == logMod.getContactId()
 									&& loginFromJson.getPasswordHash().equals(
 											logMod.getPasswordHash())) {
+								System.out.println("@MST 233");
 								cont.setInetAddress(socket.getInetAddress()
 										.toString());
+								System.out.println("@MST 236");
 								db.updateModel(cont);
+								System.out.println("@MST 238");
 								loginFromJson.setIsAccessGranted(true);
+								System.out.println("@MST 240");
 								String response = new Gson()
 										.toJson(loginFromJson);
+								System.out.println("@MST 243");
 								server.send(response, cont.getContactName());
 								System.out.println("<"
 										+ socket.getInetAddress().toString()
