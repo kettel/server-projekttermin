@@ -69,6 +69,7 @@ public class CreateContactCommand implements CommandInterface {
 	}
 
 	private void addToLogin(Contact c, String password) {
+		db.setReplicationStatus(true);
 		db.addToDB(c);
 		list = db.getAllFromDB(new Contact());
 		for (ModelInterface m : list) {
@@ -77,6 +78,7 @@ public class CreateContactCommand implements CommandInterface {
 				db.addToDB(new LoginModel(cont.getId(), password));
 			}
 		}
+		db.setReplicationStatus(false);
 	}
 	
 	private boolean checkIfContactAlreadyExist(String name){
