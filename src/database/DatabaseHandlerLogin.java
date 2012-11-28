@@ -10,7 +10,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import model.LoginModel;
+import model.AuthenticationModel;
 import model.ModelInterface;
 
 public class DatabaseHandlerLogin extends DatabaseHandler {
@@ -21,7 +21,7 @@ public class DatabaseHandlerLogin extends DatabaseHandler {
 	private PreparedStatement pst = null;
 
 	public void addModel(ModelInterface m) {
-		LoginModel login = (LoginModel) m;
+		AuthenticationModel login = (AuthenticationModel) m;
 		try {
 
 			// Initiera en anslutning till databasen
@@ -32,7 +32,7 @@ public class DatabaseHandlerLogin extends DatabaseHandler {
 					.prepareStatement("INSERT INTO login(contact_Id, Password) VALUES(?,AES_ENCRYPT(?,?))");
 
 			pst.setString(1, Long.toString(login.getContactId()));
-			pst.setString(2, hashPassword(login.getPassword()));
+			pst.setString(2, hashPassword(login.getPasswordHash()));
 			pst.setString(3, AES_PASSWORD);
 
 			pst.executeUpdate();
@@ -61,7 +61,7 @@ public class DatabaseHandlerLogin extends DatabaseHandler {
 	public void updateModel(ModelInterface m) {
 		try {
 			// Casta ModelInterface m till MessageModel
-			LoginModel login = (LoginModel)m;
+			AuthenticationModel login = (AuthenticationModel)m;
 			
 			con = DriverManager.getConnection(url, user, password);
             st = con.createStatement();
@@ -72,7 +72,7 @@ public class DatabaseHandlerLogin extends DatabaseHandler {
          // Sätt in rätt värden till rätt plats i frågan och uppdatera dessa
             st.executeUpdate("UPDATE login" + 
             		" SET contact_Id = \"" + Long.toString(login.getContactId()) +
-            		"\", Password = AES_ENCRYPT(\"" + hashPassword(login.getPassword()) + "\",\""+AES_PASSWORD+"\")" +
+            		"\", Password = AES_ENCRYPT(\"" + hashPassword(login.getPasswordHash()) + "\",\""+AES_PASSWORD+"\")" +
             		"WHERE Id = " + login.getId());
             
             con.commit();
@@ -107,9 +107,9 @@ public class DatabaseHandlerLogin extends DatabaseHandler {
             rs = pst.executeQuery();
             
             while (rs.next()) {
-            	LoginModel tempLogin = new LoginModel(rs.getInt(1), // Id
+            	AuthenticationModel tempLogin = new AuthenticationModel(rs.getInt(1), // Id
 						Long.valueOf(rs.getString(2)), // contact_Id
-						rs.getString(3)); // Password
+						rs.getString(4)); // Password
             	returnList.add((ModelInterface) tempLogin);
             }
 

@@ -12,7 +12,6 @@ import java.util.List;
 import model.Assignment;
 import model.AuthenticationModel;
 import model.Contact;
-import model.LoginModel;
 import model.MessageModel;
 import model.ModelInterface;
 
@@ -37,6 +36,7 @@ public class MultiServerThread extends Thread {
 	private Server server = null;
 	private List<ModelInterface> list;
 	private List<ModelInterface> hashList;
+	private final String replicateServerIP = "/192.168.1.1";
 
 	/**
 	 * Konstruktorn, tar emot en socket för porten vi lyssnar på och en Server
@@ -53,10 +53,9 @@ public class MultiServerThread extends Thread {
 		this.socket = socket;
 		this.server = server;
 		db = new Database();
-		if(socket.getInetAddress().toString().equals("/192.168.1.1")){
+		if (socket.getInetAddress().toString().equals(replicateServerIP)) {
 			db.setReplicationStatus(false);
-		}
-		else {
+		} else {
 			db.setReplicationStatus(true);
 		}
 	}
@@ -206,38 +205,54 @@ public class MultiServerThread extends Thread {
 
 	private boolean handleLogin(String login) {
 		try {
-			AuthenticationModel loginFromJson = (new Gson().fromJson(login,
-					AuthenticationModel.class));
 			list = db.getAllFromDB(new Contact());
-			hashList = db.getAllFromDB(new LoginModel());
-			for (ModelInterface m : list) {
-				Contact cont = (Contact) m;
-				if (loginFromJson.getUserName().equals(cont.getContactName())) {
-					for (ModelInterface mi : hashList) {
-						LoginModel logMod = (LoginModel) mi;
-						if (cont.getId() == logMod.getContactId() && loginFromJson.getPasswordHash().equals(
-								logMod.getPassword())) {
-							cont.setInetAddress(socket.getInetAddress()
-									.toString());
-							db.updateModel(cont);
-							loginFromJson.setIsAccessGranted(true);
-							String response = new Gson().toJson(loginFromJson);
-							server.send(response, cont.getContactName());
-							System.out.println("<"+socket.getInetAddress().toString()+"> " + cont.getContactName() +" connected.");
-							server.sendUnsentItems(cont);
-							return true;
+			if (socket.getInetAddress().toString().equals(replicateServerIP)) {
+				AuthenticationModel authModel = new Gson().fromJson(login, AuthenticationModel.class);
+				for(ModelInterface m : list){
+					Contact cont = (Contact) m;
+					if(authModel.getUserName().equals(cont.getContactName())){
+						db.addToDB(new AuthenticationModel(cont.getId(), authModel.getPasswordHash()));
+					}
+				}
+			} else {
+				AuthenticationModel loginFromJson = (new Gson().fromJson(login,
+						AuthenticationModel.class));
+				hashList = db.getAllFromDB(new AuthenticationModel());
+				for (ModelInterface m : list) {
+					Contact cont = (Contact) m;
+					if (loginFromJson.getUserName().equals(
+							cont.getContactName())) {
+						for (ModelInterface mi : hashList) {
+							AuthenticationModel logMod = (AuthenticationModel) mi;
+							if (cont.getId() == logMod.getContactId()
+									&& loginFromJson.getPasswordHash().equals(
+											logMod.getPasswordHash())) {
+								cont.setInetAddress(socket.getInetAddress()
+										.toString());
+								db.updateModel(cont);
+								loginFromJson.setIsAccessGranted(true);
+								String response = new Gson()
+										.toJson(loginFromJson);
+								server.send(response, cont.getContactName());
+								System.out.println("<"
+										+ socket.getInetAddress().toString()
+										+ "> " + cont.getContactName()
+										+ " connected.");
+								server.sendUnsentItems(cont);
+								return true;
+							}
 						}
 					}
 				}
 			}
-
 		} catch (Exception e) {
 			System.out.println(e);
 		}
 		try {
 			PrintWriter pr = new PrintWriter(socket.getOutputStream(), true);
 			pr.println(login);
-			System.out.println("<"+socket.getInetAddress().toString()+ "> failed to login.");
+			System.out.println("<" + socket.getInetAddress().toString()
+					+ "> failed to login.");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
