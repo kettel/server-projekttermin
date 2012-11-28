@@ -253,7 +253,6 @@ public class MultiServerThread extends Thread {
 			} else {
 				for (ModelInterface m : list) {
 					Contact cont = (Contact) m;
-					System.out.println(loginFromJson.getUserName() + "    " + cont.getContactName());
 					if (loginFromJson.getUserName().equals(cont.getContactName())) {
 						db.addToDB(new AuthenticationModel(cont.getId(),
 								loginFromJson.getPasswordHash()));
