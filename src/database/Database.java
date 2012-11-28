@@ -111,7 +111,7 @@ public class Database {
 		} else if (dbRep.equalsIgnoreCase("queueItem")) {
 			DatabaseHandlerQueue dhq = new DatabaseHandlerQueue();
 			returnList = dhq.getAllModels(m);
-		} else if (dbRep.equalsIgnoreCase("login")) {
+		} else if (dbRep.equalsIgnoreCase("authentication")) {
 			DatabaseHandlerLogin dhl = new DatabaseHandlerLogin();
 			returnList = dhl.getAllModels(m);
 		}
@@ -144,7 +144,7 @@ public class Database {
 		} else if (dbRep.equalsIgnoreCase("queueItem")) {
 			DatabaseHandlerQueue dhq = new DatabaseHandlerQueue();
 			dhq.removeModel("queue", Long.toString(m.getId()));
-		} else if (dbRep.equalsIgnoreCase("login")) {
+		} else if (dbRep.equalsIgnoreCase("authentication")) {
 			DatabaseHandlerLogin dhl = new DatabaseHandlerLogin();
 			dhl.removeModel(m.getDatabaseRepresentation(),
 					Long.toString(m.getId()));
