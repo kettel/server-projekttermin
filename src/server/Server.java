@@ -89,7 +89,6 @@ public class Server {
 				OutputStream out = clientSocket.getOutputStream();
 				new MultiServerThread(clientSocket, this).start();
 				hashMap.put(clientSocket.getInetAddress().toString(), out);
-				System.out.println("keySet: " + hashMap.keySet());
 			}
 			// Stänger socketen, anslutningar är inte längre tillåtna
 			serverSocket.close();
@@ -115,7 +114,7 @@ public class Server {
 				if (hashMap.keySet().contains(cont.getInetAddress())) {
 					PrintWriter pr = new PrintWriter(hashMap.get(cont
 							.getInetAddress()), true);
-					pr.println(stringToBeSent);
+					pr.println(stringToBeSent+"\n");
 					System.out.println("Skickar: " + stringToBeSent);
 				} else {
 					if (!stringToBeSent
