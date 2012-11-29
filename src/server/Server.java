@@ -193,6 +193,7 @@ public class Server {
 	 */
 	public void sendUnsentItems(Contact receiver) {
 		if (receiver != null) {
+			System.out.println("sendUnsentItems: inte null");
 			try {
 				list = db.getAllFromDB(new QueueItem(receiver.getId()));
 				if (!list.isEmpty()) {
@@ -208,6 +209,8 @@ public class Server {
 			} catch (Exception e) {
 				System.err.println(e);
 			}
+		}else{
+			System.out.println("sendUnsentItems: här var det null");
 		}
 	}
 }
