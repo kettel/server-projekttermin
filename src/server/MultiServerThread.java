@@ -124,6 +124,8 @@ public class MultiServerThread extends Thread {
 			}
 		} else if (input.equals("pull")) {
 			server.sendUnsentItems(thisContact);
+		} else if (input.equals("getAllContacts")) {
+			handleContactRequest();
 		} else {
 			System.out.println("<" + socket.getInetAddress()
 					+ "> Did not recognise inputtype.	" + inputLine);
@@ -273,5 +275,14 @@ public class MultiServerThread extends Thread {
 		}
 
 		return false;
+	}
+	
+	private void handleContactRequest(){
+		list = db.getAllFromDB(new Contact());
+		for (ModelInterface m : list) {
+			Contact cont = (Contact) m;
+			String contact = new Gson().toJson(cont);
+			server.send(contact, thisContact.getContactName());
+		}
 	}
 }
