@@ -237,8 +237,7 @@ public class MultiServerThread extends Thread {
 								String response = new Gson()
 										.toJson(loginFromJson);
 								server.send(response, cont.getContactName());
-								thisContact.setContactName(cont.getContactName());
-								thisContact.setInetAddress(cont.getInetAddress());
+								thisContact = new Contact(cont.getContactName(), cont.getInetAddress());
 								System.out.println("<"
 										+ socket.getInetAddress().toString()
 										+ "> " + cont.getContactName()
