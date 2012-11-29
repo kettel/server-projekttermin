@@ -121,6 +121,7 @@ public class MultiServerThread extends Thread {
 				connected = false;
 			}
 		} else if (input.equals("pull")) {
+			System.out.println(thisContact.getContactName());
 			server.sendUnsentItems(thisContact);
 		} else if (input.equals("Heart")) {
 		} else {
