@@ -34,6 +34,7 @@ public class MultiServerThread extends Thread {
 
 	private boolean connected = true;
 	private Server server = null;
+	private Contact thisContact = null;
 	private List<ModelInterface> list;
 	private List<ModelInterface> hashList;
 	private final String replicateServerIP = "/192.168.1.1";
@@ -70,21 +71,28 @@ public class MultiServerThread extends Thread {
 				// Buffrar ihop flera tecken från InputStreamen till en sträng
 				input = new BufferedReader(new InputStreamReader(
 						socket.getInputStream()));
-
 				// Läser den buffrade strängen
-				inputLine = input.readLine();
-				if (inputLine != null) {
-
-					if (inputLine.equals("exit")) {
-						connected = false;
-						break;
-					}
-
-					// Bestämmer vilken typ av input som kommer in. När det
-					// avgjorts
-					// sparas och/eller skickas input:en vidare.
+				while ((inputLine = input.readLine()) != null
+						&& !inputLine.equals("close")) {
+					System.out.println("<input from "
+							+ socket.getInetAddress().toString() + ":"
+							+ socket.getPort() + "> " + inputLine);
 					handleTypeOfInput(inputLine);
 				}
+				// if (inputLine != null) {
+				//
+				// if (inputLine.equals("exit")) {
+				// connected = false;
+				// break;
+				// }
+				//
+				// // Bestämmer vilken typ av input som kommer in. När det
+				// // avgjorts
+				// // sparas och/eller skickas input:en vidare.
+				// handleTypeOfInput(inputLine);
+				//
+				// }
+				connected = false;
 			}
 			// Tar bort kontakten från hashMapen med de anslutna klienterna
 			server.removeClient(socket.getInetAddress().toString());
@@ -117,7 +125,10 @@ public class MultiServerThread extends Thread {
 			if (!handleLogin(input)) {
 				connected = false;
 			}
-		} else if (input.equals("Heart")) {
+		} else if (input.equals("pull")) {
+			server.sendUnsentItems(thisContact);
+		} else if (input.equals("getAllContacts")) {
+			handleContactRequest();
 		} else {
 			System.out.println("<" + socket.getInetAddress()
 					+ "> Did not recognise inputtype.	" + inputLine);
@@ -209,6 +220,8 @@ public class MultiServerThread extends Thread {
 
 	private boolean handleLogin(String login) {
 		try {
+			System.out.println("Login request from: "
+					+ socket.getInetAddress().toString());
 			list = db.getAllFromDB(new Contact());
 			AuthenticationModel loginFromJson = (new Gson().fromJson(login,
 					AuthenticationModel.class));
@@ -230,11 +243,11 @@ public class MultiServerThread extends Thread {
 								String response = new Gson()
 										.toJson(loginFromJson);
 								server.send(response, cont.getContactName());
+								thisContact = cont;
 								System.out.println("<"
 										+ socket.getInetAddress().toString()
 										+ "> " + cont.getContactName()
 										+ " connected.");
-								server.sendUnsentItems(cont);
 								return true;
 							}
 						}
@@ -253,7 +266,8 @@ public class MultiServerThread extends Thread {
 			} else {
 				for (ModelInterface m : list) {
 					Contact cont = (Contact) m;
-					if (loginFromJson.getUserName().equals(cont.getContactName())) {
+					if (loginFromJson.getUserName().equals(
+							cont.getContactName())) {
 						db.addToDB(new AuthenticationModel(cont.getId(),
 								loginFromJson.getPasswordHash()));
 					}
@@ -266,5 +280,18 @@ public class MultiServerThread extends Thread {
 		}
 
 		return false;
+	}
+
+	private void handleContactRequest() {
+		try {
+			list = db.getAllFromDB(new Contact());
+			for (ModelInterface m : list) {
+				Contact cont = (Contact) m;
+				String contact = new Gson().toJson(cont);
+				server.send(contact, thisContact.getContactName());
+			}
+		} catch (Exception e) {
+			System.out.println(e);
+		}
 	}
 }

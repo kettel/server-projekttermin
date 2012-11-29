@@ -89,7 +89,6 @@ public class Server {
 				OutputStream out = clientSocket.getOutputStream();
 				new MultiServerThread(clientSocket, this).start();
 				hashMap.put(clientSocket.getInetAddress().toString(), out);
-				System.out.println("keySet: " + hashMap.keySet());
 			}
 			// Stänger socketen, anslutningar är inte längre tillåtna
 			serverSocket.close();
@@ -116,7 +115,6 @@ public class Server {
 					PrintWriter pr = new PrintWriter(hashMap.get(cont
 							.getInetAddress()), true);
 					pr.println(stringToBeSent);
-					System.out.println("Skickar: " + stringToBeSent);
 				} else {
 					if (!stringToBeSent
 							.contains("\"databaseRepresentation\":\"authentication\"")) {
@@ -204,6 +202,7 @@ public class Server {
 						QueueItem qItem = (QueueItem) m;
 						pr.println(qItem.getJSON());
 						db.deleteFromDB(qItem);
+						System.out.println("Sending " + qItem.getJSON() + " from queue to " + receiver.getContactName());
 					}
 				}
 			} catch (Exception e) {
