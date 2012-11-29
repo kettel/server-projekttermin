@@ -85,8 +85,9 @@ public class MultiServerThread extends Thread {
 					// avgjorts
 					// sparas och/eller skickas input:en vidare.
 					handleTypeOfInput(inputLine);
-					connected = false;
-				}				
+					
+				}
+				connected = false;
 			}
 			// Tar bort kontakten från hashMapen med de anslutna klienterna
 			server.removeClient(socket.getInetAddress().toString());
