@@ -72,23 +72,23 @@ public class MultiServerThread extends Thread {
 				input = new BufferedReader(new InputStreamReader(
 						socket.getInputStream()));
 				// Läser den buffrade strängen
-				while ((inputLine = input.readLine()) != null){
+				while ((inputLine = input.readLine()) != null && !inputLine.equals("close")){
 					handleTypeOfInput(inputLine);
+					System.out.println("<input from " + socket.getInetAddress().toString()+":"+socket.getPort() + "> " + inputLine);
 				}
-				System.out.println("<input from " + socket.getInetAddress().toString()+":"+socket.getPort() + "> " + inputLine);
-				if (inputLine != null) {
-
-					if (inputLine.equals("exit")) {
-						connected = false;
-						break;
-					}
-
-					// Bestämmer vilken typ av input som kommer in. När det
-					// avgjorts
-					// sparas och/eller skickas input:en vidare.
-					handleTypeOfInput(inputLine);
-					
-				}
+//				if (inputLine != null) {
+//
+//					if (inputLine.equals("exit")) {
+//						connected = false;
+//						break;
+//					}
+//
+//					// Bestämmer vilken typ av input som kommer in. När det
+//					// avgjorts
+//					// sparas och/eller skickas input:en vidare.
+//					handleTypeOfInput(inputLine);
+//					
+//				}
 				connected = false;
 			}
 			// Tar bort kontakten från hashMapen med de anslutna klienterna
