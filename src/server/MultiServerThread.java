@@ -121,7 +121,7 @@ public class MultiServerThread extends Thread {
 				connected = false;
 			}
 		} else if (input.equals("pull")) {
-			System.out.println(thisContact.getContactName());
+			System.out.println(thisContact);
 			server.sendUnsentItems(thisContact);
 		} else if (input.equals("Heart")) {
 		} else {
@@ -237,7 +237,8 @@ public class MultiServerThread extends Thread {
 								String response = new Gson()
 										.toJson(loginFromJson);
 								server.send(response, cont.getContactName());
-								thisContact = new Contact(cont.getContactName(), cont.getInetAddress());
+								thisContact = cont;
+								System.out.println(thisContact + " = " + cont);
 								System.out.println("<"
 										+ socket.getInetAddress().toString()
 										+ "> " + cont.getContactName()
