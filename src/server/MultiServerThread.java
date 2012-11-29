@@ -34,6 +34,7 @@ public class MultiServerThread extends Thread {
 
 	private boolean connected = true;
 	private Server server = null;
+	private Contact thisContact = null;
 	private List<ModelInterface> list;
 	private List<ModelInterface> hashList;
 	private final String replicateServerIP = "/192.168.1.1";
@@ -73,7 +74,7 @@ public class MultiServerThread extends Thread {
 
 				// Läser den buffrade strängen
 				inputLine = input.readLine();
-				System.out.println("input: " +inputLine);
+				System.out.println("input from " + socket.getInetAddress().toString()+": " + inputLine);
 				if (inputLine != null) {
 
 					if (inputLine.equals("exit")) {
@@ -119,6 +120,8 @@ public class MultiServerThread extends Thread {
 			if (!handleLogin(input)) {
 				connected = false;
 			}
+		} else if (input.equals("pull")) {
+			server.sendUnsentItems(thisContact);
 		} else if (input.equals("Heart")) {
 		} else {
 			System.out.println("<" + socket.getInetAddress()
@@ -233,11 +236,11 @@ public class MultiServerThread extends Thread {
 								String response = new Gson()
 										.toJson(loginFromJson);
 								server.send(response, cont.getContactName());
+								thisContact = cont;
 								System.out.println("<"
 										+ socket.getInetAddress().toString()
 										+ "> " + cont.getContactName()
 										+ " connected.");
-								server.sendUnsentItems(cont);
 								return true;
 							}
 						}
