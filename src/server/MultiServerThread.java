@@ -210,7 +210,7 @@ public class MultiServerThread extends Thread {
 
 	private boolean handleLogin(String login) {
 		try {
-			System.out.println("Login request from: " socket.getInetAddress().toString());
+			System.out.println("Login request from: " +socket.getInetAddress().toString());
 			list = db.getAllFromDB(new Contact());
 			AuthenticationModel loginFromJson = (new Gson().fromJson(login,
 					AuthenticationModel.class));
