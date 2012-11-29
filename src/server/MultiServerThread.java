@@ -121,7 +121,6 @@ public class MultiServerThread extends Thread {
 				connected = false;
 			}
 		} else if (input.equals("pull")) {
-		} else if (input.equals("Heart")) {
 		} else {
 			System.out.println("<" + socket.getInetAddress()
 					+ "> Did not recognise inputtype.	" + inputLine);
