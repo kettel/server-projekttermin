@@ -73,8 +73,8 @@ public class MultiServerThread extends Thread {
 						socket.getInputStream()));
 				// Läser den buffrade strängen
 				while ((inputLine = input.readLine()) != null && !inputLine.equals("close")){
-					handleTypeOfInput(inputLine);
 					System.out.println("<input from " + socket.getInetAddress().toString()+":"+socket.getPort() + "> " + inputLine);
+					handleTypeOfInput(inputLine);
 				}
 //				if (inputLine != null) {
 //
