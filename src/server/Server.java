@@ -88,7 +88,6 @@ public class Server {
 				clientSocket = serverSocket.accept();
 				OutputStream out = clientSocket.getOutputStream();
 				new MultiServerThread(clientSocket, this).start();
-				System.out.println("outputStream: "+ out);
 				hashMap.put(clientSocket.getInetAddress().toString(), out);
 			}
 			// Stänger socketen, anslutningar är inte längre tillåtna
@@ -112,14 +111,10 @@ public class Server {
 			Contact cont = (Contact) m;
 			if (receiver.equals(cont.getContactName())) {
 				// Om mottagaren är ansluten så skickas strängen
-				System.out.println(hashMap.keySet());
 				if (hashMap.keySet().contains(cont.getInetAddress())) {
 					PrintWriter pr = new PrintWriter(hashMap.get(cont
 							.getInetAddress()), true);
-					System.out.println(hashMap.get(cont.getInetAddress()));
-					System.out.println("stringToBeSent: " + stringToBeSent);
-					pr.print(stringToBeSent+System.getProperty("line.separator"));
-					System.out.println("här skickas skit");
+					pr.println(stringToBeSent);
 				} else {
 					if (!stringToBeSent
 							.contains("\"databaseRepresentation\":\"authentication\"")) {
@@ -145,7 +140,7 @@ public class Server {
 			if (hashMap.keySet().contains(cont.getInetAddress())) {
 				PrintWriter pr = new PrintWriter(hashMap.get(cont
 						.getInetAddress()), true);
-				pr.print(stringToBeSent+"\n");
+				pr.println(stringToBeSent);
 			} else {
 				QueueItem qItem = new QueueItem(cont.getId(), stringToBeSent);
 				db.addToDB(qItem);
@@ -170,7 +165,7 @@ public class Server {
 				if (hashMap.keySet().contains(cont.getInetAddress())) {
 					PrintWriter pr = new PrintWriter(hashMap.get(cont
 							.getInetAddress()), true);
-					pr.print(stringToBeSent+"\n");
+					pr.println(stringToBeSent);
 				} else {
 					QueueItem qItem = new QueueItem(cont.getId(),
 							stringToBeSent);
@@ -205,7 +200,7 @@ public class Server {
 							.getInetAddress()), true);
 					for (ModelInterface m : list) {
 						QueueItem qItem = (QueueItem) m;
-						pr.print(qItem.getJSON()+"\n");
+						pr.println(qItem.getJSON());
 						db.deleteFromDB(qItem);
 					}
 				}
