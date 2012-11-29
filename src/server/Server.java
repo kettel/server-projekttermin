@@ -119,7 +119,6 @@ public class Server {
 					System.out.println(hashMap.get(cont.getInetAddress()));
 					System.out.println("stringToBeSent: " + stringToBeSent);
 					pr.print(stringToBeSent+"\r\n");
-					pr.println(stringToBeSent);
 					System.out.println("här skickas skit");
 				} else {
 					if (!stringToBeSent
