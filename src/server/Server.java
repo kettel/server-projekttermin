@@ -2,6 +2,7 @@ package server;
 
 import gcm.HomeServlet;
 import gcm.RegisterServlet;
+import gcm.SendAll;
 import gcm.UnregisterServlet;
 
 import java.awt.EventQueue;
@@ -40,8 +41,9 @@ public class Server {
 	// En boolean som avgör om servern lyssnar på anslutningar
 	private static boolean listening = true;
 	// En ConcurrentHashMap som länkar ett IP till en OutputStream
-	private static ConcurrentHashMap<String, OutputStream> hashMap;
-	private static Socket clientSocket = null;
+	private ConcurrentHashMap<String, OutputStream> hashMap;
+	private ConcurrentHashMap<String, String> gcmMap;
+	private Socket clientSocket = null;
 	private List<ModelInterface> list = null;
 	private Database db = null;
 
@@ -79,6 +81,7 @@ public class Server {
 		try {
 			db = new Database();
 			hashMap = new ConcurrentHashMap<String, OutputStream>();
+			gcmMap = new ConcurrentHashMap<String, String>();
 			serverSocket = new ServerSocket(port);
 			// Skapar en ny tråd som lyssnar på kommandon
 			new ServerTerminal(this).start();
@@ -116,11 +119,11 @@ public class Server {
 							.getInetAddress()), true);
 					pr.println(stringToBeSent);
 				} else {
-					if (!stringToBeSent
-							.contains("\"databaseRepresentation\":\"authentication\"")) {
+					if (!stringToBeSent.contains("\"databaseRepresentation\":\"authentication\"")) {
 						QueueItem qItem = new QueueItem(cont.getId(),
 								stringToBeSent);
 						db.addToDB(qItem);
+						new SendAll().singleSend(gcmMap.get(cont.getContactName()));
 					}
 				}
 			}
@@ -181,8 +184,23 @@ public class Server {
 	 * @param string
 	 *            IP:t på användaren
 	 */
-	public synchronized void removeClient(String usersIP) {
+	public void removeClient(String usersIP) {
 		hashMap.remove(usersIP);
+	}
+	
+	public void addGcmClient(String name, String gcmId){
+		if(!gcmMap.contains(name)){
+			gcmMap.put(name, gcmId);
+		}else{
+			removeClient(name);
+			gcmMap.put(name, gcmId);
+		}		
+	}
+	
+	public void removeGcmClient(String name){
+		if(gcmMap.contains(name)){
+			gcmMap.remove(name);
+		}
 	}
 	
 	/**

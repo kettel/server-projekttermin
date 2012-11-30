@@ -227,18 +227,17 @@ public class MultiServerThread extends Thread {
 							if (cont.getId() == logMod.getContactId()
 									&& loginFromJson.getPasswordHash().equals(
 											logMod.getPasswordHash())) {
-								cont.setInetAddress(socket.getInetAddress()
-										.toString());
+								cont.setInetAddress(socket.getInetAddress().toString());
 								db.updateModel(cont);
 								loginFromJson.setIsAccessGranted(true);
-								String response = new Gson()
-										.toJson(loginFromJson);
+								if(loginFromJson.getGcmId().length() > 1){
+									server.addGcmClient(cont.getContactName(), loginFromJson.getGcmId());
+								}
+								String response = new Gson().toJson(loginFromJson);
 								server.send(response, cont.getContactName());
 								thisContact = cont;
-								System.out.println("<"
-										+ socket.getInetAddress().toString()
-										+ "> " + cont.getContactName()
-										+ " connected.");
+								System.out.println("<"+ socket.getInetAddress().toString()
+										+ "> " + cont.getContactName()+ " connected.");
 								return true;
 							}
 						}
