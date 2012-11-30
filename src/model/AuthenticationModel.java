@@ -8,6 +8,7 @@ public class AuthenticationModel implements ModelInterface {
 	private Boolean isAccessGranted = false;
 	private long id = -1;
 	private String databaseRepresentation = "authentication";
+	private String gcmId;
 
 
 	public AuthenticationModel(String userName, String passwordHash){
@@ -66,6 +67,10 @@ public class AuthenticationModel implements ModelInterface {
 	
 	public void setIsAccessGranted(boolean b){
 		isAccessGranted = b;
+	}
+	
+	public String getGcmId(){
+		return gcmId;
 	}
 
 	/*

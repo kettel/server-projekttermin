@@ -22,7 +22,7 @@ public class SendAll {
 	public SendAll() {
 		super();
 		// TODO Auto-generated constructor stub
-		sender=new Sender("AIzaSyDm4alrdLjfaZTVqIyLB2YstGiR62_46hk");
+		sender = new Sender("AIzaSyDm4alrdLjfaZTVqIyLB2YstGiR62_46hk");
 	}
 
 	public void doPost() throws IOException {
@@ -35,35 +35,42 @@ public class SendAll {
 			// NOTE: check below is for demonstration purposes; a real
 			// application
 			// could always send a multicast, even for just one recipient
-			if (devices.size() == 1) {
-				// send a single message using plain post
-				String registrationId = devices.get(0);
-				Message message = new Message.Builder().build();
-				Result result = sender.send(message, registrationId, 5);
-				status = "Sent message to one device: " + result;
-			} else {
-				// send a multicast message using JSON
-				// must split in chunks of 1000 devices (GCM limit)
-				int total = devices.size();
-				List<String> partialDevices = new ArrayList<String>(total);
-				int counter = 0;
-				int tasks = 0;
-				for (String device : devices) {
-					counter++;
-					partialDevices.add(device);
-					int partialSize = partialDevices.size();
-					if (partialSize == MULTICAST_SIZE || counter == total) {
-						asyncSend(partialDevices);
-						partialDevices.clear();
-						tasks++;
-					}
+			// send a multicast message using JSON
+			// must split in chunks of 1000 devices (GCM limit)
+			int total = devices.size();
+			List<String> partialDevices = new ArrayList<String>(total);
+			int counter = 0;
+			int tasks = 0;
+			for (String device : devices) {
+				counter++;
+				partialDevices.add(device);
+				int partialSize = partialDevices.size();
+				if (partialSize == MULTICAST_SIZE || counter == total) {
+					asyncSend(partialDevices);
+					partialDevices.clear();
+					tasks++;
 				}
-				status = "Asynchronously sending " + tasks
-						+ " multicast messages to " + total + " devices";
 			}
+			status = "Asynchronously sending " + tasks
+					+ " multicast messages to " + total + " devices";
 		}
-		//req.setAttribute(HomeServlet.ATTRIBUTE_STATUS, status.toString());
-		//getServletContext().getRequestDispatcher("/home").forward(req, resp);
+
+		// req.setAttribute(HomeServlet.ATTRIBUTE_STATUS, status.toString());
+		// getServletContext().getRequestDispatcher("/home").forward(req, resp);
+	}
+
+	public void singleSend(String id) {
+		String status;
+		// send a single message using plain post
+		Message message = new Message.Builder().build();
+		Result result;
+		try {
+			result = sender.send(message, id, 5);
+			status = "Sent message to one device: " + result;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	private void asyncSend(List<String> partialDevices) {
