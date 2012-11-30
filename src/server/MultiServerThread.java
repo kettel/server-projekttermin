@@ -149,6 +149,7 @@ public class MultiServerThread extends Thread {
 					+ msg.getReciever() + ": " + msg.getMessageContent());
 
 		} catch (Exception e) {
+			System.out.println("catch: handleMessage");
 			System.out.println(e);
 		}
 	}
