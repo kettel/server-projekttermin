@@ -6,10 +6,6 @@ import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 public class JettyServer {
 	private Server server;
 
-	public JettyServer() {
-		this(Integer.parseInt("16783"));
-	}
-
 	public JettyServer(Integer runningPort) {
 		server = new Server(runningPort);
 	}

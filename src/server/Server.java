@@ -34,7 +34,7 @@ import database.Database;
 public class Server {
 
 	// Porten som används för anslutningar till servern
-	private static final int port = 18234;
+	private static int port = 0;
 	// Tillåter klienter att ansluta till servern
 	private static ServerSocket serverSocket = null;
 	// En boolean som avgör om servern lyssnar på anslutningar
@@ -44,9 +44,17 @@ public class Server {
 	private static Socket clientSocket = null;
 	private List<ModelInterface> list = null;
 	private Database db = null;
-
+	private static int jettyPort = 0;
 	public static void main(String[] args) {
-
+		int i = 0;
+		for (String s: args){
+			if(i==0){
+				port = Integer.parseInt(s);
+			} else {
+				jettyPort = Integer.parseInt(s);
+			}
+		i++;
+		}
 		ServletContextHandler context = new ServletContextHandler(
 				ServletContextHandler.SESSIONS);
 		context.setContextPath("/");
@@ -57,7 +65,7 @@ public class Server {
 				"/unregister");
 		// context.addServlet(new ServletHolder(new SendAllMessagesServlet()),
 		// "/sendAll");
-		final JettyServer jettyServer = new JettyServer();
+		final JettyServer jettyServer = new JettyServer(jettyPort);
 		jettyServer.getServer().setHandler(context);
 		Runnable runner = new Runnable() {
 			@Override
