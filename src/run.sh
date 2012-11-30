@@ -1,5 +1,8 @@
 #!/bin/bash
-if [ "$1" -eq 1 ]
+ip=$(ifconfig eth0 | awk '/inet addr/ {split ($2,A,":"); print A[2]}')
+server="192.168.1.128"
+
+if [ $ip=$server ]
 	then 
 		port=17234
 		jetty=16783
