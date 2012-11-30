@@ -284,6 +284,7 @@ public class MultiServerThread extends Thread {
 				server.send(contact, thisContact.getContactName());
 			}
 		} catch (Exception e) {
+			System.out.println("catch: handleContactRequest");
 			System.out.println(e);
 		}
 	}
