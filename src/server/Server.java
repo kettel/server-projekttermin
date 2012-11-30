@@ -65,12 +65,10 @@ public class Server {
 				try {
 					jettyServer.start();
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
 		};
-
 		EventQueue.invokeLater(runner);
 		new Server();
 	}
