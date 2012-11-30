@@ -37,6 +37,7 @@ public class CreateContactCommand implements CommandInterface {
 			newContact.setContactName(in.nextLine());
 			// System.out.print("Kontaktens IP: ");
 			 newContact.setInetAddress("");
+			 newContact.setGcmId("");
 			String pw = readPw();
 			System.out
 					.print("Är du nöjd med din nya insättning av kontakt? (y/n): ");
@@ -48,7 +49,9 @@ public class CreateContactCommand implements CommandInterface {
 			} else if (yesOrNo.equals("y")) {
 				if(!checkIfContactAlreadyExist(newContact.getContactName())){
 				String contact = new Gson().toJson(newContact);
+				System.out.println("sendTOMOTHERFUCKINGALL(contact)");
 				server.sendToAll(contact);
+				System.out.println("addToLogin");
 				addToLogin(newContact, pw);
 				System.out.println("Kontakt sparad.");
 				}else{
