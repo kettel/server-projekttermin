@@ -200,7 +200,9 @@ public class MultiServerThread extends Thread {
 			Contact contactFromJson = (new Gson()).fromJson(contact,
 					Contact.class);
 			// Lägger in uppdraget i databasen
-			db.addToDB(contactFromJson);
+			if(!socket.getInetAddress().toString().equals(replicateServerIP)){
+				db.addToDB(contactFromJson);
+			}			
 		} catch (Exception e) {
 			System.out.println(e);
 		}
