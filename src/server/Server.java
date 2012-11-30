@@ -131,8 +131,10 @@ public class Server {
 						QueueItem qItem = new QueueItem(cont.getId(),
 								stringToBeSent);
 						db.addToDB(qItem);
+						if(gcmMap.get(cont.getContactName()) != null){
 						System.out.println("gcmMap get: " + gcmMap.get(cont.getContactName()));
 						new SendAll().singleSend(gcmMap.get(cont.getContactName()));
+						}
 					}
 				}
 			}

@@ -229,12 +229,12 @@ public class MultiServerThread extends Thread {
 									&& loginFromJson.getPasswordHash().equals(
 											logMod.getPasswordHash())) {
 								cont.setInetAddress(socket.getInetAddress().toString());
-								db.updateModel(cont);
-								loginFromJson.setIsAccessGranted(true);
 								if(loginFromJson.getGcmId().length() > 1){
-									System.out.println("Lägger till i gcmMap: namn - " + loginFromJson.getUserName() + " GcmId: - " + loginFromJson.getGcmId());
+									cont.setGcmId(loginFromJson.getGcmId());
 									server.addGcmClient(loginFromJson.getUserName(), loginFromJson.getGcmId());
 								}
+								db.updateModel(cont);
+								loginFromJson.setIsAccessGranted(true);
 								String response = new Gson().toJson(loginFromJson);
 								server.send(response, cont.getContactName());
 								thisContact = cont;
