@@ -31,7 +31,6 @@ public class MultiServerThread extends Thread {
 	private BufferedReader input = null;
 	private String inputLine;
 	private Database db = null;
-
 	private boolean connected = true;
 	private Server server = null;
 	private Contact thisContact = null;
@@ -79,19 +78,6 @@ public class MultiServerThread extends Thread {
 							+ socket.getPort() + "> " + inputLine);
 					handleTypeOfInput(inputLine);
 				}
-				// if (inputLine != null) {
-				//
-				// if (inputLine.equals("exit")) {
-				// connected = false;
-				// break;
-				// }
-				//
-				// // Bestämmer vilken typ av input som kommer in. När det
-				// // avgjorts
-				// // sparas och/eller skickas input:en vidare.
-				// handleTypeOfInput(inputLine);
-				//
-				// }
 				connected = false;
 			}
 			// Tar bort kontakten från hashMapen med de anslutna klienterna
@@ -127,6 +113,7 @@ public class MultiServerThread extends Thread {
 			}
 		} else if (input.equals("pull")) {
 			server.sendUnsentItems(thisContact);
+			// Vid förfrågan skickas alla kontakter från databasen
 		} else if (input.equals("getAllContacts")) {
 			handleContactRequest();
 		} else {
@@ -218,10 +205,14 @@ public class MultiServerThread extends Thread {
 		}
 	}
 
+	/**
+	 * Hanterar json-strängen om det är en login-request och skickar ett svar om det är ett korrekt login
+	 * @param login		Json-strängen av inloggningsförfrågan
+	 * @return	true om kontakten stämmer överens med befintlig kontakt ur databasen, annars false 
+	 */
 	private boolean handleLogin(String login) {
 		try {
-			System.out.println("Login request from: "
-					+ socket.getInetAddress().toString());
+			System.out.println("Login request from: "+socket.getInetAddress().toString());
 			list = db.getAllFromDB(new Contact());
 			AuthenticationModel loginFromJson = (new Gson().fromJson(login,
 					AuthenticationModel.class));
@@ -282,6 +273,9 @@ public class MultiServerThread extends Thread {
 		return false;
 	}
 
+	/**
+	 * Skickar alla kontakter från databasen
+	 */
 	private void handleContactRequest() {
 		try {
 			list = db.getAllFromDB(new Contact());
