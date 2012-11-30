@@ -224,6 +224,7 @@ public class Server {
 					}
 				}
 			} catch (Exception e) {
+				System.out.println("catch: sendUnsentItems");
 				System.err.println(e);
 			}
 		}
