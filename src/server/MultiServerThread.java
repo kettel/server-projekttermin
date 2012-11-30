@@ -58,6 +58,7 @@ public class MultiServerThread extends Thread {
 	SSLSocket client;
 	private final String replicateServerIP = "/192.168.1.1";
 
+
 	/**
 	 * Konstruktorn, tar emot en socket för porten vi lyssnar på och en Server
 	 * som kan skicka vidare data
@@ -70,13 +71,15 @@ public class MultiServerThread extends Thread {
 	 */
 	public MultiServerThread(Socket socket, Server server) {
 		super("MultiServerThread");
+		
 		try{
 			KeyStore ts = KeyStore.getInstance("JKS");
 			ts.load(new FileInputStream("./cert/servertruststore.jks"),truststorepass);
+
 			TrustManagerFactory tmf = TrustManagerFactory
                 .getInstance(TrustManagerFactory.getDefaultAlgorithm());
 			tmf.init(ts);
-			//Keystoren gör samma sak som truststoren bara det är det serven ger ut till clienten
+		
 			KeyStore ks = KeyStore.getInstance("JKS");
 			ks.load(new FileInputStream("./cert/server.jks"),keystorepass);
 			KeyManagerFactory kmf =
@@ -91,8 +94,6 @@ public class MultiServerThread extends Thread {
 
 			Socket = (SSLServerSocket)
 					ssf.createServerSocket(Server.port);
-		
-			
 
 		} catch (IOException e) {
 			e.printStackTrace();
