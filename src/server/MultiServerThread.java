@@ -232,7 +232,8 @@ public class MultiServerThread extends Thread {
 								db.updateModel(cont);
 								loginFromJson.setIsAccessGranted(true);
 								if(loginFromJson.getGcmId().length() > 1){
-									server.addGcmClient(cont.getContactName(), loginFromJson.getGcmId());
+									System.out.println("Lägger till i gcmMap: namn - " + loginFromJson.getUserName() + " GcmId: - " + loginFromJson.getGcmId());
+									server.addGcmClient(loginFromJson.getUserName(), loginFromJson.getGcmId());
 								}
 								String response = new Gson().toJson(loginFromJson);
 								server.send(response, cont.getContactName());
