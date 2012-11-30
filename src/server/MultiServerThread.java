@@ -1,13 +1,27 @@
 package server;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.security.KeyManagementException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
+
+import javax.net.ServerSocketFactory;
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLServerSocket;
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.TrustManagerFactory;
 
 import model.Assignment;
 import model.AuthenticationModel;
@@ -37,6 +51,11 @@ public class MultiServerThread extends Thread {
 	private Contact thisContact = null;
 	private List<ModelInterface> list;
 	private List<ModelInterface> hashList;
+	char keystorepass[] = "password".toCharArray();
+	char keypassword[] = "password".toCharArray();
+	char truststorepass[] = "password".toCharArray();
+	SSLServerSocket Socket = null;
+	SSLSocket client;
 	private final String replicateServerIP = "/192.168.1.1";
 
 	/**
@@ -51,8 +70,52 @@ public class MultiServerThread extends Thread {
 	 */
 	public MultiServerThread(Socket socket, Server server) {
 		super("MultiServerThread");
-		this.socket = socket;
-		this.server = server;
+		try{
+			KeyStore ts = KeyStore.getInstance("JKS");
+			ts.load(new FileInputStream("./cert/servertruststore.jks"),truststorepass);
+			TrustManagerFactory tmf = TrustManagerFactory
+                .getInstance(TrustManagerFactory.getDefaultAlgorithm());
+			tmf.init(ts);
+			//Keystoren gör samma sak som truststoren bara det är det serven ger ut till clienten
+			KeyStore ks = KeyStore.getInstance("JKS");
+			ks.load(new FileInputStream("./cert/server.jks"),keystorepass);
+			KeyManagerFactory kmf =
+					KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
+			kmf.init(ks, keypassword);
+			//ställer in tls med keystoren och truststoren
+			SSLContext sslcontext =
+					SSLContext.getInstance("TLS");
+			sslcontext.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);
+			//gör en server socket med tls
+			ServerSocketFactory ssf = sslcontext.getServerSocketFactory();
+
+			Socket = (SSLServerSocket)
+					ssf.createServerSocket(Server.port);
+		
+			
+
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.out.println("Could not listen on port "+socket);
+		} catch (KeyStoreException e) {
+			System.out.println("Could not get key store");
+		} catch (NoSuchAlgorithmException e) {
+			System.out.println("There is no algorithm in ks.load");
+			e.printStackTrace();
+		} catch (CertificateException e) {
+			e.printStackTrace();
+		} catch (UnrecoverableKeyException e) {
+			System.out.println("kmf.init() no key");
+		} catch (KeyManagementException e) {
+			System.out.println("sslcontext.init keymanagementexception");
+		}
+		try {
+			//klart att skicka över om deta klara sig
+			client = (SSLSocket) Socket.accept();
+		}catch (IOException e) {
+			//bör kunna kasta detta sen om det är ivägen
+			System.out.println("Accept failed on "+Server.port);
+		}
 		db = new Database();
 		if (socket.getInetAddress().toString().equals(replicateServerIP)) {
 			db.setReplicationStatus(false);
@@ -67,7 +130,7 @@ public class MultiServerThread extends Thread {
 	public void run() {
 
 		try {
-			while (connected) {
+			
 				// Buffrar ihop flera tecken från InputStreamen till en sträng
 				input = new BufferedReader(new InputStreamReader(
 						socket.getInputStream()));
@@ -92,8 +155,8 @@ public class MultiServerThread extends Thread {
 				// handleTypeOfInput(inputLine);
 				//
 				// }
-				connected = false;
-			}
+
+
 			// Tar bort kontakten från hashMapen med de anslutna klienterna
 			server.removeClient(socket.getInetAddress().toString());
 			// Stänger buffern
