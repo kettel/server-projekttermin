@@ -203,11 +203,10 @@ public class Server {
 
 	public void addGcmClient(String name, String gcmId) {
 		if (gcmId.length() > 0) {
-			System.out.println("NU SKA VI SE: " + gcmMap.get(name) + " = " + gcmId);
 			if (!gcmMap.containsKey(name)) {
 				System.out.println("Adding " + name + " to gcmMap");
 				gcmMap.put(name, gcmId);
-			} else if (gcmMap.get(name) != gcmId) { // !gcmMap.containsValue(gcmId)
+			} else if (!gcmMap.get(name).equals(gcmId)) { // !gcmMap.containsValue(gcmId)
 				System.out.println("remove!!!");
 				removeGcmClient(name);
 				System.out.println("Adding " + name + " to gcmMap");
