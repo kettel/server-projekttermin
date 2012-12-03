@@ -202,16 +202,17 @@ public class Server {
 	}
 
 	public void addGcmClient(String name, String gcmId) {
-		if (!gcmMap.containsKey(name)) {
-			System.out.println("Adding " + name + " to gcmMap");
-			gcmMap.put(name, gcmId);
-		} else if(gcmMap.get(name) != gcmId) { //!gcmMap.containsValue(gcmId)
-			System.out.println("remove!!!");
-			removeGcmClient(name);
-			System.out.println("Adding " + name + " to gcmMap");
-			gcmMap.put(name, gcmId);
+		if (gcmId.length() > 0) {
+			if (!gcmMap.containsKey(name)) {
+				System.out.println("Adding " + name + " to gcmMap");
+				gcmMap.put(name, gcmId);
+			} else if (gcmMap.get(name) != gcmId) { // !gcmMap.containsValue(gcmId)
+				System.out.println("remove!!!");
+				removeGcmClient(name);
+				System.out.println("Adding " + name + " to gcmMap");
+				gcmMap.put(name, gcmId);
+			}
 		}
-		System.out.println(gcmMap.keySet());
 	}
 
 	public void removeGcmClient(String name) {
@@ -221,8 +222,10 @@ public class Server {
 				Contact cont = (Contact) m;
 				if (name.equals(cont.getContactName())) {
 					if (gcmMap.get(cont.getContactName()) != null) {
-						System.out.println("Sending logout to " + gcmMap.get(cont.getContactName()));
-						new SendAll().sendLogout(gcmMap.get(cont.getContactName()));
+						System.out.println("Sending logout to "
+								+ gcmMap.get(cont.getContactName()));
+						new SendAll().sendLogout(gcmMap.get(cont
+								.getContactName()));
 					}
 				}
 			}
@@ -245,7 +248,8 @@ public class Server {
 				if (!list.isEmpty()) {
 					PrintWriter pr = new PrintWriter(hashMap.get(receiver
 							.getInetAddress()), true);
-					System.out.println("outputstream: " + hashMap.get(receiver.getInetAddress()));
+					System.out.println("outputstream: "
+							+ hashMap.get(receiver.getInetAddress()));
 					for (ModelInterface m : list) {
 						QueueItem qItem = (QueueItem) m;
 						pr.println(qItem.getJSON());
