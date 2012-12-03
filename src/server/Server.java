@@ -134,6 +134,7 @@ public class Server {
 						if(gcmMap.get(cont.getContactName()) != null){
 						System.out.println("gcmMap get: " + gcmMap.get(cont.getContactName()));
 						new SendAll().singleSend(gcmMap.get(cont.getContactName()));
+						System.out.println("Skickar till: " + gcmMap.get(cont.getContactName() + " " + cont.getContactName()));
 						}
 					}
 				}
