@@ -205,7 +205,6 @@ public class Server {
 	}
 
 	public void addGcmClient(String name, String gcmId) {
-		System.out.println(gcmMap.keySet() + " contains " + name +"?" + "  " + gcmMap.values());
 		if (!gcmMap.containsKey(name)) {
 			System.out.println("Adding " + name + " to gcmMap");
 			gcmMap.put(name, gcmId);
@@ -219,15 +218,11 @@ public class Server {
 	}
 
 	public void removeGcmClient(String name) {
-		System.out.println("@Server(219)");
 		if (gcmMap.containsKey(name)) {
-			System.out.println("@Server(221)");
 			list = db.getAllFromDB(new Contact());
-			System.out.println("@Server(223)");
 			for (ModelInterface m : list) {
 				Contact cont = (Contact) m;
 				if (name.equals(cont.getContactName())) {
-					System.out.println("@Server(227)");
 					if (gcmMap.get(cont.getContactName()) != null) {
 						System.out.println("Sending logout to " + gcmMap.get(cont.getContactName()));
 						new SendAll().sendLogout(gcmMap.get(cont.getContactName()));
