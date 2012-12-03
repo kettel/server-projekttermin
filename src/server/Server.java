@@ -204,10 +204,12 @@ public class Server {
 	}
 
 	public void addGcmClient(String name, String gcmId) {
+		System.out.println(gcmMap.keySet() + " contains " + name +"?");
 		if (!gcmMap.contains(name)) {
 			System.out.println("Adding " + name + " to gcmMap");
 			gcmMap.put(name, gcmId);
 		} else {
+			System.out.println("remove!!!");
 			removeClient(name);
 			System.out.println("Adding " + name + " to gcmMap");
 			gcmMap.put(name, gcmId);
