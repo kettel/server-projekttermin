@@ -206,36 +206,25 @@ public class Server {
 	public void addGcmClient(String name, String gcmId) {
 		System.out.println(gcmMap.keySet() + " contains " + name +"?");
 		if (!gcmMap.containsKey(name)) {
-			System.out.println("Adding " + name + " to gcmMap");
 			gcmMap.put(name, gcmId);
 		} else if(!gcmMap.containsValue(gcmId)) {
-			System.out.println("remove!!!");
 			removeGcmClient(name);
-			System.out.println("Adding " + name + " to gcmMap");
 			gcmMap.put(name, gcmId);
 		}
-		System.out.println(gcmMap.keySet());
 	}
 
 	public void removeGcmClient(String name) {
-		System.out.println("@Server(219)");
 		if (gcmMap.containsKey(name)) {
-			System.out.println("@Server(221)");
 			list = db.getAllFromDB(new Contact());
-			System.out.println("@Server(223)");
 			for (ModelInterface m : list) {
 				Contact cont = (Contact) m;
 				if (name.equals(cont.getContactName())) {
-					System.out.println("@Server(227)");
 					if (gcmMap.get(cont.getContactName()) != null) {
-						System.out.println("Sending logout to " + gcmMap.get(cont.getContactName()));
 						new SendAll().sendLogout(gcmMap.get(cont.getContactName()));
 					}
 				}
 			}
-			System.out.println("Removing " + name + " from gcmMap");
 			gcmMap.remove(name);
-			System.out.println(gcmMap.keySet());
 		}
 	}
 
