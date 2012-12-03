@@ -106,8 +106,7 @@ public class MultiServerThread extends Thread {
 			handleAssignment(input);
 		} else if (input.contains("\"databaseRepresentation\":\"contact\"")) {
 			handleContact(input);
-		} else if (input
-				.contains("\"databaseRepresentation\":\"authentication\"")) {
+		} else if (input.contains("\"databaseRepresentation\":\"authentication\"")) {
 			if (!handleLogin(input)) {
 				connected = false;
 			}

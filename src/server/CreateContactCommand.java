@@ -49,9 +49,7 @@ public class CreateContactCommand implements CommandInterface {
 			} else if (yesOrNo.equals("y")) {
 				if(!checkIfContactAlreadyExist(newContact.getContactName())){
 				String contact = new Gson().toJson(newContact);
-				System.out.println("sendTOMOTHERFUCKINGALL(contact)");
 				server.sendToAll(contact);
-				System.out.println("addToLogin");
 				addToLogin(newContact, pw);
 				System.out.println("Kontakt sparad.");
 				}else{
@@ -72,7 +70,7 @@ public class CreateContactCommand implements CommandInterface {
 	}
 
 	private void addToLogin(Contact c, String password) {
-		db.setReplicationStatus(true);
+//		db.setReplicationStatus(true);
 		db.addToDB(c);
 		list = db.getAllFromDB(new Contact());
 		for (ModelInterface m : list) {
@@ -81,7 +79,7 @@ public class CreateContactCommand implements CommandInterface {
 				db.addToDB(new AuthenticationModel(cont.getId(), cont.getContactName(), password));
 			}
 		}
-		db.setReplicationStatus(false);
+//		db.setReplicationStatus(false);
 	}
 	
 	private boolean checkIfContactAlreadyExist(String name){
