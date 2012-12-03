@@ -208,7 +208,7 @@ public class Server {
 		if (!gcmMap.containsKey(name)) {
 			System.out.println("Adding " + name + " to gcmMap");
 			gcmMap.put(name, gcmId);
-		} else {
+		} else if(!gcmMap.containsValue(gcmId)) {
 			System.out.println("remove!!!");
 			removeGcmClient(name);
 			System.out.println("Adding " + name + " to gcmMap");
