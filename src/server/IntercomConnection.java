@@ -1,11 +1,17 @@
 package server;
 
+import intercomModels.GPSCoordinate;
+import intercomModels.MissionID;
+import intercomModels.MissionIntergroup;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.PrintWriter;
+import java.lang.reflect.Type;
 import java.security.KeyStore;
-
+import java.util.LinkedList;
+import java.util.Queue;
 import javax.net.ssl.HandshakeCompletedEvent;
 import javax.net.ssl.HandshakeCompletedListener;
 import javax.net.ssl.KeyManagerFactory;
@@ -14,9 +20,15 @@ import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManagerFactory;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import model.Assignment;
+
 public class IntercomConnection  extends Thread implements HandshakeCompletedListener{
 	private static String serverIP = "ipgoeshere";
 	private static int serverPort = 3802;
+	private int id = 0;
 	private char password[] = "password".toCharArray();
 	private boolean stayConnected = false;
 	private boolean connected = false;
@@ -28,7 +40,8 @@ public class IntercomConnection  extends Thread implements HandshakeCompletedLis
 	private SSLContext sslContext = null;
 	private TrustManagerFactory trustManagerFactory = null;
 	private SSLSocketFactory sslSocketFactory = null;
-	
+	private Queue <String> intercomQueue = new LinkedList<String>();
+	private Gson gson = new Gson();
 	public IntercomConnection(){
 			try {
 				keystore = KeyStore.getInstance("JKS");
@@ -49,18 +62,29 @@ public class IntercomConnection  extends Thread implements HandshakeCompletedLis
 	public synchronized void closeConncetion(){
 		this.stayConnected = false;
 	}
+	
 	private synchronized void stayConnected(){
 		this.stayConnected = true;
+		setConnected(false);
 	}
+	
 	private synchronized boolean isStayConnected(){
 		return this.stayConnected;
 	}
+	
 	private synchronized void setConnected(boolean newValue){
 		this.connected = newValue;
 	}
+	
 	private synchronized boolean isConnected(){
 		return this.connected;
 	}
+	
+	public synchronized void addIntercomAssignment(Assignment assigmentToSend){
+		
+//		new MissionIntergroup(new MissionID(faction, id), new GPSCoordinate(, latitude), title, description, creationTime)
+	}
+	
 	
 	public void run(){
 		while(isStayConnected()){
@@ -69,13 +93,15 @@ public class IntercomConnection  extends Thread implements HandshakeCompletedLis
 				sslSocket = (SSLSocket) sslSocketFactory.createSocket(serverIP,serverPort);
 				sslSocket.addHandshakeCompletedListener(this);
 				sslSocket.startHandshake();
-				while(!isConnected()){
-					this.wait(10);	
+				while(!isConnected() && isStayConnected()){
+					this.wait(500);	
 				}
-				
 			} catch (Exception e) {
 				System.out.println("SSL socket creation failed due to: " + e.toString());
 				setConnected(false);
+			}
+			while(isConnected()){
+				
 			}
 			
 		}
