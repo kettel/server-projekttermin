@@ -72,6 +72,19 @@ public class SendAll {
 			e.printStackTrace();
 		}
 	}
+	public void sendLogout(String id){
+		String status;
+		// send a single message using plain post
+		Message message = new Message.Builder().addData("logout", "true").build();
+		Result result;
+		try {
+			result = sender.send(message, id, 5);
+			status = "Sent message to one device: " + result;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 	private void asyncSend(List<String> partialDevices) {
 		// make a copy

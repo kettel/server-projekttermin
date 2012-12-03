@@ -47,15 +47,16 @@ public class Server {
 	private List<ModelInterface> list = null;
 	private Database db = null;
 	private static int jettyPort = 0;
+
 	public static void main(String[] args) {
 		int i = 0;
-		for (String s: args){
-			if(i==0){
+		for (String s : args) {
+			if (i == 0) {
 				port = Integer.parseInt(s);
 			} else {
 				jettyPort = Integer.parseInt(s);
 			}
-		i++;
+			i++;
 		}
 		ServletContextHandler context = new ServletContextHandler(
 				ServletContextHandler.SESSIONS);
@@ -127,14 +128,16 @@ public class Server {
 							.getInetAddress()), true);
 					pr.println(stringToBeSent);
 				} else {
-					if (!stringToBeSent.contains("\"databaseRepresentation\":\"authentication\"")) {
+					if (!stringToBeSent
+							.contains("\"databaseRepresentation\":\"authentication\"")) {
 						QueueItem qItem = new QueueItem(cont.getId(),
 								stringToBeSent);
 						db.addToDB(qItem);
-						if(gcmMap.get(cont.getContactName()) != null){
-						System.out.println("gcmMap get: " + gcmMap.get(cont.getContactName()));
-						new SendAll().singleSend(gcmMap.get(cont.getContactName()));
-						System.out.println("Skickar till: " + gcmMap.get(cont.getContactName() + " " + cont.getContactName()));
+						if (gcmMap.get(cont.getContactName()) != null) {
+							System.out.println("gcmMap get: "
+									+ gcmMap.get(cont.getContactName()));
+							new SendAll().singleSend(gcmMap.get(cont
+									.getContactName()));
 						}
 					}
 				}
@@ -199,22 +202,35 @@ public class Server {
 	public void removeClient(String usersIP) {
 		hashMap.remove(usersIP);
 	}
-	
-	public void addGcmClient(String name, String gcmId){
-		if(!gcmMap.contains(name)){
+
+	public void addGcmClient(String name, String gcmId) {
+		if (!gcmMap.contains(name)) {
+			System.out.println("Adding " + name + " to gcmMap");
 			gcmMap.put(name, gcmId);
-		}else{
+		} else {
 			removeClient(name);
+			System.out.println("Adding " + name + " to gcmMap");
 			gcmMap.put(name, gcmId);
-		}		
+		}
 	}
-	
-	public void removeGcmClient(String name){
-		if(gcmMap.contains(name)){
+
+	public void removeGcmClient(String name) {
+		if (gcmMap.contains(name)) {
+			list = db.getAllFromDB(new Contact());
+			for (ModelInterface m : list) {
+				Contact cont = (Contact) m;
+				if (name.equals(cont.getContactName())) {
+					if (gcmMap.get(cont.getContactName()) != null) {
+						System.out.println("Sending logout to " + gcmMap.get(cont.getContactName()));
+						new SendAll().sendLogout(gcmMap.get(cont.getContactName()));
+					}
+				}
+			}
+			System.out.println("Removing " + name + " from gcmMap");
 			gcmMap.remove(name);
 		}
 	}
-	
+
 	/**
 	 * Återsänder data som inte kommat fram till en viss mottagare
 	 * 
@@ -232,7 +248,10 @@ public class Server {
 						QueueItem qItem = (QueueItem) m;
 						pr.println(qItem.getJSON());
 						db.deleteFromDB(qItem);
-						System.out.println("Sending " + qItem.getJSON() + " from queue to " + receiver.getContactName());
+						System.out
+								.println("Sending " + qItem.getJSON()
+										+ " from queue to "
+										+ receiver.getContactName());
 					}
 				}
 			} catch (Exception e) {
