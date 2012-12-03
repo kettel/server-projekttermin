@@ -212,6 +212,7 @@ public class Server {
 			System.out.println("Adding " + name + " to gcmMap");
 			gcmMap.put(name, gcmId);
 		}
+		System.out.println(gcmMap.keySet());
 	}
 
 	public void removeGcmClient(String name) {
