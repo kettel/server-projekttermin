@@ -203,6 +203,7 @@ public class Server {
 
 	public void addGcmClient(String name, String gcmId) {
 		if (gcmId.length() > 0) {
+			System.out.println("NU SKA VI SE: " + gcmMap.get(name) + " = " + gcmId);
 			if (!gcmMap.containsKey(name)) {
 				System.out.println("Adding " + name + " to gcmMap");
 				gcmMap.put(name, gcmId);
@@ -231,7 +232,6 @@ public class Server {
 			}
 			System.out.println("Removing " + name + " from gcmMap");
 			gcmMap.remove(name);
-			System.out.println(gcmMap.keySet());
 		}
 	}
 
@@ -248,8 +248,6 @@ public class Server {
 				if (!list.isEmpty()) {
 					PrintWriter pr = new PrintWriter(hashMap.get(receiver
 							.getInetAddress()), true);
-					System.out.println("outputstream: "
-							+ hashMap.get(receiver.getInetAddress()));
 					for (ModelInterface m : list) {
 						QueueItem qItem = (QueueItem) m;
 						pr.println(qItem.getJSON());
