@@ -235,6 +235,7 @@ public class Server {
 			}
 			System.out.println("Removing " + name + " from gcmMap");
 			gcmMap.remove(name);
+			System.out.println(gcmMap.keySet());
 		}
 	}
 
