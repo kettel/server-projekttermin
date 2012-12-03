@@ -205,7 +205,7 @@ public class Server {
 
 	public void addGcmClient(String name, String gcmId) {
 		System.out.println(gcmMap.keySet() + " contains " + name +"?");
-		if (!gcmMap.contains(name)) {
+		if (!gcmMap.containsKey(name)) {
 			System.out.println("Adding " + name + " to gcmMap");
 			gcmMap.put(name, gcmId);
 		} else {
@@ -219,7 +219,7 @@ public class Server {
 
 	public void removeGcmClient(String name) {
 		System.out.println("@Server(219)");
-		if (gcmMap.contains(name)) {
+		if (gcmMap.containsKey(name)) {
 			System.out.println("@Server(221)");
 			list = db.getAllFromDB(new Contact());
 			System.out.println("@Server(223)");
