@@ -157,7 +157,8 @@ public class IntercomConnection  extends Thread implements HandshakeCompletedLis
 							}
 							this.wait(50);
 						} catch (Exception e) {
-						System.out.println("Crash in output thread due to: " + e.toString() + System.getProperty("line.separator") + "Dissconnecting from intercom server");
+							System.out.println("Crash in output thread due to: " + e.toString() + System.getProperty("line.separator") + "Dissconnecting from intercom server");
+							setConnected(false);
 						}
 						}
 					}
