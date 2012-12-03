@@ -284,7 +284,6 @@ public class MultiServerThread extends Thread {
 			for (ModelInterface m : list) {
 				Contact cont = (Contact) m;
 				String contact = new Gson().toJson(cont);
-				System.out.println("Sending " + contact + " to " + thisContact.getContactName());
 				server.send(contact, thisContact.getContactName());
 			}
 		} catch (Exception e) {
