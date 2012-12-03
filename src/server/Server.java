@@ -253,6 +253,7 @@ public class Server {
 				if (!list.isEmpty()) {
 					PrintWriter pr = new PrintWriter(hashMap.get(receiver
 							.getInetAddress()), true);
+					System.out.println("outputstream: " + hashMap.get(receiver.getInetAddress()));
 					for (ModelInterface m : list) {
 						QueueItem qItem = (QueueItem) m;
 						pr.println(qItem.getJSON());
