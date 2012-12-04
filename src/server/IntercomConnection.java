@@ -1,15 +1,15 @@
 package server;
 
 import intercomModels.GPSCoordinate;
+import intercomModels.LoginObject;
 import intercomModels.MissionID;
 import intercomModels.MissionIntergroup;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.lang.reflect.Type;
 import java.security.KeyStore;
 import java.util.Date;
 import java.util.LinkedList;
@@ -23,13 +23,12 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManagerFactory;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import model.Assignment;
 import model.AssignmentStatus;
 
 public class IntercomConnection  extends Thread implements HandshakeCompletedListener{
-	private static String serverIP = "ipgoeshere";
+	private static String serverIP = "localhost";
 	private static int serverPort = 3802;
 	private int id = 0;
 	private char password[] = "password".toCharArray();
@@ -46,13 +45,14 @@ public class IntercomConnection  extends Thread implements HandshakeCompletedLis
 	private Queue <String> intercomQueue = new LinkedList<String>();
 	private WgspointConverter WgsC = new WgspointConverter();
 	private Gson gson = new Gson();
-	private Server server = null;
+	SSLSocket sslSocket = null;
+//	private Server server = null;
 	
-	public IntercomConnection(Server server){
-		this.server = server;
+	public IntercomConnection(/*Server server*/){
+//		this.server = server;
 			try {
 				keystore = KeyStore.getInstance("JKS");
-				keystore.load(new FileInputStream(new File(getClass().getClassLoader().getResource("server/masterserver.jks").getPath())),password);
+				keystore.load(new FileInputStream(new File(getClass().getClassLoader().getResource("interkomTest/masterserver.jks").getPath())),password);
 				keyMangamentFactory = keyMangamentFactory.getInstance(keyMangamentFactory.getDefaultAlgorithm());
 				keyMangamentFactory.init(keystore, password);
 				trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
@@ -62,6 +62,7 @@ public class IntercomConnection  extends Thread implements HandshakeCompletedLis
 				sslSocketFactory = sslContext.getSocketFactory();
 			} catch (Exception e) {
 				System.out.println("SSL initiation failed due to " + e.toString());
+				
 			}
 	}
 	
@@ -71,9 +72,9 @@ public class IntercomConnection  extends Thread implements HandshakeCompletedLis
 		setConnected(false);
 	}
 	
-	private synchronized void stayConnected(){
+	public synchronized void stayConnected(){
 		this.stayConnected = true;
-		setConnected(true);
+//		setConnected(true);
 	}
 	
 	private synchronized boolean isStayConnected(){
@@ -99,18 +100,26 @@ public class IntercomConnection  extends Thread implements HandshakeCompletedLis
 	private synchronized Queue <String> getQueue(){
 		return intercomQueue;
 	}
+	private synchronized void syncWait (int time) {
+	   try {
+		this.wait(time);
+	} catch (InterruptedException e) {
+		System.out.println("waitfail");
+		e.printStackTrace();
+	}
+	}
 	
 	public void run(){
 		while(isStayConnected()){
-			SSLSocket sslSocket = null;
 			try {
 				sslSocket = (SSLSocket) sslSocketFactory.createSocket(serverIP,serverPort);
 				sslSocket.addHandshakeCompletedListener(this);
 				sslSocket.startHandshake();
 				if(!isConnected() && isStayConnected()){
-					this.wait(500);	
+					syncWait(500);	
 				}
 			} catch (Exception e) {
+				e.printStackTrace();
 				System.out.println("SSL socket creation failed due to: " + e.toString());
 				setConnected(false);
 			}
@@ -121,19 +130,22 @@ public class IntercomConnection  extends Thread implements HandshakeCompletedLis
 						while(isConnected()){
 							try {
 								String incomeing = input.readLine();
-								if(incomeing != "&"){
+								if(incomeing != null && incomeing != "&"){
 									if(incomeing.contains("\"identifier\":\"@Missonintergroup@\"")){
 										System.out.println("incoming misson fron itercom server");
 										MissionIntergroup intercom = gson.fromJson(incomeing, MissionIntergroup.class);
 										double[] latAndLon = {intercom.getLocation().getLatitude(),intercom.getLocation().getLongitude()};
 										String region = WgsC.DoubelToGsonWgsString(latAndLon);
 										Assignment misson = new Assignment(intercom.getTitle(),region,"intercom", false, intercom.getDescription(), "", AssignmentStatus.STARTED, "", "");
-										server.sendToAll(gson.toJson(misson));
+										System.out.println("send to all here");
+										System.out.println(gson.toJson(misson));
+//										server.sendToAll(gson.toJson(misson));
 									}else if(incomeing.contains("\"identifier\":\"@MissonUpdateInter@\"")){
 										System.out.println("uppdate, nothing done");
 									}
 								}
 							} catch (Exception e) {
+								e.printStackTrace();
 								System.out.println("Crash in intercom input thread, due to " + e.toString() + System.getProperty("line.separator") + "Dissconnecting from intercom server");
 								setConnected(false);
 							}
@@ -155,7 +167,7 @@ public class IntercomConnection  extends Thread implements HandshakeCompletedLis
 									q.poll();
 								}
 							}
-							this.wait(50);
+							syncWait(50);
 						} catch (Exception e) {
 							System.out.println("Crash in output thread due to: " + e.toString() + System.getProperty("line.separator") + "Dissconnecting from intercom server");
 							setConnected(false);
@@ -169,7 +181,19 @@ public class IntercomConnection  extends Thread implements HandshakeCompletedLis
 	
 	@Override
 	public void handshakeCompleted(HandshakeCompletedEvent arg0) {
+		if(isConnected()){
+			return;
+		}
 		System.out.println("SSL handshake with intercom server compleated");
+		try {
+			input = new BufferedReader(new InputStreamReader(sslSocket.getInputStream()));
+			output = new PrintWriter(sslSocket.getOutputStream(), true);
+			output.println(gson.toJson(new LoginObject(faction)));
+		} catch (Exception e) {
+			System.out.println("input and output streamcreation  failed due to:" + e.toString() + System.getProperty("line.separator") + "Dissconnecting from intercom server");
+			setConnected(false);
+			return;
+		}
 		setConnected(true);
 	}
 

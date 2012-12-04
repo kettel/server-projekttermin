@@ -1,8 +1,8 @@
 package server;
 
-import gcm.HomeServlet;
-import gcm.RegisterServlet;
-import gcm.UnregisterServlet;
+import GCM.HomeServlet;
+import GCM.RegisterServlet;
+import GCM.UnregisterServlet;
 
 import java.awt.EventQueue;
 import java.io.IOException;
