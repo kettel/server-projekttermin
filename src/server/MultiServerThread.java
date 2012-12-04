@@ -170,17 +170,23 @@ public class MultiServerThread extends Thread {
 		// (!socket.getInetAddress().toString().equals(replicateServerIP)) {
 		// server.sendToAllExceptTheSender(assignment, socket
 		// .getInetAddress().toString());
-		// }		
+		// }
 		list = db.getAllFromDB(new Assignment());
-		for (ModelInterface m : list) {
-			Assignment ass = (Assignment) m;
-			if (assignmentFromJson.getGlobalID().equals(ass.getGlobalID())) {
-				db.updateModel(assignmentFromJson);
-			} else {
-				db.addToDB(assignmentFromJson);
-				server.sendToAllExceptTheSender(assignment, socket.getInetAddress().toString());
+		if (list.size() > 0) {
+			for (ModelInterface m : list) {
+				Assignment ass = (Assignment) m;
+				if (assignmentFromJson.getGlobalID().equals(ass.getGlobalID())) {
+					db.updateModel(assignmentFromJson);
+				} else {
+					db.addToDB(assignmentFromJson);
+					server.sendToAllExceptTheSender(assignment, socket
+							.getInetAddress().toString());
+				}
 			}
+		} else {
+			db.addToDB(assignmentFromJson);
 		}
+
 		Calendar cal = Calendar.getInstance();
 		cal.getTime();
 		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
