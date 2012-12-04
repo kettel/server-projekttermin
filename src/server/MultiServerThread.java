@@ -74,22 +74,20 @@ public class MultiServerThread extends Thread {
 		
 		try{
 			KeyStore ts = KeyStore.getInstance("JKS");
-			ts.load(new FileInputStream("./cert/servertruststore.jks"),truststorepass);
+			ts.load(new FileInputStream("src/cert/servertruststore.jks"),truststorepass);
 
 			TrustManagerFactory tmf = TrustManagerFactory
                 .getInstance(TrustManagerFactory.getDefaultAlgorithm());
 			tmf.init(ts);
 		
 			KeyStore ks = KeyStore.getInstance("JKS");
-			ks.load(new FileInputStream("./cert/server.jks"),keystorepass);
+			ks.load(new FileInputStream("src/cert/server.jks"),keystorepass);
 			KeyManagerFactory kmf =
 					KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
 			kmf.init(ks, keypassword);
-			//ställer in tls med keystoren och truststoren
 			SSLContext sslcontext =
 					SSLContext.getInstance("TLS");
 			sslcontext.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);
-			//gör en server socket med tls
 			ServerSocketFactory ssf = sslcontext.getServerSocketFactory();
 
 			Socket = (SSLServerSocket)
@@ -114,10 +112,9 @@ public class MultiServerThread extends Thread {
 			//klart att skicka över om deta klara sig
 			client = (SSLSocket) Socket.accept();
 		}catch (IOException e) {
-			//bör kunna kasta detta sen om det är ivägen
 			System.out.println("Accept failed on "+Server.port);
 		}
-		db = new Database();
+		db = new Database(); 
 		if (socket.getInetAddress().toString().equals(replicateServerIP)) {
 			db.setReplicationStatus(false);
 		} else {
