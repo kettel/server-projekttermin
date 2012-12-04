@@ -173,7 +173,7 @@ public class MultiServerThread extends Thread {
 			// }
 
 			// Lägger in kontakten i databasen
-			db.addToDB(assignmentFromJson);
+//			db.addToDB(assignmentFromJson);
 			list = db.getAllFromDB(new Assignment());
 			for (ModelInterface m : list) {
 				Assignment ass = (Assignment) m;
