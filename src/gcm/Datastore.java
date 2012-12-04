@@ -19,10 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import model.Contact;
-import model.ModelInterface;
-import database.Database;
-
 /**
  * Simple implementation of a data store using standard Java collections.
  * <p>
@@ -34,16 +30,8 @@ public final class Datastore {
 	private static final List<String> regIds = new ArrayList<String>();
 	private static final Logger logger = Logger.getLogger(Datastore.class
 			.getName());
-	private List<ModelInterface> contactList = new ArrayList<ModelInterface>();
-	private Database db = new Database();
 
 	private Datastore() {
-		contactList = db.getAllFromDB(new Contact());
-		for (ModelInterface m : contactList) {
-			Contact cont = (Contact) m;
-			regIds.add(cont.getGcmId());
-		}
-		System.out.println("RegIds: " +regIds);
 		throw new UnsupportedOperationException();
 	}
 

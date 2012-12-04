@@ -1,5 +1,6 @@
 package server;
 
+import gcm.Datastore;
 import gcm.HomeServlet;
 import gcm.RegisterServlet;
 import gcm.SendAll;
@@ -91,6 +92,12 @@ public class Server {
 			db = new Database();
 			hashMap = new ConcurrentHashMap<String, OutputStream>();
 			gcmMap = new ConcurrentHashMap<String, String>();
+			List<ModelInterface> contactList = db.getAllFromDB(new Contact());
+			for (ModelInterface m : contactList) {
+				Contact cont = (Contact) m;
+				Datastore.register(cont.getGcmId());
+			}
+			System.out.println("RegIds: " +Datastore.getDevices());
 			serverSocket = new ServerSocket(port);
 			// Skapar en ny tråd som lyssnar på kommandon
 			new ServerTerminal(this).start();
