@@ -149,6 +149,7 @@ public class MultiServerThread extends Thread {
 					+ msg.getReciever() + ": " + msg.getMessageContent());
 
 		} catch (Exception e) {
+			System.out.println("catch: handleMessage");
 			System.out.println(e);
 		}
 	}
@@ -165,17 +166,20 @@ public class MultiServerThread extends Thread {
 		try {
 			Assignment assignmentFromJson = (new Gson()).fromJson(assignment,
 					Assignment.class);
-			list = db.getAllFromDB(new Assignment());
-			if (list.size() > 0) {
-				for (ModelInterface m : list) {
-					Assignment ass = (Assignment) m;
-					if (assignmentFromJson.getGlobalID().equals(
-							ass.getGlobalID())) {
-						db.updateModel(assignmentFromJson);
-					} else {
-						db.addToDB(assignmentFromJson);
-						server.sendToAllExceptTheSender(assignment, socket
-								.getInetAddress().toString());
+			if (!socket.getInetAddress().toString().equals(replicateServerIP)) {
+
+				list = db.getAllFromDB(new Assignment());
+				if (list.size() > 0) {
+					for (ModelInterface m : list) {
+						Assignment ass = (Assignment) m;
+						if (assignmentFromJson.getGlobalID().equals(
+								ass.getGlobalID())) {
+							db.updateModel(assignmentFromJson);
+						} else {
+							db.addToDB(assignmentFromJson);
+							server.sendToAllExceptTheSender(assignment, socket
+									.getInetAddress().toString());
+						}
 					}
 				}
 			} else {
@@ -307,6 +311,7 @@ public class MultiServerThread extends Thread {
 				server.send(contact, thisContact.getContactName());
 			}
 		} catch (Exception e) {
+			System.out.println("catch: handleContactRequest");
 			System.out.println(e);
 		}
 	}
