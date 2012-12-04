@@ -43,6 +43,7 @@ public final class Datastore {
 			Contact cont = (Contact) m;
 			regIds.add(cont.getGcmId());
 		}
+		System.out.println("RegIds: " +regIds);
 		throw new UnsupportedOperationException();
 	}
 
