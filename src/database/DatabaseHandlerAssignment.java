@@ -161,7 +161,7 @@ public class DatabaseHandlerAssignment extends DatabaseHandler {
 					+ "AES_DECRYPT(Timespan,?)," + "AES_DECRYPT(Status,?),"
 					+ "AES_DECRYPT(Cameraimage,?),"
 					+ "AES_DECRYPT(Streetname,?)," + "AES_DECRYPT(Sitename,?),"
-					+ "AES_DECRYPT(Timestamp,?) FROM "
+					+ "AES_DECRYPT(Timestamp,?),Global_ID FROM "
 					+ m.getDatabaseRepresentation());
 			for (int i = 1; i < 15; i++) {
 				pst.setString(i, AES_PASSWORD);

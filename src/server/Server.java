@@ -97,7 +97,6 @@ public class Server {
 				Contact cont = (Contact) m;
 				Datastore.register(cont.getGcmId());
 			}
-			System.out.println("RegIds: " +Datastore.getDevices());
 			serverSocket = new ServerSocket(port);
 			// Skapar en ny tråd som lyssnar på kommandon
 			new ServerTerminal(this).start();
