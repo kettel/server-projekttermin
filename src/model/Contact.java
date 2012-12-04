@@ -19,6 +19,10 @@ public class Contact implements ModelInterface {
 	public Contact() {
 
 	}
+	
+	public Contact(String contactName){
+		this.contactName = contactName;
+	}
 
 	/**
 	 * Konstruktor för att skapa en ny kontakt som inte finns i databasen.
