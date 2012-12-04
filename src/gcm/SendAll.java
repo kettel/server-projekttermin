@@ -25,7 +25,7 @@ public class SendAll {
 		sender = new Sender("AIzaSyDm4alrdLjfaZTVqIyLB2YstGiR62_46hk");
 	}
 
-	public void doPost() throws IOException {
+	public void sendAll() throws IOException {
 		List<String> devices = Datastore.getDevices();
 		String status;
 		if (devices.isEmpty()) {
@@ -62,7 +62,7 @@ public class SendAll {
 	public void singleSend(String id) {
 		String status;
 		// send a single message using plain post
-		Message message = new Message.Builder().build();
+		Message message = new Message.Builder().addData("action", "pull").build();
 		Result result;
 		try {
 			result = sender.send(message, id, 5);
@@ -92,7 +92,7 @@ public class SendAll {
 		threadPool.execute(new Runnable() {
 
 			public void run() {
-				Message message = new Message.Builder().build();
+				Message message = new Message.Builder().addData("action", "pull").build();
 				MulticastResult multicastResult;
 				try {
 					multicastResult = sender.send(message, devices, 5);

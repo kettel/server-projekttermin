@@ -35,7 +35,7 @@ public class Database {
 			dha.addModel(m);
 			if (replicateStatus) {
 				try {
-					all.doPost();
+					all.sendAll();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					System.out.println("fel med GCM doPost");
@@ -47,7 +47,7 @@ public class Database {
 			dhc.addModel(m);
 			if (replicateStatus) {
 				try {
-					all.doPost();
+					all.sendAll();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					System.out.println("fel med GCM doPost");
