@@ -399,7 +399,7 @@ public class Assignment implements ModelInterface {
 		String agents = new String();
 		List<Contact> receivers = this.agents;
 		for (Contact contact : receivers) {
-			agents = contact.getContactName() + "\\";
+			agents = contact.getContactName() + "|";
 		}
 		return agents;
 	}
