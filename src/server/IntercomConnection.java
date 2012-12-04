@@ -4,7 +4,6 @@ import intercomModels.GPSCoordinate;
 import intercomModels.LoginObject;
 import intercomModels.MissionID;
 import intercomModels.MissionIntergroup;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -21,9 +20,7 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManagerFactory;
-
 import com.google.gson.Gson;
-
 import model.Assignment;
 import model.AssignmentStatus;
 
@@ -45,7 +42,7 @@ public class IntercomConnection  extends Thread implements HandshakeCompletedLis
 	private Queue <String> intercomQueue = new LinkedList<String>();
 	private WgspointConverter WgsC = new WgspointConverter();
 	private Gson gson = new Gson();
-	SSLSocket sslSocket = null;
+	private SSLSocket sslSocket = null;
 //	private Server server = null;
 	
 	public IntercomConnection(/*Server server*/){
@@ -160,6 +157,7 @@ public class IntercomConnection  extends Thread implements HandshakeCompletedLis
 							 Queue <String> q = getQueue();
 							if(!q.isEmpty()){
 								output.println(q.peek());
+								System.out.println("sending");
 								if(output.checkError()){
 									setConnected(false);
 									System.out.println("Dissconnecting from intercom server");
