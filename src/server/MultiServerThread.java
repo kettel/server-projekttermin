@@ -163,6 +163,7 @@ public class MultiServerThread extends Thread {
 	 */
 	private void handleAssignment(String assignment) {
 		// Gson konverterar json-strängen till Assignment-objektet igen.
+		System.out.println("DAFUQ");
 		try {
 			Assignment assignmentFromJson = (new Gson()).fromJson(assignment,
 					Assignment.class);
