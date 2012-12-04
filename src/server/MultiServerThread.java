@@ -166,13 +166,41 @@ public class MultiServerThread extends Thread {
 		try {
 			Assignment assignmentFromJson = (new Gson()).fromJson(assignment,
 					Assignment.class);
-			if (!socket.getInetAddress().toString().equals(replicateServerIP)) {
-				server.sendToAllExceptTheSender(assignment, socket
-						.getInetAddress().toString());
-			}
+			// if
+			// (!socket.getInetAddress().toString().equals(replicateServerIP)) {
+			// server.sendToAllExceptTheSender(assignment, socket
+			// .getInetAddress().toString());
+			// }
 
 			// Lägger in kontakten i databasen
 			db.addToDB(assignmentFromJson);
+			list = db.getAllFromDB(new Assignment());
+			for (ModelInterface m : list) {
+				Assignment ass = (Assignment) m;
+				if (assignmentFromJson.getGlobalID().equals(ass.getGlobalID())) {
+					db.updateModel(assignmentFromJson);
+				} else {
+					if (assignmentFromJson.getAgents() == ass.getAgents()
+							&& assignmentFromJson.getAssignmentDescription().equals(ass.getAssignmentDescription())
+							&& assignmentFromJson.getAssignmentStatus() == ass.getAssignmentStatus()
+							&& assignmentFromJson.getCameraImage() == ass.getCameraImage()
+							&& assignmentFromJson.getLat() == ass.getLat()
+							&& assignmentFromJson.getLon() == ass.getLon()
+							&& assignmentFromJson.getMessageTimeStampSmart().equals(ass.getMessageTimeStampSmart())
+							&& assignmentFromJson.getName().equals(ass.getName())
+							&& assignmentFromJson.getRegion().equals(ass.getRegion())
+							&& assignmentFromJson.getSender().equals(ass.getSender())
+							&& assignmentFromJson.getSiteName().equals(ass.getSiteName())
+							&& assignmentFromJson.getStreetName().equals(ass.getStreetName())
+							&& assignmentFromJson.getTimeSpan().equals(ass.getTimeSpan())
+							&& assignmentFromJson.getTimeStamp() == ass.getTimeStamp()
+							&& assignmentFromJson.isExternalMission() == ass.isExternalMission()) {
+						System.out.println("@MultiServerThread(198): Troligt denna if stämmer");
+						String assignmentToBeSent = new Gson().toJson(ass);
+						server.sendToAll(assignmentToBeSent);
+					}
+				}
+			}
 			Calendar cal = Calendar.getInstance();
 			cal.getTime();
 			SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
