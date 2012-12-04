@@ -142,6 +142,7 @@ public class Server {
 						db.addToDB(qItem);
 						if (gcmMap.get(cont.getContactName()) != null) {
 							System.out.println("Skickar en notifikation till " + cont.getContactName());
+							System.out.println("gcmMap: " + gcmMap.keySet());
 							new SendAll().singleSend(gcmMap.get(cont
 									.getContactName()));
 						}

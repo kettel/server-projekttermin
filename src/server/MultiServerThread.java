@@ -106,7 +106,8 @@ public class MultiServerThread extends Thread {
 			handleAssignment(input);
 		} else if (input.contains("\"databaseRepresentation\":\"contact\"")) {
 			handleContact(input);
-		} else if (input.contains("\"databaseRepresentation\":\"authentication\"")) {
+		} else if (input
+				.contains("\"databaseRepresentation\":\"authentication\"")) {
 			if (!handleLogin(input)) {
 				connected = false;
 			}
@@ -199,22 +200,27 @@ public class MultiServerThread extends Thread {
 			Contact contactFromJson = (new Gson()).fromJson(contact,
 					Contact.class);
 			// Lägger in uppdraget i databasen
-			if(!socket.getInetAddress().toString().equals(replicateServerIP)){
+			if (!socket.getInetAddress().toString().equals(replicateServerIP)) {
 				db.addToDB(contactFromJson);
-			}			
+			}
 		} catch (Exception e) {
 			System.out.println(e);
 		}
 	}
 
 	/**
-	 * Hanterar json-strängen om det är en login-request och skickar ett svar om det är ett korrekt login
-	 * @param login		Json-strängen av inloggningsförfrågan
-	 * @return	true om kontakten stämmer överens med befintlig kontakt ur databasen, annars false 
+	 * Hanterar json-strängen om det är en login-request och skickar ett svar om
+	 * det är ett korrekt login
+	 * 
+	 * @param login
+	 *            Json-strängen av inloggningsförfrågan
+	 * @return true om kontakten stämmer överens med befintlig kontakt ur
+	 *         databasen, annars false
 	 */
 	private boolean handleLogin(String login) {
 		try {
-			System.out.println("Login request from: "+socket.getInetAddress().toString());
+			System.out.println("Login request from: "
+					+ socket.getInetAddress().toString());
 			list = db.getAllFromDB(new Contact());
 			AuthenticationModel loginFromJson = (new Gson().fromJson(login,
 					AuthenticationModel.class));
@@ -229,18 +235,23 @@ public class MultiServerThread extends Thread {
 							if (cont.getId() == logMod.getContactId()
 									&& loginFromJson.getPasswordHash().equals(
 											logMod.getPasswordHash())) {
-								cont.setInetAddress(socket.getInetAddress().toString());
-								if(loginFromJson.getGcmId().length() > 1){
-									cont.setGcmId(loginFromJson.getGcmId());
-									server.addGcmClient(loginFromJson.getUserName(), loginFromJson.getGcmId());
-								}
+								cont.setInetAddress(socket.getInetAddress()
+										.toString());
+								cont.setGcmId(loginFromJson.getGcmId());
+								server.addGcmClient(
+										loginFromJson.getUserName(),
+										loginFromJson.getGcmId());
+
 								db.updateModel(cont);
 								loginFromJson.setIsAccessGranted(true);
-								String response = new Gson().toJson(loginFromJson);
+								String response = new Gson()
+										.toJson(loginFromJson);
 								server.send(response, cont.getContactName());
 								thisContact = cont;
-								System.out.println("<"+ socket.getInetAddress().toString()
-										+ "> " + cont.getContactName()+ " connected.");
+								System.out.println("<"
+										+ socket.getInetAddress().toString()
+										+ "> " + cont.getContactName()
+										+ " connected.");
 								return true;
 							}
 						}
