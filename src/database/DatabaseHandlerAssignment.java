@@ -217,8 +217,7 @@ public class DatabaseHandlerAssignment extends DatabaseHandler {
 			String[] agentArray = agentString.split("|");
 			for (String agent : agentArray) {
 				// Dela upp kontakten så man kommer åt namn och IP
-				String[] contactArray = agent.split(":");
-				agents.add(new Contact(contactArray[0], contactArray[1]));
+				agents.add(new Contact(agentArray[0]));
 			}
 		}
 		return agents;
