@@ -40,7 +40,8 @@ public class DatabaseHandlerAssignment extends DatabaseHandler {
 							+ "AES_ENCRYPT(?,?)," + "AES_ENCRYPT(?,?),"
 							+ "AES_ENCRYPT(?,?)," + "AES_ENCRYPT(?,?),"
 							+ "AES_ENCRYPT(?,?)," + "AES_ENCRYPT(?,?),"
-							+ "AES_ENCRYPT(?,?)," + "AES_ENCRYPT(?,?),UUID())");
+							+ "AES_ENCRYPT(?,?)," + "AES_ENCRYPT(?,?)," 
+							+ "AES_ENCRYPT(?,?))");
 
 			// Sätt in rätt värden till rätt plats i frågan
 			pst.setString(1, ass.getName());
@@ -71,6 +72,8 @@ public class DatabaseHandlerAssignment extends DatabaseHandler {
 			pst.setString(26, AES_PASSWORD);
 			pst.setString(27, Long.toString(ass.getTimeStamp()));
 			pst.setString(28, AES_PASSWORD);
+			pst.setString(29, ass.getGlobalID());
+			pst.setString(30, AES_PASSWORD);
 
 			// Utför frågan och lägg till objektet i databasen
 			pst.executeUpdate();
@@ -120,7 +123,7 @@ public class DatabaseHandlerAssignment extends DatabaseHandler {
 					" Cameraimage = AES_ENCRYPT(\"" + ass.getCameraImage()+ "\",\""+AES_PASSWORD+"\")," +
 					" Streetname = AES_ENCRYPT(\"" + ass.getStreetName()+ "\",\""+AES_PASSWORD+"\")," +
 					" Sitename = AES_ENCRYPT(\"" + ass.getSiteName()+ "\",\""+AES_PASSWORD+"\")" +
-					" WHERE Global_ID = " + ass.getGlobalID();
+					" WHERE Global_ID = AES_DECRYPT(\"" + ass.getGlobalID() + "\","+AES_PASSWORD+"\")";
 			System.out.println("UpdateString: " + updateString);
 			// Sätt in rätt värden till rätt plats i frågan och uppdatera dessa
 			st.executeUpdate(updateString);
@@ -161,9 +164,9 @@ public class DatabaseHandlerAssignment extends DatabaseHandler {
 					+ "AES_DECRYPT(Timespan,?)," + "AES_DECRYPT(Status,?),"
 					+ "AES_DECRYPT(Cameraimage,?),"
 					+ "AES_DECRYPT(Streetname,?)," + "AES_DECRYPT(Sitename,?),"
-					+ "AES_DECRYPT(Timestamp,?),Global_ID FROM "
+					+ "AES_DECRYPT(Timestamp,?),AES_DECRYPT(Global_ID,?) FROM "
 					+ m.getDatabaseRepresentation());
-			for (int i = 1; i < 15; i++) {
+			for (int i = 1; i < 16; i++) {
 				pst.setString(i, AES_PASSWORD);
 			}
 			rs = pst.executeQuery();
