@@ -163,7 +163,6 @@ public class MultiServerThread extends Thread {
 	 */
 	private void handleAssignment(String assignment) {
 		// Gson konverterar json-strängen till Assignment-objektet igen.
-		System.out.println("DAFUQ");
 		try {
 			Assignment assignmentFromJson = (new Gson()).fromJson(assignment,
 					Assignment.class);
@@ -174,15 +173,12 @@ public class MultiServerThread extends Thread {
 			// }
 
 			// Lägger in kontakten i databasen
-//			db.addToDB(assignmentFromJson);
+			db.addToDB(assignmentFromJson);
 			list = db.getAllFromDB(new Assignment());
-			System.out.println("179");
 			for (ModelInterface m : list) {
 				Assignment ass = (Assignment) m;
 				if (assignmentFromJson.getGlobalID().equals(ass.getGlobalID())) {
-					System.out.println("183");
 					db.updateModel(assignmentFromJson);
-					System.out.println("185");
 				} else {
 					if (assignmentFromJson.getAgentsString().equals(ass.getAgentsString())
 							&& assignmentFromJson.getAssignmentDescription().equals(ass.getAssignmentDescription())
