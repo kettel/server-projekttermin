@@ -181,19 +181,20 @@ public class MultiServerThread extends Thread {
 									.getInetAddress().toString());
 						}
 					}
-				}
-			} else {
-				db.addToDB(assignmentFromJson);
-			}
 
-			Calendar cal = Calendar.getInstance();
-			cal.getTime();
-			SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-			System.out.println("<" + socket.getInetAddress() + ":"
-					+ socket.getPort() + " " + sdf.format(cal.getTime())
-					+ "> assignment from " + assignmentFromJson.getSender()
-					+ ": " + assignmentFromJson.getName() + "	"
-					+ assignmentFromJson.getAssignmentStatus());
+				} else {
+					db.addToDB(assignmentFromJson);
+				}
+
+				Calendar cal = Calendar.getInstance();
+				cal.getTime();
+				SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+				System.out.println("<" + socket.getInetAddress() + ":"
+						+ socket.getPort() + " " + sdf.format(cal.getTime())
+						+ "> assignment from " + assignmentFromJson.getSender()
+						+ ": " + assignmentFromJson.getName() + "	"
+						+ assignmentFromJson.getAssignmentStatus());
+			}
 		} catch (Exception e) {
 			System.out.println(e);
 		}
