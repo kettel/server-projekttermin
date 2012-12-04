@@ -180,7 +180,7 @@ public class MultiServerThread extends Thread {
 				if (assignmentFromJson.getGlobalID().equals(ass.getGlobalID())) {
 					db.updateModel(assignmentFromJson);
 				} else {
-					if (assignmentFromJson.getAgentsString().equals(ass.getAgentsString())
+					if (assignmentFromJson.getAgents() == ass.getAgents()
 							&& assignmentFromJson.getAssignmentDescription().equals(ass.getAssignmentDescription())
 							&& assignmentFromJson.getAssignmentStatus() == ass.getAssignmentStatus()
 							&& assignmentFromJson.getCameraImage() == ass.getCameraImage()
