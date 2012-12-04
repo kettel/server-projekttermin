@@ -33,14 +33,14 @@ public class DatabaseHandlerAssignment extends DatabaseHandler {
 			pst = con
 					.prepareStatement("INSERT INTO "
 							+ m.getDatabaseRepresentation()
-							+ "(Name , Latitude , Longitude , Region , Agents , ExternalMission , Sender , Description , Timespan , Status , Cameraimage , Streetname , Sitename , Timestamp) "
+							+ "(Name , Latitude , Longitude , Region , Agents , ExternalMission , Sender , Description , Timespan , Status , Cameraimage , Streetname , Sitename , Timestamp, Global_ID) "
 							+ "VALUES (AES_ENCRYPT(?,?)," + "AES_ENCRYPT(?,?),"
 							+ "AES_ENCRYPT(?,?)," + "AES_ENCRYPT(?,?),"
 							+ "AES_ENCRYPT(?,?)," + "AES_ENCRYPT(?,?),"
 							+ "AES_ENCRYPT(?,?)," + "AES_ENCRYPT(?,?),"
 							+ "AES_ENCRYPT(?,?)," + "AES_ENCRYPT(?,?),"
 							+ "AES_ENCRYPT(?,?)," + "AES_ENCRYPT(?,?),"
-							+ "AES_ENCRYPT(?,?)," + "AES_ENCRYPT(?,?))");
+							+ "AES_ENCRYPT(?,?)," + "AES_ENCRYPT(?,?),UUID())");
 
 			// Sätt in rätt värden till rätt plats i frågan
 			pst.setString(1, ass.getName());
@@ -108,7 +108,7 @@ public class DatabaseHandlerAssignment extends DatabaseHandler {
 
 			String updateString = "UPDATE " + ass.getDatabaseRepresentation()
 					+ " SET Name = AES_ENCRYPT(\"" + ass.getName() + "\",\""+AES_PASSWORD+"\"), " +
-					"Latitude = AES_ENCRYPT(\"" + Double.toString(ass.getLat()) + "\",\""+AES_PASSWORD+"\")," +
+					" Latitude = AES_ENCRYPT(\"" + Double.toString(ass.getLat()) + "\",\""+AES_PASSWORD+"\")," +
 					" Longitude = AES_ENCRYPT(\"" + Double.toString(ass.getLon()) + "\",\""+AES_PASSWORD+"\")," +
 					" Region = AES_ENCRYPT(\"" + ass.getRegion() + "\",\""+AES_PASSWORD+"\")," +
 					" Agents = AES_ENCRYPT(\"" + ass.getAgentsString() + "\",\""+AES_PASSWORD+"\")," +
@@ -120,7 +120,7 @@ public class DatabaseHandlerAssignment extends DatabaseHandler {
 					" Cameraimage = AES_ENCRYPT(\"" + ass.getCameraImage()+ "\",\""+AES_PASSWORD+"\")," +
 					" Streetname = AES_ENCRYPT(\"" + ass.getStreetName()+ "\",\""+AES_PASSWORD+"\")," +
 					" Sitename = AES_ENCRYPT(\"" + ass.getSiteName()+ "\",\""+AES_PASSWORD+"\")" +
-					" WHERE Id = " + ass.getId();
+					" WHERE Global_ID = " + ass.getGlobalID();
 			System.out.println("UpdateString: " + updateString);
 			// Sätt in rätt värden till rätt plats i frågan och uppdatera dessa
 			st.executeUpdate(updateString);
@@ -186,7 +186,8 @@ public class DatabaseHandlerAssignment extends DatabaseHandler {
 				String strName = rs.getString(13);
 				String siteName = rs.getString(14);
 				Long timestamp = Long.valueOf(rs.getString(15));
-				returnList.add((ModelInterface) new Assignment(id,name,lat,lon,region,agents,sender,extMission,desc,timespan,astatus,camImg,strName,siteName,timestamp));
+				String globalID = rs.getString(16);
+				returnList.add((ModelInterface) new Assignment(id,name,lat,lon,region,agents,sender,extMission,desc,timespan,astatus,camImg,strName,siteName,timestamp,globalID));
 			}
 
 		} catch (SQLException ex) {
