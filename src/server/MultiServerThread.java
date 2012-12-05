@@ -174,6 +174,7 @@ public class MultiServerThread extends Thread {
 				if (list.size() > 0) {
 					for (ModelInterface m : list) {
 						Assignment ass = (Assignment) m;
+						System.out.println("assignmentFromJson.getGlobalId: " + assignmentFromJson.getGlobalID() + " compared to " + ass.getGlobalID());
 						if (assignmentFromJson.getGlobalID().equals(
 								ass.getGlobalID())) {
 							db.updateModel(assignmentFromJson);
