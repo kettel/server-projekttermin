@@ -70,12 +70,15 @@ public class MultiServerThread extends Thread {
 				// Buffrar ihop flera tecken från InputStreamen till en sträng
 				input = new BufferedReader(new InputStreamReader(
 						socket.getInputStream()));
+				int counter = 1;
 				// Läser den buffrade strängen
 				while ((inputLine = input.readLine()) != null
 						&& !inputLine.equals("close")) {
 					System.out.println("<input from "
 							+ socket.getInetAddress().toString() + ":"
 							+ socket.getPort() + "> " + inputLine);
+					System.out.println("counter: "+ counter);
+					counter++;
 					handleTypeOfInput(inputLine);
 				}
 				connected = false;
