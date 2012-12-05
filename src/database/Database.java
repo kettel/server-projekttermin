@@ -33,7 +33,7 @@ public class Database {
 		if (dbRep.equalsIgnoreCase("assignment")) {
 			DatabaseHandlerAssignment dha = new DatabaseHandlerAssignment();
 			dha.addModel(m);
-			if (replicateStatus) {
+//			if (replicateStatus) {
 				try {
 					all.sendAll();
 				} catch (IOException e) {
@@ -41,7 +41,7 @@ public class Database {
 					System.out.println("fel med GCM doPost");
 					e.printStackTrace();
 				}
-			}
+//			}
 		} else if (dbRep.equalsIgnoreCase("contact")) {
 			DatabaseHandlerContacts dhc = new DatabaseHandlerContacts();
 			dhc.addModel(m);
