@@ -108,7 +108,7 @@ public class DatabaseHandlerAssignment extends DatabaseHandler {
 
 			// Sätt autocommit till falskt
 			con.setAutoCommit(false);
-
+			System.out.println("REGION: "+ass.getRegion());
 			String updateString = "UPDATE " + ass.getDatabaseRepresentation()
 					+ " SET Name = AES_ENCRYPT(\"" + ass.getName() + "\",\""+AES_PASSWORD+"\"), " +
 					" Latitude = AES_ENCRYPT(\"" + Double.toString(ass.getLat()) + "\",\""+AES_PASSWORD+"\")," +
