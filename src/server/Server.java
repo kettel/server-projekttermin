@@ -259,6 +259,7 @@ public class Server {
 				System.out.println("@Server(259)");
 				if (!list.isEmpty()) {
 					System.out.println("@Server(261)");
+					System.out.println("keySet: " + hashMap.keySet() + " values: " + hashMap.values());
 					PrintWriter pr = new PrintWriter(hashMap.get(receiver
 							.getInetAddress()), true);
 					System.out.println("@Server(264)");
