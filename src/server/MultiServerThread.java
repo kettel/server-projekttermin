@@ -70,15 +70,12 @@ public class MultiServerThread extends Thread {
 				// Buffrar ihop flera tecken från InputStreamen till en sträng
 				input = new BufferedReader(new InputStreamReader(
 						socket.getInputStream()));
-				int counter = 1;
 				// Läser den buffrade strängen
 				while ((inputLine = input.readLine()) != null
 						&& !inputLine.equals("close")) {
 					System.out.println("<input from "
 							+ socket.getInetAddress().toString() + ":"
 							+ socket.getPort() + "> " + inputLine);
-					System.out.println("counter: "+ counter);
-					counter++;
 					handleTypeOfInput(inputLine);
 				}
 				connected = false;
@@ -169,32 +166,30 @@ public class MultiServerThread extends Thread {
 		try {
 			Assignment assignmentFromJson = (new Gson()).fromJson(assignment,
 					Assignment.class);
+			boolean alreadyExists = false;
 			if (!socket.getInetAddress().toString().equals(replicateServerIP)) {
 				list = db.getAllFromDB(new Assignment());
 				if (list.size() > 0) {
 					for (ModelInterface m : list) {
 						Assignment ass = (Assignment) m;
-						System.out.println("assignmentFromJson.getGlobalId: " + assignmentFromJson.getGlobalID() + " compared to " + ass.getGlobalID());
 						if (assignmentFromJson.getGlobalID().equals(
 								ass.getGlobalID())) {
+							alreadyExists = true;
 							db.updateModel(assignmentFromJson);
-							server.sendToAllExceptTheSender(assignment, socket.getInetAddress().toString());
-						} else {
-							System.out.println("@MST(179): Lägger till i db " + assignmentFromJson.getName());
-							db.addToDB(assignmentFromJson);
-							System.out.println("@MST(181): Skickar " + assignmentFromJson.getName() + " till alla utom avsändaren");
-
 							server.sendToAllExceptTheSender(assignment, socket
 									.getInetAddress().toString());
 						}
 					}
-
+					if (!alreadyExists) {
+						db.addToDB(assignmentFromJson);
+						server.sendToAllExceptTheSender(assignment, socket
+								.getInetAddress().toString());
+					}
 				} else {
-					System.out.println("@MST(189): Lägger till i db " + assignmentFromJson.getName());
 					db.addToDB(assignmentFromJson);
-					System.out.println("@MST(191): Skickar " + assignmentFromJson.getName() + " till alla utom avsändaren");
-					server.sendToAllExceptTheSender(assignment, socket.getInetAddress().toString());
-				}				
+					server.sendToAllExceptTheSender(assignment, socket
+							.getInetAddress().toString());
+				}
 			}
 			Calendar cal = Calendar.getInstance();
 			cal.getTime();

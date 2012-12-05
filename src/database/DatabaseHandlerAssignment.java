@@ -125,7 +125,6 @@ public class DatabaseHandlerAssignment extends DatabaseHandler {
 					" Streetname = AES_ENCRYPT(\"" + ass.getStreetName()+ "\",\""+AES_PASSWORD+"\")," +
 					" Sitename = AES_ENCRYPT(\"" + ass.getSiteName()+ "\",\""+AES_PASSWORD+"\")" +
 					" WHERE AES_DECRYPT(Global_ID,\""+AES_PASSWORD+"\") = \""+ass.getGlobalID()+"\"";
-			System.out.println("UpdateString: " + updateString);
 			// Sätt in rätt värden till rätt plats i frågan och uppdatera dessa
 			st.executeUpdate(updateString);
 
