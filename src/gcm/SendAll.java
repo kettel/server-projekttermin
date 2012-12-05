@@ -46,7 +46,6 @@ public class SendAll {
 				partialDevices.add(device);
 				int partialSize = partialDevices.size();
 				if (partialSize == MULTICAST_SIZE || counter == total) {
-					System.out.println("asyncSend");
 					asyncSend(partialDevices);
 					partialDevices.clear();
 					tasks++;
