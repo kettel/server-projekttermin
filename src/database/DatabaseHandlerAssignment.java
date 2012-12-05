@@ -123,7 +123,7 @@ public class DatabaseHandlerAssignment extends DatabaseHandler {
 					" Cameraimage = AES_ENCRYPT(\"" + ass.getCameraImage()+ "\",\""+AES_PASSWORD+"\")," +
 					" Streetname = AES_ENCRYPT(\"" + ass.getStreetName()+ "\",\""+AES_PASSWORD+"\")," +
 					" Sitename = AES_ENCRYPT(\"" + ass.getSiteName()+ "\",\""+AES_PASSWORD+"\")" +
-					" WHERE Global_ID = \""+ass.getGlobalID()+"\"";
+					" WHERE AES_DECRYPT(Global_ID,\""+AES_PASSWORD+"\") = \""+ass.getGlobalID()+"\"";
 			System.out.println("UpdateString: " + updateString);
 			// Sätt in rätt värden till rätt plats i frågan och uppdatera dessa
 			st.executeUpdate(updateString);
