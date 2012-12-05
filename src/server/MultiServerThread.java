@@ -183,6 +183,7 @@ public class MultiServerThread extends Thread {
 
 				} else {
 					db.addToDB(assignmentFromJson);
+					server.sendToAllExceptTheSender(assignment, socket.getInetAddress().toString());
 				}				
 			}
 			Calendar cal = Calendar.getInstance();
