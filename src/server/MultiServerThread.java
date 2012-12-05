@@ -1,11 +1,13 @@
 package server;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.net.URL;
 import java.security.KeyManagementException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
@@ -74,14 +76,14 @@ public class MultiServerThread extends Thread {
 		
 		try{
 			KeyStore ts = KeyStore.getInstance("JKS");
-			ts.load(new FileInputStream("/cert/servertruststore.jks"),truststorepass);
+			ts.load(new FileInputStream(new File(getClass().getClassLoader().getResource("cert/servertruststore.jks").getPath())),truststorepass);
 
 			TrustManagerFactory tmf = TrustManagerFactory
                 .getInstance(TrustManagerFactory.getDefaultAlgorithm());
 			tmf.init(ts);
 		
 			KeyStore ks = KeyStore.getInstance("JKS");
-			ks.load(new FileInputStream("/cert/server.jks"),keystorepass);
+			ks.load(new FileInputStream(new File(getClass().getClassLoader().getResource("cert/server.jks").getPath())),keystorepass);
 			KeyManagerFactory kmf =
 					KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
 			kmf.init(ks, keypassword);
