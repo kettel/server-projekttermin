@@ -176,14 +176,19 @@ public class MultiServerThread extends Thread {
 							db.updateModel(assignmentFromJson);
 							server.sendToAllExceptTheSender(assignment, socket.getInetAddress().toString());
 						} else {
+							System.out.println("@MST(179): Lägger till i db " + assignmentFromJson.getName());
 							db.addToDB(assignmentFromJson);
+							System.out.println("@MST(181): Skickar " + assignmentFromJson.getName() + " till alla utom avsändaren");
+
 							server.sendToAllExceptTheSender(assignment, socket
 									.getInetAddress().toString());
 						}
 					}
 
 				} else {
+					System.out.println("@MST(189): Lägger till i db " + assignmentFromJson.getName());
 					db.addToDB(assignmentFromJson);
+					System.out.println("@MST(191): Skickar " + assignmentFromJson.getName() + " till alla utom avsändaren");
 					server.sendToAllExceptTheSender(assignment, socket.getInetAddress().toString());
 				}				
 			}
