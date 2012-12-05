@@ -174,6 +174,7 @@ public class MultiServerThread extends Thread {
 						if (assignmentFromJson.getGlobalID().equals(
 								ass.getGlobalID())) {
 							db.updateModel(assignmentFromJson);
+							server.sendToAllExceptTheSender(assignment, socket.getInetAddress().toString());
 						} else {
 							db.addToDB(assignmentFromJson);
 							server.sendToAllExceptTheSender(assignment, socket
