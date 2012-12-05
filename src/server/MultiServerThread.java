@@ -111,6 +111,8 @@ public class MultiServerThread extends Thread {
 			if (!handleLogin(input)) {
 				connected = false;
 			}
+		} else if (input.equals("logout")) {
+			handleLogout();
 		} else if (input.equals("pull")) {
 			server.sendUnsentItems(thisContact);
 			// Vid förfrågan skickas alla kontakter från databasen
@@ -320,5 +322,10 @@ public class MultiServerThread extends Thread {
 			System.out.println("catch: handleContactRequest");
 			System.out.println(e);
 		}
+	}
+	
+	private void handleLogout(){
+		server.removeClient(socket.getInetAddress().toString());
+		server.removeGcmClient(thisContact.getContactName());
 	}
 }
