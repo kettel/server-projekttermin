@@ -252,14 +252,22 @@ public class Server {
 	 */
 	public void sendUnsentItems(Contact receiver) {
 		if (receiver != null) {
+			System.out.println("@Server(255)");
 			try {
+				System.out.println("@Server(257)");
 				list = db.getAllFromDB(new QueueItem(receiver.getId()));
+				System.out.println("@Server(259)");
 				if (!list.isEmpty()) {
+					System.out.println("@Server(261)");
 					PrintWriter pr = new PrintWriter(hashMap.get(receiver
 							.getInetAddress()), true);
+					System.out.println("@Server(264)");
 					for (ModelInterface m : list) {
+						System.out.println("@Server(266)");
 						QueueItem qItem = (QueueItem) m;
+						System.out.println("@Server(268)");
 						pr.println(qItem.getJSON());
+						System.out.println("@Server(270)");
 						db.deleteFromDB(qItem);
 						System.out
 								.println("Sending " + qItem.getJSON()
