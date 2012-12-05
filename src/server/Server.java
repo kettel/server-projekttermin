@@ -132,6 +132,7 @@ public class Server {
 				if (hashMap.keySet().contains(cont.getInetAddress())) {
 					PrintWriter pr = new PrintWriter(hashMap.get(cont
 							.getInetAddress()), true);
+					System.out.println("Skickar enbart till " + receiver);
 					pr.println(stringToBeSent);
 				} else {
 					if (!stringToBeSent
@@ -139,6 +140,7 @@ public class Server {
 						QueueItem qItem = new QueueItem(cont.getId(),
 								stringToBeSent);
 						db.addToDB(qItem);
+						System.out.println("kollar gcmMap för skickning av notifikation");
 						if (gcmMap.get(cont.getContactName()) != null) {
 							System.out.println("Skickar en notifikation till " + cont.getContactName());
 							System.out.println("gcmMap: " + gcmMap.keySet());
