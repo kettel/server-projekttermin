@@ -193,7 +193,7 @@ public class Server {
 				} else {
 					QueueItem qItem = new QueueItem(cont.getId(),
 							stringToBeSent);
-					db.addToDB(qItem);
+//					db.addToDB(qItem);
 				}
 			}
 		}

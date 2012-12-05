@@ -166,10 +166,11 @@ public class MultiServerThread extends Thread {
 		try {
 			Assignment assignmentFromJson = (new Gson()).fromJson(assignment,
 					Assignment.class);
+			boolean listIsEmpty = true;
 			if (!socket.getInetAddress().toString().equals(replicateServerIP)) {
-
 				list = db.getAllFromDB(new Assignment());
 				if (list.size() > 0) {
+					listIsEmpty = false;
 					for (ModelInterface m : list) {
 						Assignment ass = (Assignment) m;
 						if (assignmentFromJson.getGlobalID().equals(
@@ -182,7 +183,7 @@ public class MultiServerThread extends Thread {
 						}
 					}
 
-				} else {
+				} else if(listIsEmpty) {
 					db.addToDB(assignmentFromJson);
 				}
 
