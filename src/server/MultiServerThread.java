@@ -74,14 +74,14 @@ public class MultiServerThread extends Thread {
 		
 		try{
 			KeyStore ts = KeyStore.getInstance("JKS");
-			ts.load(new FileInputStream("src/cert/servertruststore.jks"),truststorepass);
+			ts.load(new FileInputStream("../cert/servertruststore.jks"),truststorepass);
 
 			TrustManagerFactory tmf = TrustManagerFactory
                 .getInstance(TrustManagerFactory.getDefaultAlgorithm());
 			tmf.init(ts);
 		
 			KeyStore ks = KeyStore.getInstance("JKS");
-			ks.load(new FileInputStream("src/cert/server.jks"),keystorepass);
+			ks.load(new FileInputStream("../cert/server.jks"),keystorepass);
 			KeyManagerFactory kmf =
 					KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
 			kmf.init(ks, keypassword);
