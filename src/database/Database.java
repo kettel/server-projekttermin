@@ -35,6 +35,7 @@ public class Database {
 			dha.addModel(m);
 //			if (replicateStatus) {
 				try {
+					System.out.println("SKICKAR TILL ALLA!");
 					all.sendAll();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block

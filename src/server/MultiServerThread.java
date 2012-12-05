@@ -166,11 +166,9 @@ public class MultiServerThread extends Thread {
 		try {
 			Assignment assignmentFromJson = (new Gson()).fromJson(assignment,
 					Assignment.class);
-			boolean listIsEmpty = true;
 			if (!socket.getInetAddress().toString().equals(replicateServerIP)) {
 				list = db.getAllFromDB(new Assignment());
 				if (list.size() > 0) {
-					listIsEmpty = false;
 					for (ModelInterface m : list) {
 						Assignment ass = (Assignment) m;
 						if (assignmentFromJson.getGlobalID().equals(
@@ -183,19 +181,18 @@ public class MultiServerThread extends Thread {
 						}
 					}
 
-				} else if(listIsEmpty) {
+				} else {
 					db.addToDB(assignmentFromJson);
-				}
-
-				Calendar cal = Calendar.getInstance();
-				cal.getTime();
-				SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-				System.out.println("<" + socket.getInetAddress() + ":"
-						+ socket.getPort() + " " + sdf.format(cal.getTime())
-						+ "> assignment from " + assignmentFromJson.getSender()
-						+ ": " + assignmentFromJson.getName() + "	"
-						+ assignmentFromJson.getAssignmentStatus());
+				}				
 			}
+			Calendar cal = Calendar.getInstance();
+			cal.getTime();
+			SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+			System.out.println("<" + socket.getInetAddress() + ":"
+					+ socket.getPort() + " " + sdf.format(cal.getTime())
+					+ "> assignment from " + assignmentFromJson.getSender()
+					+ ": " + assignmentFromJson.getName() + "	"
+					+ assignmentFromJson.getAssignmentStatus());
 		} catch (Exception e) {
 			System.out.println(e);
 		}
