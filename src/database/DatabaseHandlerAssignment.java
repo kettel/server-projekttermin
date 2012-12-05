@@ -113,7 +113,7 @@ public class DatabaseHandlerAssignment extends DatabaseHandler {
 					+ " SET Name = AES_ENCRYPT(\"" + ass.getName() + "\",\""+AES_PASSWORD+"\"), " +
 					" Latitude = AES_ENCRYPT(\"" + Double.toString(ass.getLat()) + "\",\""+AES_PASSWORD+"\")," +
 					" Longitude = AES_ENCRYPT(\"" + Double.toString(ass.getLon()) + "\",\""+AES_PASSWORD+"\")," +
-					" Region = AES_ENCRYPT(\"" + ass.getRegion() + "\",\""+AES_PASSWORD+"\")," +
+					" Region = AES_ENCRYPT(" + ass.getRegion() + ",\""+AES_PASSWORD+"\")," +
 					" Agents = AES_ENCRYPT(\"" + ass.getAgentsString() + "\",\""+AES_PASSWORD+"\")," +
 					" Sender = AES_ENCRYPT(\"" + ass.getSender() + "\",\""+AES_PASSWORD+"\")," +
 					" ExternalMission = AES_ENCRYPT(\""	+ Boolean.toString(ass.isExternalMission()) + "\",\""+AES_PASSWORD+"\")," +
