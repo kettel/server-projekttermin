@@ -133,6 +133,7 @@ public class Server {
 					PrintWriter pr = new PrintWriter(hashMap.get(cont
 							.getInetAddress()), true);
 					System.out.println("Skickar enbart till " + receiver);
+					System.out.println("hashMap: " + hashMap.keySet());
 					pr.println(stringToBeSent);
 				} else {
 					if (!stringToBeSent
