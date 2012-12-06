@@ -25,7 +25,7 @@ import model.Assignment;
 import model.AssignmentStatus;
 
 public class IntercomConnection  extends Thread implements HandshakeCompletedListener{
-	private static String serverIP = "localhost";
+	private static String serverIP = "79.136.60.158";
 	private static int serverPort = 3802;
 	private int id = 0;
 	private char password[] = "password".toCharArray();

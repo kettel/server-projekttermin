@@ -1,6 +1,6 @@
 package database;
 
-import GCM.SendAll;
+import gcm.SendAll;
 
 import java.io.IOException;
 import java.util.ArrayList;

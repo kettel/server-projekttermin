@@ -13,23 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package GCM;
+package gcm;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet that registers a device, whose registration id is identified by
+ * Servlet that unregisters a device, whose registration id is identified by
  * {@link #PARAMETER_REG_ID}.
- *
  * <p>
  * The client app should call this servlet everytime it receives a
- * {@code com.google.android.c2dm.intent.REGISTRATION C2DM} intent without an
- * error or {@code unregistered} extra.
+ * {@code com.google.android.c2dm.intent.REGISTRATION} with an
+ * {@code unregistered} extra.
  */
 @SuppressWarnings("serial")
-public class RegisterServlet extends BaseServlet {
+public class UnregisterServlet extends BaseServlet {
 
   private static final String PARAMETER_REG_ID = "regId";
 
@@ -37,8 +36,7 @@ public class RegisterServlet extends BaseServlet {
   protected void doPost(HttpServletRequest req, HttpServletResponse resp)
       throws ServletException {
     String regId = getParameter(req, PARAMETER_REG_ID);
-    Datastore.register(regId);
-    System.out.println("GCM: reggar");
+    Datastore.unregister(regId);
     setSuccess(resp);
   }
 
