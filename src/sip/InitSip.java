@@ -87,7 +87,7 @@ public class InitSip {
 			out.write("tcpbindaddr = 0.0.0.0\n");
 			out.write("tcpenable = yes\n");
 			out.write("videosupport = yes\n");
-			
+			out.write("\n");
 			// Provisionera användare
 			for(ModelInterface m : list){
 				AuthenticationModel contact = (AuthenticationModel) m;
