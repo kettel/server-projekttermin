@@ -57,7 +57,7 @@ public class IntercomConnection  extends Thread implements HandshakeCompletedLis
 		db = new Database();
 			try {
 				keystore = KeyStore.getInstance("JKS");
-				keystore.load(new FileInputStream(new File(getClass().getClassLoader().getResource("interkomTest/masterserver.jks").getPath())),password);
+				keystore.load(new FileInputStream(new File(getClass().getClassLoader().getResource("server/masterserver.jks").getPath())),password);
 				keyMangamentFactory = keyMangamentFactory.getInstance(keyMangamentFactory.getDefaultAlgorithm());
 				keyMangamentFactory.init(keystore, password);
 				trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
