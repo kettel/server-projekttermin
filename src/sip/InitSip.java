@@ -19,6 +19,10 @@ public class InitSip {
 	List<ModelInterface> list;
 	private static String externalIp;
 	private static boolean isStarted = false; 
+	public InitSip(){
+		
+	}
+	
 	public InitSip(List<ModelInterface> list){
 		System.out.println("pwd: " + pwd());
 		provisionUsers(list);
@@ -221,5 +225,11 @@ public class InitSip {
 		} 
 		System.out.println("InitSip: Extern IP är: "+externalIp);
 		return externalIp;
+	}
+	public static boolean getIsStarted(){
+		return isStarted;
+	}
+	public static void setIsStarted(boolean started){
+		isStarted = started;
 	}
 }

@@ -4,6 +4,8 @@ import java.io.Console;
 import java.util.List;
 import java.util.Scanner;
 
+import sip.InitSip;
+
 import model.AuthenticationModel;
 import model.Contact;
 import model.ModelInterface;
@@ -52,6 +54,13 @@ public class CreateContactCommand implements CommandInterface {
 				server.sendToAll(contact);
 				addToLogin(newContact, pw);
 				System.out.println("Kontakt sparad.");
+				
+				// Uppdatera SIP-användarna när man har lagt till en ny användare
+				if(InitSip.getIsStarted()){
+					InitSip.setIsStarted(false);
+				}
+				InitSip.provisionUsers(db.getAllFromDB(new AuthenticationModel()));
+				
 				}else{
 					System.out.println("En kontakt med det namnet finns redan.");
 				}
