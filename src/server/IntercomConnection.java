@@ -4,6 +4,8 @@ import intercomModels.GPSCoordinate;
 import intercomModels.LoginObject;
 import intercomModels.MissionID;
 import intercomModels.MissionIntergroup;
+import intercomModels.MissionIntergroupUpdate;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -12,6 +14,7 @@ import java.io.PrintWriter;
 import java.security.KeyStore;
 import java.util.Date;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 import javax.net.ssl.HandshakeCompletedEvent;
 import javax.net.ssl.HandshakeCompletedListener;
@@ -21,8 +24,11 @@ import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManagerFactory;
 import com.google.gson.Gson;
+
+import database.Database;
 import model.Assignment;
 import model.AssignmentStatus;
+import model.ModelInterface;
 
 public class IntercomConnection  extends Thread implements HandshakeCompletedListener{
 	private static String serverIP = "79.136.60.158";
@@ -43,10 +49,13 @@ public class IntercomConnection  extends Thread implements HandshakeCompletedLis
 	private WgspointConverter WgsC = new WgspointConverter();
 	private Gson gson = new Gson();
 	private SSLSocket sslSocket = null;
-//	private Server server = null;
+	private Server server = null;
+	private Database db = null;
+	private List<ModelInterface> list;
 	
-	public IntercomConnection(/*Server server*/){
-//		this.server = server;
+	public IntercomConnection(Server server){
+		this.server = server;
+		db = new Database();
 			try {
 				keystore = KeyStore.getInstance("JKS");
 				keystore.load(new FileInputStream(new File(getClass().getClassLoader().getResource("interkomTest/masterserver.jks").getPath())),password);
@@ -134,11 +143,33 @@ public class IntercomConnection  extends Thread implements HandshakeCompletedLis
 										double[] latAndLon = {intercom.getLocation().getLatitude(),intercom.getLocation().getLongitude()};
 										String region = WgsC.DoubelToGsonWgsString(latAndLon);
 										Assignment misson = new Assignment(intercom.getTitle(),region,"intercom", false, intercom.getDescription(), "", AssignmentStatus.STARTED, "", "");
-										System.out.println("send to all here");
-										System.out.println(gson.toJson(misson));
-//										server.sendToAll(gson.toJson(misson));
+										System.out.println("New assignment from InterCommServer named: " + misson.getName());
+										misson.setGlobalID(intercom.getId().idToString());
+										db.addToDB(misson);
+										server.sendToAll(gson.toJson(misson));
 									}else if(incomeing.contains("\"identifier\":\"@MissonUpdateInter@\"")){
-										System.out.println("uppdate, nothing done");
+										System.out.println("Misson uppdate from InterCommServer");
+										MissionIntergroupUpdate update = gson.fromJson(incomeing, MissionIntergroupUpdate.class);
+										list = db.getAllFromDB(new Assignment());
+										if (list.size() > 0) {
+											for (ModelInterface m : list) {
+												Assignment ass = (Assignment) m;
+												if (update.getMissionId().idToString().equals(ass.getGlobalID())) {
+													if(update.getContent().equals(MissionIntergroupUpdate.UpdateContent.DESCRIPTION)){
+														ass.setAssigmentDescripton((String)update.getNewValue());
+													}else if (update.getContent().equals(MissionIntergroupUpdate.UpdateContent.TITLE)) {
+														ass.SetName((String)update.getNewValue());
+													}else if (update.getContent().equals(MissionIntergroupUpdate.UpdateContent.LOCATION)) {
+														GPSCoordinate GPS = gson.fromJson((String)update.getNewValue(), GPSCoordinate.class);
+														double[] array = {GPS.getLongitude(),GPS.getLatitude()};
+														ass.setRegion(WgsC.DoubelToGsonWgsString(array));
+													}	
+													db.updateModel(ass);
+													server.sendToAll(gson.toJson(ass));
+												}
+											}
+										}
+										
 									}
 								}
 							} catch (Exception e) {

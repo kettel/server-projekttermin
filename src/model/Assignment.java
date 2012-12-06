@@ -306,6 +306,10 @@ public class Assignment implements ModelInterface {
 	public String getRegion() {
 		return region;
 	}
+	
+	public void setRegion(String newRegion){
+		this.region = newRegion;
+	}
 
 	public boolean isExternalMission() {
 		return externalMission;
@@ -317,6 +321,10 @@ public class Assignment implements ModelInterface {
 
 	public String getName() {
 		return name;
+	}
+	
+	public void SetName(String newName){
+		this.name = newName;
 	}
 
 	public String getStreetName() {
@@ -345,6 +353,10 @@ public class Assignment implements ModelInterface {
 
 	public String getAssignmentDescription() {
 		return assignmentDescription;
+	}
+	
+	public void setAssigmentDescripton(String newDescription){
+		this.assignmentDescription = newDescription;
 	}
 
 	public String getTimeSpan() {
@@ -383,6 +395,9 @@ public class Assignment implements ModelInterface {
 
 	public long getId() {
 		return id;
+	}
+	public void setGlobalID(String id){
+		this.globalID = id;
 	}
 
 	/**
