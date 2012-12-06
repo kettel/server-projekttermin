@@ -1,30 +1,17 @@
 package server;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 
-import java.security.KeyManagementException;
-import java.security.KeyStore;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.security.UnrecoverableKeyException;
-import java.security.cert.CertificateException;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 
-import javax.net.ServerSocketFactory;
-import javax.net.ssl.KeyManagerFactory;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLServerSocket;
 import javax.net.ssl.SSLSocket;
-import javax.net.ssl.TrustManagerFactory;
 
 import model.Assignment;
 import model.AuthenticationModel;
@@ -54,9 +41,7 @@ public class MultiServerThread extends Thread {
 	private List<ModelInterface> list;
 	private List<ModelInterface> hashList;
 	private final String replicateServerIP = "/192.168.1.1";
-	private char keystorepass[] = "password".toCharArray();
-	private char keypassword[] = "password".toCharArray();
-	private char truststorepass[] = "password".toCharArray();
+
 
 	/**
 	 * Konstruktorn, tar emot en socket för porten vi lyssnar på och en Server
@@ -68,51 +53,17 @@ public class MultiServerThread extends Thread {
 	 *            Servern som hanterar alla anslutningar och som kan skicka
 	 *            vidare data
 	 */
-	public MultiServerThread(SSLSocket socket, SSLServerSocket serverSocket) {
+	public MultiServerThread(SSLSocket socket, Server server) {
 		super("MultiServerThread");
-		System.out.println("test2");
-		KeyStore ts;
-		try {
-			ts = KeyStore.getInstance("JKS");
-		
-			ts.load(new FileInputStream(new File(getClass().getClassLoader().getResource("cert/servertruststore.jks").getPath())),truststorepass);
-
-			TrustManagerFactory tmf = TrustManagerFactory
-            .getInstance(TrustManagerFactory.getDefaultAlgorithm());
-			tmf.init(ts);
-	
-			KeyStore ks = KeyStore.getInstance("JKS");
-			ks.load(new FileInputStream(new File(getClass().getClassLoader().getResource("cert/server.jks").getPath())),keystorepass);
-			KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
-			kmf.init(ks, keypassword);
-			SSLContext sslcontext = SSLContext.getInstance("TLS");
-			sslcontext.init(kmf.getKeyManagers(), tmf.getTrustManagers(), new SecureRandom());
-			ServerSocketFactory ssf = sslcontext.getServerSocketFactory();
-
-			serverSocket = (SSLServerSocket)
-					ssf.createServerSocket(Server.port);
-		
-			db = new Database();
-			if (socket.getInetAddress().toString().equals(replicateServerIP)) {
-				db.setReplicationStatus(false);
-			} else {
-				db.setReplicationStatus(true);
-			}
-		} catch (KeyStoreException e) {
-			e.printStackTrace();
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-		} catch (CertificateException e) {
-			e.printStackTrace();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (UnrecoverableKeyException e) {
-			e.printStackTrace();
-		} catch (KeyManagementException e) {
-			e.printStackTrace();
+		this.socket = socket;
+		this.server = server;
+		db = new Database();
+		if (socket.getInetAddress().toString().equals(replicateServerIP)) {
+			db.setReplicationStatus(false);
+		} else {
+			db.setReplicationStatus(true);
 		}
+
 	}
 
 	/**
@@ -370,7 +321,9 @@ public class MultiServerThread extends Thread {
 			for (ModelInterface m : list) {
 				Contact cont = (Contact) m;
 				String contact = new Gson().toJson(cont);
-				System.out.println("@MST(316): sending contact " + cont.getContactName() + " to " + thisContact.getContactName());
+				System.out.println("@MST(316): sending contact "
+						+ cont.getContactName() + " to "
+						+ thisContact.getContactName());
 				server.send(contact, thisContact.getContactName());
 			}
 		} catch (Exception e) {
@@ -378,8 +331,8 @@ public class MultiServerThread extends Thread {
 			System.out.println(e);
 		}
 	}
-	
-	private void handleLogout(){
+
+	private void handleLogout() {
 		server.removeClient(socket.getInetAddress().toString());
 		server.removeGcmClient(thisContact.getContactName());
 	}
