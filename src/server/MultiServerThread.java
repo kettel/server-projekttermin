@@ -1,29 +1,15 @@
 package server;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.net.URL;
-import java.security.KeyManagementException;
-import java.security.KeyStore;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.UnrecoverableKeyException;
-import java.security.cert.CertificateException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 
-import javax.net.ServerSocketFactory;
-import javax.net.ssl.KeyManagerFactory;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLServerSocket;
 import javax.net.ssl.SSLSocket;
-import javax.net.ssl.TrustManagerFactory;
 
 import model.Assignment;
 import model.AuthenticationModel;
@@ -43,23 +29,16 @@ import database.Database;
  */
 public class MultiServerThread extends Thread {
 
-	private Socket socket = null;
+	private SSLSocket socket = null;
 	private BufferedReader input = null;
 	private String inputLine;
 	private Database db = null;
-
 	private boolean connected = true;
 	private Server server = null;
 	private Contact thisContact = null;
 	private List<ModelInterface> list;
 	private List<ModelInterface> hashList;
-	char keystorepass[] = "password".toCharArray();
-	char keypassword[] = "password".toCharArray();
-	char truststorepass[] = "password".toCharArray();
-	SSLServerSocket Socket = null;
-	SSLSocket client;
 	private final String replicateServerIP = "/192.168.1.1";
-
 
 	/**
 	 * Konstruktorn, tar emot en socket för porten vi lyssnar på och en Server
@@ -73,50 +52,9 @@ public class MultiServerThread extends Thread {
 	 */
 	public MultiServerThread(Socket socket, Server server) {
 		super("MultiServerThread");
-		
-		try{
-			KeyStore ts = KeyStore.getInstance("JKS");
-			ts.load(new FileInputStream(new File(getClass().getClassLoader().getResource("cert/servertruststore.jks").getPath())),truststorepass);
-
-			TrustManagerFactory tmf = TrustManagerFactory
-                .getInstance(TrustManagerFactory.getDefaultAlgorithm());
-			tmf.init(ts);
-		
-			KeyStore ks = KeyStore.getInstance("JKS");
-			ks.load(new FileInputStream(new File(getClass().getClassLoader().getResource("cert/server.jks").getPath())),keystorepass);
-			KeyManagerFactory kmf =
-					KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
-			kmf.init(ks, keypassword);
-			SSLContext sslcontext =
-					SSLContext.getInstance("TLS");
-			sslcontext.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);
-			ServerSocketFactory ssf = sslcontext.getServerSocketFactory();
-
-			Socket = (SSLServerSocket)
-					ssf.createServerSocket(Server.port);
-
-		} catch (IOException e) {
-			e.printStackTrace();
-			System.out.println("Could not listen on port "+socket);
-		} catch (KeyStoreException e) {
-			System.out.println("Could not get key store");
-		} catch (NoSuchAlgorithmException e) {
-			System.out.println("There is no algorithm in ks.load");
-			e.printStackTrace();
-		} catch (CertificateException e) {
-			e.printStackTrace();
-		} catch (UnrecoverableKeyException e) {
-			System.out.println("kmf.init() no key");
-		} catch (KeyManagementException e) {
-			System.out.println("sslcontext.init keymanagementexception");
-		}
-		try {
-			//klart att skicka över om deta klara sig
-			client = (SSLSocket) Socket.accept();
-		}catch (IOException e) {
-			System.out.println("Accept failed on "+Server.port);
-		}
-		db = new Database(); 
+		this.socket = (SSLSocket) socket;
+		this.server = server;
+		db = new Database();
 		if (socket.getInetAddress().toString().equals(replicateServerIP)) {
 			db.setReplicationStatus(false);
 		} else {
@@ -130,7 +68,7 @@ public class MultiServerThread extends Thread {
 	public void run() {
 
 		try {
-			
+			while (connected) {
 				// Buffrar ihop flera tecken från InputStreamen till en sträng
 				input = new BufferedReader(new InputStreamReader(
 						socket.getInputStream()));
@@ -142,21 +80,8 @@ public class MultiServerThread extends Thread {
 							+ socket.getPort() + "> " + inputLine);
 					handleTypeOfInput(inputLine);
 				}
-				// if (inputLine != null) {
-				//
-				// if (inputLine.equals("exit")) {
-				// connected = false;
-				// break;
-				// }
-				//
-				// // Bestämmer vilken typ av input som kommer in. När det
-				// // avgjorts
-				// // sparas och/eller skickas input:en vidare.
-				// handleTypeOfInput(inputLine);
-				//
-				// }
-
-
+				connected = false;
+			}
 			// Tar bort kontakten från hashMapen med de anslutna klienterna
 			server.removeClient(socket.getInetAddress().toString());
 			// Stänger buffern
@@ -188,8 +113,11 @@ public class MultiServerThread extends Thread {
 			if (!handleLogin(input)) {
 				connected = false;
 			}
+		} else if (input.equals("logout")) {
+			handleLogout();
 		} else if (input.equals("pull")) {
 			server.sendUnsentItems(thisContact);
+			// Vid förfrågan skickas alla kontakter från databasen
 		} else if (input.equals("getAllContacts")) {
 			handleContactRequest();
 		} else {
@@ -225,6 +153,7 @@ public class MultiServerThread extends Thread {
 					+ msg.getReciever() + ": " + msg.getMessageContent());
 
 		} catch (Exception e) {
+			System.out.println("catch: handleMessage");
 			System.out.println(e);
 		}
 	}
@@ -241,13 +170,31 @@ public class MultiServerThread extends Thread {
 		try {
 			Assignment assignmentFromJson = (new Gson()).fromJson(assignment,
 					Assignment.class);
+			boolean alreadyExists = false;
 			if (!socket.getInetAddress().toString().equals(replicateServerIP)) {
-				server.sendToAllExceptTheSender(assignment, socket
-						.getInetAddress().toString());
+				list = db.getAllFromDB(new Assignment());
+				if (list.size() > 0) {
+					for (ModelInterface m : list) {
+						Assignment ass = (Assignment) m;
+						if (assignmentFromJson.getGlobalID().equals(
+								ass.getGlobalID())) {
+							alreadyExists = true;
+							db.updateModel(assignmentFromJson);
+							server.sendToAllExceptTheSender(assignment, socket
+									.getInetAddress().toString());
+						}
+					}
+					if (!alreadyExists) {
+						db.addToDB(assignmentFromJson);
+						server.sendToAllExceptTheSender(assignment, socket
+								.getInetAddress().toString());
+					}
+				} else {
+					db.addToDB(assignmentFromJson);
+					server.sendToAllExceptTheSender(assignment, socket
+							.getInetAddress().toString());
+				}
 			}
-
-			// Lägger in kontakten i databasen
-			db.addToDB(assignmentFromJson);
 			Calendar cal = Calendar.getInstance();
 			cal.getTime();
 			SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
@@ -275,12 +222,23 @@ public class MultiServerThread extends Thread {
 			Contact contactFromJson = (new Gson()).fromJson(contact,
 					Contact.class);
 			// Lägger in uppdraget i databasen
-			db.addToDB(contactFromJson);
+			if (!socket.getInetAddress().toString().equals(replicateServerIP)) {
+				db.addToDB(contactFromJson);
+			}
 		} catch (Exception e) {
 			System.out.println(e);
 		}
 	}
 
+	/**
+	 * Hanterar json-strängen om det är en login-request och skickar ett svar om
+	 * det är ett korrekt login
+	 * 
+	 * @param login
+	 *            Json-strängen av inloggningsförfrågan
+	 * @return true om kontakten stämmer överens med befintlig kontakt ur
+	 *         databasen, annars false
+	 */
 	private boolean handleLogin(String login) {
 		try {
 			System.out.println("Login request from: "
@@ -301,6 +259,11 @@ public class MultiServerThread extends Thread {
 											logMod.getPasswordHash())) {
 								cont.setInetAddress(socket.getInetAddress()
 										.toString());
+								cont.setGcmId(loginFromJson.getGcmId());
+								server.addGcmClient(
+										loginFromJson.getUserName(),
+										loginFromJson.getGcmId());
+
 								db.updateModel(cont);
 								loginFromJson.setIsAccessGranted(true);
 								String response = new Gson()
@@ -345,16 +308,26 @@ public class MultiServerThread extends Thread {
 		return false;
 	}
 
+	/**
+	 * Skickar alla kontakter från databasen
+	 */
 	private void handleContactRequest() {
 		try {
 			list = db.getAllFromDB(new Contact());
 			for (ModelInterface m : list) {
 				Contact cont = (Contact) m;
 				String contact = new Gson().toJson(cont);
+				System.out.println("@MST(316): sending contact " + cont.getContactName() + " to " + thisContact.getContactName());
 				server.send(contact, thisContact.getContactName());
 			}
 		} catch (Exception e) {
+			System.out.println("catch: handleContactRequest");
 			System.out.println(e);
 		}
+	}
+	
+	private void handleLogout(){
+		server.removeClient(socket.getInetAddress().toString());
+		server.removeGcmClient(thisContact.getContactName());
 	}
 }

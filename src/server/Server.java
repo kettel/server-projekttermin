@@ -1,17 +1,33 @@
 package server;
 
+import gcm.Datastore;
 import gcm.HomeServlet;
 import gcm.RegisterServlet;
+import gcm.SendAll;
 import gcm.UnregisterServlet;
 
 import java.awt.EventQueue;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.security.KeyManagementException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+
+import javax.net.ServerSocketFactory;
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLServerSocket;
+import javax.net.ssl.TrustManagerFactory;
 
 import jetty.JettyServer;
 import model.Contact;
@@ -34,19 +50,32 @@ import database.Database;
 public class Server {
 
 	// Porten som används för anslutningar till servern
-	public static final int port = 18234;
+	private static int port = 0;
 	// Tillåter klienter att ansluta till servern
-	private static ServerSocket serverSocket = null;
+	private static SSLServerSocket serverSocket = null;
 	// En boolean som avgör om servern lyssnar på anslutningar
 	private static boolean listening = true;
 	// En ConcurrentHashMap som länkar ett IP till en OutputStream
-	private static ConcurrentHashMap<String, OutputStream> hashMap;
-	private static Socket clientSocket = null;
+	private ConcurrentHashMap<String, OutputStream> hashMap;
+	private ConcurrentHashMap<String, String> gcmMap;
+	private Socket clientSocket = null;
 	private List<ModelInterface> list = null;
 	private Database db = null;
+	private static int jettyPort = 0;
+	char keystorepass[] = "password".toCharArray();
+	char keypassword[] = "password".toCharArray();
+	char truststorepass[] = "password".toCharArray();
 
 	public static void main(String[] args) {
-
+		int i = 0;
+		for (String s : args) {
+			if (i == 0) {
+				port = Integer.parseInt(s);
+			} else {
+				jettyPort = Integer.parseInt(s);
+			}
+			i++;
+		}
 		ServletContextHandler context = new ServletContextHandler(
 				ServletContextHandler.SESSIONS);
 		context.setContextPath("/");
@@ -57,7 +86,7 @@ public class Server {
 				"/unregister");
 		// context.addServlet(new ServletHolder(new SendAllMessagesServlet()),
 		// "/sendAll");
-		final JettyServer jettyServer = new JettyServer();
+		final JettyServer jettyServer = new JettyServer(jettyPort);
 		jettyServer.getServer().setHandler(context);
 		Runnable runner = new Runnable() {
 			@Override
@@ -79,7 +108,32 @@ public class Server {
 		try {
 			db = new Database();
 			hashMap = new ConcurrentHashMap<String, OutputStream>();
-			serverSocket = new ServerSocket(port);
+			gcmMap = new ConcurrentHashMap<String, String>();
+			List<ModelInterface> contactList = db.getAllFromDB(new Contact());
+			for (ModelInterface m : contactList) {
+				Contact cont = (Contact) m;
+				Datastore.register(cont.getGcmId());
+			}
+			KeyStore ts = KeyStore.getInstance("JKS");
+			ts.load(new FileInputStream(new File(getClass().getClassLoader().getResource("cert/servertruststore.jks").getPath())),truststorepass);
+
+			TrustManagerFactory tmf = TrustManagerFactory
+                .getInstance(TrustManagerFactory.getDefaultAlgorithm());
+			tmf.init(ts);
+		
+			KeyStore ks = KeyStore.getInstance("JKS");
+			ks.load(new FileInputStream(new File(getClass().getClassLoader().getResource("cert/server.jks").getPath())),keystorepass);
+			KeyManagerFactory kmf =
+					KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
+			kmf.init(ks, keypassword);
+			SSLContext sslcontext =
+					SSLContext.getInstance("TLS");
+			sslcontext.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);
+			ServerSocketFactory ssf = sslcontext.getServerSocketFactory();
+
+			serverSocket = (SSLServerSocket)
+					ssf.createServerSocket(port);
+			serverSocket = (SSLServerSocket) new ServerSocket(port);
 			// Skapar en ny tråd som lyssnar på kommandon
 			new ServerTerminal(this).start();
 			// Lyssnar på anslutningar och skapar en ny tråd per anslutning så
@@ -94,6 +148,17 @@ public class Server {
 			serverSocket.close();
 		} catch (IOException e) {
 			System.out.println(e);
+		} catch (KeyStoreException e) {
+			System.out.println("Could not get key store");
+		} catch (NoSuchAlgorithmException e) {
+			System.out.println("There is no algorithm in ks.load");
+			e.printStackTrace();
+		} catch (CertificateException e) {
+			e.printStackTrace();
+		} catch (UnrecoverableKeyException e) {
+			System.out.println("kmf.init() no key");
+		} catch (KeyManagementException e) {
+			System.out.println("sslcontext.init keymanagementexception");
 		}
 	}
 
@@ -114,6 +179,8 @@ public class Server {
 				if (hashMap.keySet().contains(cont.getInetAddress())) {
 					PrintWriter pr = new PrintWriter(hashMap.get(cont
 							.getInetAddress()), true);
+					System.out.println("Skickar enbart till " + receiver);
+					System.out.println("hashMap: " + hashMap.keySet());
 					pr.println(stringToBeSent);
 				} else {
 					if (!stringToBeSent
@@ -121,6 +188,13 @@ public class Server {
 						QueueItem qItem = new QueueItem(cont.getId(),
 								stringToBeSent);
 						db.addToDB(qItem);
+						System.out.println("kollar gcmMap för skickning av notifikation");
+						if (gcmMap.get(cont.getContactName()) != null) {
+							System.out.println("Skickar en notifikation till " + cont.getContactName());
+							System.out.println("gcmMap: " + gcmMap.keySet());
+							new SendAll().singleSend(gcmMap.get(cont
+									.getContactName()));
+						}
 					}
 				}
 			}
@@ -181,10 +255,42 @@ public class Server {
 	 * @param string
 	 *            IP:t på användaren
 	 */
-	public synchronized void removeClient(String usersIP) {
+	public void removeClient(String usersIP) {
 		hashMap.remove(usersIP);
 	}
-	
+
+	public void addGcmClient(String name, String gcmId) {
+		if (gcmId.length() > 0) {
+			if (!gcmMap.containsKey(name)) {
+				System.out.println("Adding " + name + " to gcmMap");
+				gcmMap.put(name, gcmId);
+			} else if (!gcmMap.get(name).equals(gcmId)) {
+				removeGcmClient(name);
+				System.out.println("Adding " + name + " to gcmMap");
+				gcmMap.put(name, gcmId);
+			}
+		}
+	}
+
+	public void removeGcmClient(String name) {
+		if (gcmMap.containsKey(name)) {
+			list = db.getAllFromDB(new Contact());
+			for (ModelInterface m : list) {
+				Contact cont = (Contact) m;
+				if (name.equals(cont.getContactName())) {
+					if (gcmMap.get(cont.getContactName()) != null) {
+						System.out.println("Sending logout to "
+								+ gcmMap.get(cont.getContactName()));
+						new SendAll().sendLogout(gcmMap.get(cont
+								.getContactName()));
+					}
+				}
+			}
+			System.out.println("Removing " + name + " from gcmMap");
+			gcmMap.remove(name);
+		}
+	}
+
 	/**
 	 * Återsänder data som inte kommat fram till en viss mottagare
 	 * 
@@ -193,19 +299,32 @@ public class Server {
 	 */
 	public void sendUnsentItems(Contact receiver) {
 		if (receiver != null) {
+			System.out.println("@Server(255)");
 			try {
+				System.out.println("@Server(257)");
 				list = db.getAllFromDB(new QueueItem(receiver.getId()));
+				System.out.println("@Server(259)");
 				if (!list.isEmpty()) {
+					System.out.println("@Server(261)");
+					System.out.println("keySet: " + hashMap.keySet() + " values: " + hashMap.values());
 					PrintWriter pr = new PrintWriter(hashMap.get(receiver
 							.getInetAddress()), true);
+					System.out.println("@Server(264)");
 					for (ModelInterface m : list) {
+						System.out.println("@Server(266)");
 						QueueItem qItem = (QueueItem) m;
+						System.out.println("@Server(268)");
 						pr.println(qItem.getJSON());
+						System.out.println("@Server(270)");
 						db.deleteFromDB(qItem);
-						System.out.println("Sending " + qItem.getJSON() + " from queue to " + receiver.getContactName());
+						System.out
+								.println("Sending " + qItem.getJSON()
+										+ " from queue to "
+										+ receiver.getContactName());
 					}
 				}
 			} catch (Exception e) {
+				System.out.println("catch: sendUnsentItems");
 				System.err.println(e);
 			}
 		}
