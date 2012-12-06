@@ -81,7 +81,7 @@ public class InitSip {
 			out.write("fromdomain = "+externalIp+"\n");
 			out.write("localnet = 192.168.1.1/255.255.255.0\n");
 			out.write("qualify = yes\n");
-			out.write("context = default");
+			out.write("context = default\n");
 			out.write("bindport = 5060\n");
 			out.write("bindaddr = 0.0.0.0\n");
 			out.write("tcpbindaddr = 0.0.0.0\n");
