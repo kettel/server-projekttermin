@@ -49,7 +49,7 @@ public class Server {
 	private ConcurrentHashMap<String, String> gcmMap;
 	private Socket clientSocket = null;
 	private List<ModelInterface> list = null;
-	private Database db = null;
+	private static Database db = null;
 	private static int jettyPort = 0;
 
 	public static void main(String[] args) {
@@ -74,6 +74,10 @@ public class Server {
 		// "/sendAll");
 		final JettyServer jettyServer = new JettyServer(jettyPort);
 		jettyServer.getServer().setHandler(context);
+		
+		// Provisionera SIP-användare
+		InitSip.provisionUsers(db.getAllFromDB(new AuthenticationModel()));
+		
 		Runnable runner = new Runnable() {
 			@Override
 			public void run() {
@@ -103,9 +107,6 @@ public class Server {
 				Datastore.register(cont.getGcmId());
 			}
 			serverSocket = new ServerSocket(port);
-			
-			// Provisionera SIP-användare
-			InitSip.provisionUsers(db.getAllFromDB(new AuthenticationModel()));
 			
 			// Skapar en ny tråd som lyssnar på kommandon
 			new ServerTerminal(this).start();
