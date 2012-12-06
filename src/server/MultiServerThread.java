@@ -9,7 +9,10 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 
+<<<<<<< HEAD
 import javax.net.ssl.SSLServerSocket;
+=======
+>>>>>>> 71d578282e6972092048ea3e3c2d6316adf81472
 import javax.net.ssl.SSLSocket;
 
 import model.Assignment;
@@ -53,7 +56,7 @@ public class MultiServerThread extends Thread {
 	 */
 	public MultiServerThread(SSLSocket socket, Server server) {
 		super("MultiServerThread");
-		this.socket = socket;
+		this.socket = (SSLSocket) socket;
 		this.server = server;
 		db = new Database();
 		if (socket.getInetAddress().toString().equals(replicateServerIP)) {

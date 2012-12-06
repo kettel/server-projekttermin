@@ -60,6 +60,7 @@ public class Server {
 	private ConcurrentHashMap<String, OutputStream> hashMap;
 	private ConcurrentHashMap<String, String> gcmMap;
 	private SSLSocket clientSocket = null;
+
 	private List<ModelInterface> list = null;
 	private Database db = null;
 	private static int jettyPort = 0;
