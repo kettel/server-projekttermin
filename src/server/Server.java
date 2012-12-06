@@ -112,6 +112,8 @@ public class Server {
 			System.out.println(e);
 		}
 		IntercomConnection intercom = new IntercomConnection(this);
+		intercom.start();
+		intercom.stayConnected();
 	}
 
 	/**
