@@ -35,11 +35,13 @@ public class InitSip {
 	 * Ladda om asterisk
 	 */
 	private static void sudoReloadAsterisk() {
+		System.out.println("InitSip: Ska ladda om asterisk...");
 		String[] cmd = {"/bin/bash","-c","echo mandelHandduk | sudo -S asterisk -x reload"}; 
 		Runtime run = Runtime.getRuntime(); 
 		Process pr = null; 
 		try { 
 			pr = run.exec(cmd); 
+			System.out.println("InitSip: Laddade om asterisk");
 		} catch (IOException e) { 
 			e.printStackTrace(); 
 		} 
@@ -59,12 +61,40 @@ public class InitSip {
 		} 
 		
 	}
-	
+	private static String pwd(){
+		System.out.println("InitSip: Ska hämta aktuell mapp...");
+		String cmd = "pwd";
+		Runtime run = Runtime.getRuntime(); 
+		Process pr = null; 
+		String pwd = new String();
+		try { 
+			pr = run.exec(cmd); 
+		} catch (IOException e) { 
+			e.printStackTrace(); 
+		} 
+		try { 
+			pr.waitFor(); 
+		} catch (InterruptedException e) { 
+			e.printStackTrace(); 
+		} 
+		BufferedReader buf = new BufferedReader(new InputStreamReader(pr.getInputStream())); 
+		String line = ""; 
+		try { 
+			while ((line=buf.readLine())!=null) { 
+				pwd = line;
+			} 
+		} catch (IOException e) { 
+			e.printStackTrace(); 
+		} 
+		System.out.println("InitSip: Aktuell mapp är: "+pwd);
+		return pwd;
+	}
 	/**
 	 * Skapa sip.conf för alla kontakter med lösen
 	 * @param list
 	 */
 	private static void makeSipConf(List<ModelInterface> list){
+		System.out.println("InitSip: Ska skapa sip.conf");
 		try{
 			// Skapa filen
 			FileWriter fstream = new FileWriter("sip.conf");
@@ -103,6 +133,7 @@ public class InitSip {
 			}
 			//Close the output stream
 			out.close();
+			System.out.println("InitSip: Skapade sip.conf");
 		}catch (Exception e){//Catch exception if any
 			System.err.println("Error: " + e.getMessage());
 		}
@@ -113,6 +144,7 @@ public class InitSip {
 	 * @param list
 	 */
 	private static void makeExtensionsConf(List<ModelInterface> list){
+		System.out.println("InitSip: Ska skapa extensions.conf");
 		try{
 			// Create file 
 			FileWriter fstream = new FileWriter("extensions.conf");
@@ -131,6 +163,7 @@ public class InitSip {
 			}
 			//Close the output stream
 			out.close();
+			System.out.println("InitSip: Skapade extensions.conf");
 		}catch (Exception e){//Catch exception if any
 			System.err.println("Error: " + e.getMessage());
 		}
@@ -141,11 +174,13 @@ public class InitSip {
 	 * @param file
 	 */
 	public static void sudoMoveAsteriskConf(String file) { 
+		System.out.println("InitSip: Ska flytta "+file+"...");
 		String[] cmd = {"/bin/bash","-c","echo mandelHandduk | sudo -S mv "+file+" /etc/asterisk/"+file}; 
 		Runtime run = Runtime.getRuntime(); 
 		Process pr = null; 
 		try { 
 			pr = run.exec(cmd); 
+			System.out.println("InitSip: Lyckades flytta "+file);
 		} catch (IOException e) { 
 			e.printStackTrace(); 
 		} 
@@ -169,7 +204,8 @@ public class InitSip {
 	 * Hämta extern IP-adress
 	 * @return
 	 */
-	public static String getExternalIp() { 
+	public static String getExternalIp() {
+		System.out.println("InitSip: Ska hämta extern IP...");
 		String cmd = "curl ifconfig.me";
 		Runtime run = Runtime.getRuntime(); 
 		Process pr = null; 
@@ -193,6 +229,7 @@ public class InitSip {
 		} catch (IOException e) { 
 			e.printStackTrace(); 
 		} 
+		System.out.println("InitSip: Extern IP är: "+externalIp);
 		return externalIp;
 	}
 }
