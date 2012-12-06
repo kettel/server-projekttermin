@@ -28,6 +28,7 @@ public class InitSip {
 	public static void provisionUsers(List<ModelInterface> list) {
 		//externalIp = getExternalIp();
 		externalIp = "94.254.72.38";
+		System.out.println("Storlekt på listan: " + list.size());
 		provisionUsers(list);
 		makeSipConf(list);
 		makeExtensionsConf(list);
