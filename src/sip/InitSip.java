@@ -23,12 +23,11 @@ public class InitSip {
 		
 	}
 	
-	public InitSip(List<ModelInterface> list){
-		System.out.println("pwd: " + pwd());
-		provisionUsers(list);
-		
-	}
 	
+	/**
+	 * Lägg till alla användare från listan list
+	 * @param list
+	 */
 	public static void provisionUsers(List<ModelInterface> list) {
 		if(!isStarted){
 			isStarted = true;
@@ -64,36 +63,9 @@ public class InitSip {
 			e.printStackTrace(); 
 		} 
 	}
-	private static String pwd(){
-		System.out.println("InitSip: Ska hämta aktuell mapp...");
-		String cmd = "pwd";
-		Runtime run = Runtime.getRuntime(); 
-		Process pr = null; 
-		String pwd = new String();
-		try { 
-			pr = run.exec(cmd); 
-		} catch (IOException e) { 
-			e.printStackTrace(); 
-		} 
-		try { 
-			pr.waitFor(); 
-		} catch (InterruptedException e) { 
-			e.printStackTrace(); 
-		} 
-		BufferedReader buf = new BufferedReader(new InputStreamReader(pr.getInputStream())); 
-		String line = ""; 
-		try { 
-			while ((line=buf.readLine())!=null) { 
-				pwd = line;
-			} 
-		} catch (IOException e) { 
-			e.printStackTrace(); 
-		} 
-		System.out.println("InitSip: Aktuell mapp är: "+pwd);
-		return pwd;
-	}
+	
 	/**
-	 * Skapa sip.conf för alla kontakter med lösen
+	 * Skapa sip.conf för alla kontakter med lösen från listan
 	 * @param list
 	 */
 	private static void makeSipConf(List<ModelInterface> list){
@@ -133,6 +105,7 @@ public class InitSip {
 				out.write("allow = ulaw\n");
 				out.write("allow = h263p\n");
 				out.write("transport = udp\n");
+				out.write("\n");
 			}
 			//Close the output stream
 			out.close();
@@ -160,9 +133,10 @@ public class InitSip {
 			for(ModelInterface m : list){
 				AuthenticationModel contact = (AuthenticationModel) m;
 				String userName = contact.getUserName();
-				out.write("exten => " + userName + "1,Answer()\n");
-				out.write("exten => " + userName + "n,Dial(SIP/"+userName+",20,tr)\n");
-				out.write("exten => " + userName + "n,Hangup\n");
+				out.write("exten => " + userName + ",1,Answer()\n");
+				out.write("exten => " + userName + ",n,Dial(SIP/"+userName+",20,tr)\n");
+				out.write("exten => " + userName + ",n,Hangup\n");
+				out.write("\n");
 			}
 			//Close the output stream
 			out.close();
