@@ -76,6 +76,7 @@ public class Server {
 		jettyServer.getServer().setHandler(context);
 		
 		// Provisionera SIP-användare
+		db = new Database();
 		InitSip.provisionUsers(db.getAllFromDB(new AuthenticationModel()));
 		
 		Runnable runner = new Runnable() {
@@ -98,7 +99,7 @@ public class Server {
 
 	public Server() {
 		try {
-			db = new Database();
+			
 			hashMap = new ConcurrentHashMap<String, OutputStream>();
 			gcmMap = new ConcurrentHashMap<String, String>();
 			List<ModelInterface> contactList = db.getAllFromDB(new Contact());
