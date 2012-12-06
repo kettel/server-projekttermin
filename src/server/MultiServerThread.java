@@ -4,15 +4,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.Socket;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 
-<<<<<<< HEAD
-import javax.net.ssl.SSLServerSocket;
-=======
->>>>>>> 71d578282e6972092048ea3e3c2d6316adf81472
 import javax.net.ssl.SSLSocket;
 
 import model.Assignment;
@@ -56,8 +52,10 @@ public class MultiServerThread extends Thread {
 	 */
 	public MultiServerThread(SSLSocket socket, Server server) {
 		super("MultiServerThread");
-		this.socket = (SSLSocket) socket;
+		System.out.println("test2");
+		this.socket = socket;
 		this.server = server;
+		
 		db = new Database();
 		if (socket.getInetAddress().toString().equals(replicateServerIP)) {
 			db.setReplicationStatus(false);
