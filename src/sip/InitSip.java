@@ -9,7 +9,6 @@ import java.util.List;
 
 import model.AuthenticationModel;
 import model.ModelInterface;
-import database.Database;
 
 /**
  * Klass för att provisionera SIP-användare
@@ -17,7 +16,6 @@ import database.Database;
  *
  */
 public class InitSip {
-	Database db = new Database();
 	List<ModelInterface> list;
 	private static String externalIp;
 	
