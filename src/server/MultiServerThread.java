@@ -9,6 +9,9 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 
+import javax.net.ssl.SSLServerSocket;
+import javax.net.ssl.SSLSocket;
+
 import model.Assignment;
 import model.AuthenticationModel;
 import model.Contact;
@@ -27,7 +30,7 @@ import database.Database;
  */
 public class MultiServerThread extends Thread {
 
-	private Socket socket = null;
+	private SSLSocket socket = null;
 	private BufferedReader input = null;
 	private String inputLine;
 	private Database db = null;
@@ -48,7 +51,7 @@ public class MultiServerThread extends Thread {
 	 *            Servern som hanterar alla anslutningar och som kan skicka
 	 *            vidare data
 	 */
-	public MultiServerThread(Socket socket, Server server) {
+	public MultiServerThread(SSLSocket socket, Server server) {
 		super("MultiServerThread");
 		this.socket = socket;
 		this.server = server;

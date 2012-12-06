@@ -7,13 +7,28 @@ import gcm.SendAll;
 import gcm.UnregisterServlet;
 
 import java.awt.EventQueue;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.security.KeyManagementException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+
+import javax.net.ServerSocketFactory;
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLServerSocket;
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.TrustManagerFactory;
 
 import jetty.JettyServer;
 import model.Contact;
@@ -38,16 +53,19 @@ public class Server {
 	// Porten som används för anslutningar till servern
 	private static int port = 0;
 	// Tillåter klienter att ansluta till servern
-	private static ServerSocket serverSocket = null;
+	private static SSLServerSocket serverSocket = null;
 	// En boolean som avgör om servern lyssnar på anslutningar
 	private static boolean listening = true;
 	// En ConcurrentHashMap som länkar ett IP till en OutputStream
 	private ConcurrentHashMap<String, OutputStream> hashMap;
 	private ConcurrentHashMap<String, String> gcmMap;
-	private Socket clientSocket = null;
+	private SSLSocket clientSocket = null;
 	private List<ModelInterface> list = null;
 	private Database db = null;
 	private static int jettyPort = 0;
+	char keystorepass[] = "password".toCharArray();
+	char keypassword[] = "password".toCharArray();
+	char truststorepass[] = "password".toCharArray();
 
 	public static void main(String[] args) {
 		int i = 0;
@@ -97,13 +115,32 @@ public class Server {
 				Contact cont = (Contact) m;
 				Datastore.register(cont.getGcmId());
 			}
-			serverSocket = new ServerSocket(port);
+			KeyStore ts = KeyStore.getInstance("JKS");
+			ts.load(new FileInputStream(new File(getClass().getClassLoader().getResource("cert/servertruststore.jks").getPath())),truststorepass);
+
+			TrustManagerFactory tmf = TrustManagerFactory
+                .getInstance(TrustManagerFactory.getDefaultAlgorithm());
+			tmf.init(ts);
+		
+			KeyStore ks = KeyStore.getInstance("JKS");
+			ks.load(new FileInputStream(new File(getClass().getClassLoader().getResource("cert/server.jks").getPath())),keystorepass);
+			KeyManagerFactory kmf =
+					KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
+			kmf.init(ks, keypassword);
+			SSLContext sslcontext =
+					SSLContext.getInstance("TLS");
+			sslcontext.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);
+			ServerSocketFactory ssf = sslcontext.getServerSocketFactory();
+
+			serverSocket = (SSLServerSocket)
+					ssf.createServerSocket(port);
+			serverSocket = (SSLServerSocket) new ServerSocket(port);
 			// Skapar en ny tråd som lyssnar på kommandon
 			new ServerTerminal(this).start();
 			// Lyssnar på anslutningar och skapar en ny tråd per anslutning så
 			// länge servern lyssnar efter anslutningar
 			while (listening) {
-				clientSocket = serverSocket.accept();
+				clientSocket = (SSLSocket) serverSocket.accept();
 				OutputStream out = clientSocket.getOutputStream();
 				new MultiServerThread(clientSocket, this).start();
 				hashMap.put(clientSocket.getInetAddress().toString(), out);
@@ -111,6 +148,16 @@ public class Server {
 			// Stänger socketen, anslutningar är inte längre tillåtna
 			serverSocket.close();
 		} catch (IOException e) {
+			System.out.println(e);
+		} catch (KeyStoreException e) {
+			System.out.println(e);
+		} catch (NoSuchAlgorithmException e) {
+			System.out.println(e);
+		} catch (CertificateException e) {
+			System.out.println(e);
+		} catch (UnrecoverableKeyException e) {
+			System.out.println(e);
+		} catch (KeyManagementException e) {
 			System.out.println(e);
 		}
 	}
