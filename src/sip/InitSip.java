@@ -18,7 +18,7 @@ import model.ModelInterface;
 public class InitSip {
 	List<ModelInterface> list;
 	private static String externalIp;
-	
+	private static boolean isStarted = false; 
 	public InitSip(List<ModelInterface> list){
 		System.out.println("pwd: " + pwd());
 		provisionUsers(list);
@@ -26,15 +26,18 @@ public class InitSip {
 	}
 	
 	public static void provisionUsers(List<ModelInterface> list) {
-		//externalIp = getExternalIp();
-		externalIp = "94.254.72.38";
-		System.out.println("Storlekt på listan: " + list.size());
-		provisionUsers(list);
-		makeSipConf(list);
-		makeExtensionsConf(list);
-		sudoMoveAsteriskConf("sip.conf");
-		sudoMoveAsteriskConf("extensions.conf");
-		sudoReloadAsterisk();
+		if(!isStarted){
+			isStarted = true;
+			//externalIp = getExternalIp();
+			externalIp = "94.254.72.38";
+			System.out.println("Storlekt på listan: " + list.size());
+			provisionUsers(list);
+			makeSipConf(list);
+			makeExtensionsConf(list);
+			sudoMoveAsteriskConf("sip.conf");
+			sudoMoveAsteriskConf("extensions.conf");
+			sudoReloadAsterisk();
+		}
 	}
 	
 	/**
