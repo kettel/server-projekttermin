@@ -108,23 +108,6 @@ public class Server {
 
 	public Server() {
 		try {
-			KeyStore ts = KeyStore.getInstance("JKS");
-			ts.load(new FileInputStream(new File(getClass().getClassLoader().getResource("cert/servertruststore.jks").getPath())),truststorepass);
-
-			TrustManagerFactory tmf = TrustManagerFactory
-	            .getInstance(TrustManagerFactory.getDefaultAlgorithm());
-			tmf.init(ts);
-		
-			KeyStore ks = KeyStore.getInstance("JKS");
-			ks.load(new FileInputStream(new File(getClass().getClassLoader().getResource("cert/server.jks").getPath())),keystorepass);
-			KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
-			kmf.init(ks, keypassword);
-			SSLContext sslcontext = SSLContext.getInstance("TLS");
-			sslcontext.init(kmf.getKeyManagers(), tmf.getTrustManagers(), new SecureRandom());
-			ServerSocketFactory ssf = sslcontext.getServerSocketFactory();
-
-			serverSocket = (SSLServerSocket)
-					ssf.createServerSocket(port);
 			db = new Database();
 			hashMap = new ConcurrentHashMap<String, OutputStream>();
 			gcmMap = new ConcurrentHashMap<String, String>();
@@ -133,7 +116,6 @@ public class Server {
 				Contact cont = (Contact) m;
 				Datastore.register(cont.getGcmId());
 			}
-			serverSocket = (SSLServerSocket) ssf.createServerSocket(port);
 			// Skapar en ny tråd som lyssnar på kommandon
 			new ServerTerminal(this).start();
 			// Lyssnar på anslutningar och skapar en ny tråd per anslutning så
@@ -141,7 +123,7 @@ public class Server {
 			while (listening) {
 				clientSocket = (SSLSocket) serverSocket.accept();
 				OutputStream out = clientSocket.getOutputStream();
-				new MultiServerThread(clientSocket, this).start();
+				new MultiServerThread(clientSocket, serverSocket).start();
 				hashMap.put(clientSocket.getInetAddress().toString(), out);
 			}
 			// Stänger socketen, anslutningar är inte längre tillåtna
@@ -149,17 +131,7 @@ public class Server {
 		} catch (IOException e) {
 			System.out.println("test1");
 			System.out.println(e);
-		} catch (KeyStoreException e) {
-			e.printStackTrace();
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-		} catch (CertificateException e) {
-			e.printStackTrace();
-		} catch (UnrecoverableKeyException e) {
-			e.printStackTrace();
-		} catch (KeyManagementException e) {
-			e.printStackTrace();
-		}
+		} 
 	}
 
 	/**
