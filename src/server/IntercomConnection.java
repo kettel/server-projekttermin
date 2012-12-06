@@ -67,7 +67,6 @@ public class IntercomConnection  extends Thread implements HandshakeCompletedLis
 				sslSocketFactory = sslContext.getSocketFactory();
 			} catch (Exception e) {
 				System.out.println("SSL initiation failed due to " + e.toString());
-				
 			}
 	}
 	
@@ -127,6 +126,7 @@ public class IntercomConnection  extends Thread implements HandshakeCompletedLis
 				e.printStackTrace();
 				System.out.println("SSL socket creation failed due to: " + e.toString());
 				setConnected(false);
+				System.exit(0);
 			}
 			if(isConnected()){
 				// get stuff thread
