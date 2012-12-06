@@ -94,7 +94,7 @@ public class InitSip {
 				String userName = contact.getUserName();
 				out.write("[" + userName + "]\n");
 				out.write("type = friend\n");
-				out.write("callerid = " + userName + "<"+userName+">\n");
+				out.write("callerid = " + userName + " <"+userName+">\n");
 				out.write("secret = "+contact.getPasswordHash()+"\n");
 				out.write("host = dynamic\n");
 				out.write("canreinvite = no\n");
