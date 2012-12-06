@@ -26,8 +26,8 @@ public class InitSip {
 	}
 	
 	public static void provisionUsers(List<ModelInterface> list) {
-		externalIp = getExternalIp();
-		
+		//externalIp = getExternalIp();
+		externalIp = "94.254.72.38";
 		provisionUsers(list);
 		makeSipConf(list);
 		makeExtensionsConf(list);
@@ -55,16 +55,6 @@ public class InitSip {
 		} catch (InterruptedException e) { 
 			e.printStackTrace(); 
 		} 
-		BufferedReader buf = new BufferedReader(new InputStreamReader(pr.getInputStream())); 
-		String line = ""; 
-		try { 
-			while ((line=buf.readLine())!=null) { 
-				System.out.println(line); 
-			} 
-		} catch (IOException e) { 
-			e.printStackTrace(); 
-		} 
-		
 	}
 	private static String pwd(){
 		System.out.println("InitSip: Ska hämta aktuell mapp...");
@@ -192,15 +182,6 @@ public class InitSip {
 		try { 
 			pr.waitFor(); 
 		} catch (InterruptedException e) { 
-			e.printStackTrace(); 
-		} 
-		BufferedReader buf = new BufferedReader(new InputStreamReader(pr.getInputStream())); 
-		String line = ""; 
-		try { 
-			while ((line=buf.readLine())!=null) { 
-				System.out.println(line); 
-			} 
-		} catch (IOException e) { 
 			e.printStackTrace(); 
 		} 
 	}
