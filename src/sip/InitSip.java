@@ -19,6 +19,7 @@ public class InitSip {
 	List<ModelInterface> list;
 	private static String externalIp;
 	private static boolean isStarted = false; 
+	
 	public InitSip(){
 		
 	}
@@ -33,8 +34,7 @@ public class InitSip {
 			isStarted = true;
 			//externalIp = getExternalIp();
 			externalIp = "94.254.72.38";
-			System.out.println("Storlekt på listan: " + list.size());
-			provisionUsers(list);
+			
 			makeSipConf(list);
 			makeExtensionsConf(list);
 			sudoMoveAsteriskConf("sip.conf");
