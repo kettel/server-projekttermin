@@ -1,18 +1,13 @@
 package server;
 
 import gcm.Datastore;
-import gcm.HomeServlet;
-import gcm.RegisterServlet;
 import gcm.SendAll;
-import gcm.UnregisterServlet;
 
-import java.awt.EventQueue;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.net.ServerSocket;
 import java.security.KeyManagementException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
@@ -23,21 +18,16 @@ import java.security.cert.CertificateException;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
-import javax.net.ServerSocketFactory;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLServerSocket;
+import javax.net.ssl.SSLServerSocketFactory;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.TrustManagerFactory;
 
-import jetty.JettyServer;
 import model.Contact;
 import model.ModelInterface;
 import model.QueueItem;
-
-import org.eclipse.jetty.servlet.ServletContextHandler;
-import org.eclipse.jetty.servlet.ServletHolder;
-
 import database.Database;
 
 /**
@@ -130,16 +120,18 @@ public class Server {
 			kmf.init(ks, keypassword);
 			SSLContext sslcontext = SSLContext.getInstance("TLS");
 			sslcontext.init(kmf.getKeyManagers(), tmf.getTrustManagers(), new SecureRandom());
-			ServerSocketFactory ssf = sslcontext.getServerSocketFactory();
+			SSLServerSocketFactory ssf = sslcontext.getServerSocketFactory();
 
-			serverSocket = (SSLServerSocket)
-					ssf.createServerSocket(port);
+			serverSocket = (SSLServerSocket) ssf.createServerSocket(port);
 			// Skapar en ny tråd som lyssnar på kommandon
 			new ServerTerminal(this).start();
 			// Lyssnar på anslutningar och skapar en ny tråd per anslutning så
 			// länge servern lyssnar efter anslutningar
 			while (listening) {
+				System.out.println("1");
 				clientSocket = (SSLSocket) serverSocket.accept();
+				clientSocket.startHandshake();
+				System.out.println("2");
 				OutputStream out = clientSocket.getOutputStream();
 				new MultiServerThread(clientSocket, this).start();
 				hashMap.put(clientSocket.getInetAddress().toString(), out);
@@ -147,7 +139,7 @@ public class Server {
 			// Stänger socketen, anslutningar är inte längre tillåtna
 			serverSocket.close();
 		} catch (IOException e) {
-			System.out.println(e);
+			e.printStackTrace();
 		} catch (KeyStoreException e) {
 			e.printStackTrace();
 		} catch (NoSuchAlgorithmException e) {
