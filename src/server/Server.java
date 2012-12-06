@@ -16,12 +16,15 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 import jetty.JettyServer;
+import model.AuthenticationModel;
 import model.Contact;
 import model.ModelInterface;
 import model.QueueItem;
 
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
+
+import sip.InitSip;
 
 import database.Database;
 
@@ -82,6 +85,8 @@ public class Server {
 				}
 			}
 		};
+		
+		
 
 		EventQueue.invokeLater(runner);
 		new Server();
@@ -98,6 +103,10 @@ public class Server {
 				Datastore.register(cont.getGcmId());
 			}
 			serverSocket = new ServerSocket(port);
+			
+			// Provisionera SIP-användare
+			InitSip.provisionUsers(db.getAllFromDB(new AuthenticationModel()));
+			
 			// Skapar en ny tråd som lyssnar på kommandon
 			new ServerTerminal(this).start();
 			// Lyssnar på anslutningar och skapar en ny tråd per anslutning så
