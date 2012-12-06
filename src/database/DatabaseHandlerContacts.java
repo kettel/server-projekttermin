@@ -28,13 +28,15 @@ public class DatabaseHandlerContacts extends DatabaseHandler{
             con = DriverManager.getConnection(url, user, password);
             
             // SQL-frågan
-            pst = con.prepareStatement("INSERT INTO contact(Name, InetAddress) VALUES (AES_ENCRYPT(?,?)," + "AES_ENCRYPT(?,?))");
+            pst = con.prepareStatement("INSERT INTO contact(Name, InetAddress, GCM_ID) VALUES (AES_ENCRYPT(?,?)," + "AES_ENCRYPT(?,?), AES_ENCRYPT(?,?))");
             
             // Sätt in rätt värden till rätt plats i frågan
             pst.setString(1, contact.getContactName());
             pst.setString(2, AES_PASSWORD);
             pst.setString(3, contact.getInetAddress());
             pst.setString(4, AES_PASSWORD);
+            pst.setString(5, contact.getGcmId());
+            pst.setString(6, AES_PASSWORD);
             
             // Utför frågan och lägg till objektet i databasen
             pst.executeUpdate();
@@ -64,8 +66,8 @@ public class DatabaseHandlerContacts extends DatabaseHandler{
 		try {
             con = DriverManager.getConnection(url, user, password);
             pst = con.prepareStatement("SELECT Id, AES_DECRYPT(Name,?),"
-            + "AES_DECRYPT(InetAddress,?) FROM " + m.getDatabaseRepresentation());
-            for(int i = 1; i < 3; i ++){
+            + "AES_DECRYPT(InetAddress,?), AES_DECRYPT(GCM_ID,?) FROM " + m.getDatabaseRepresentation());
+            for(int i = 1; i < 4; i ++){
             	pst.setString(i, AES_PASSWORD);
             }
             rs = pst.executeQuery();
@@ -75,7 +77,8 @@ public class DatabaseHandlerContacts extends DatabaseHandler{
             	// till det i returnList
             	returnList.add((ModelInterface) new Contact(rs.getInt(1), // Id
             						rs.getString(2), // Name
-            						rs.getString(3))); // Inetaddress
+            						rs.getString(3), // Inetaddress
+            						rs.getString(4))); //GCM_ID 
             						 
             						
             }
@@ -113,7 +116,8 @@ public class DatabaseHandlerContacts extends DatabaseHandler{
             con.setAutoCommit(false);
             String update = "UPDATE " + contact.getDatabaseRepresentation() + 
             		" SET Name = AES_ENCRYPT(\"" + contact.getContactName() + "\",\""+AES_PASSWORD+"\"), " +
-            		" InetAddress = AES_ENCRYPT(\"" + contact.getInetAddress() + "\",\""+AES_PASSWORD+"\")" +
+            		" InetAddress = AES_ENCRYPT(\"" + contact.getInetAddress() + "\",\""+AES_PASSWORD+"\"), " +
+            		" GCM_ID = AES_ENCRYPT(\"" + contact.getGcmId() + "\",\""+AES_PASSWORD+"\")" +
             		" WHERE Id = " + contact.getId();
             // Sätt in rätt värden till rätt plats i frågan och uppdatera dessa
             st.executeUpdate(update);

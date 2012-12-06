@@ -27,27 +27,27 @@ public class Database {
 
 	public void addToDB(ModelInterface m) {
 		String dbRep = m.getDatabaseRepresentation();
-		if (replicateStatus) {
-			new ReplicationManager(m);
-		}
+//		if (replicateStatus) {
+//			new ReplicationManager(m);
+//		}
 		if (dbRep.equalsIgnoreCase("assignment")) {
 			DatabaseHandlerAssignment dha = new DatabaseHandlerAssignment();
 			dha.addModel(m);
-			if (replicateStatus) {
+//			if (replicateStatus) {
 				try {
-					all.doPost();
+					all.sendAll();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					System.out.println("fel med GCM doPost");
 					e.printStackTrace();
 				}
-			}
+//			}
 		} else if (dbRep.equalsIgnoreCase("contact")) {
 			DatabaseHandlerContacts dhc = new DatabaseHandlerContacts();
 			dhc.addModel(m);
 			if (replicateStatus) {
 				try {
-					all.doPost();
+					all.sendAll();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					System.out.println("fel med GCM doPost");

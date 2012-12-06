@@ -111,6 +111,8 @@ public class MultiServerThread extends Thread {
 			if (!handleLogin(input)) {
 				connected = false;
 			}
+		} else if (input.equals("logout")) {
+			handleLogout();
 		} else if (input.equals("pull")) {
 			server.sendUnsentItems(thisContact);
 			// Vid förfrågan skickas alla kontakter från databasen
@@ -149,6 +151,7 @@ public class MultiServerThread extends Thread {
 					+ msg.getReciever() + ": " + msg.getMessageContent());
 
 		} catch (Exception e) {
+			System.out.println("catch: handleMessage");
 			System.out.println(e);
 		}
 	}
@@ -165,13 +168,31 @@ public class MultiServerThread extends Thread {
 		try {
 			Assignment assignmentFromJson = (new Gson()).fromJson(assignment,
 					Assignment.class);
+			boolean alreadyExists = false;
 			if (!socket.getInetAddress().toString().equals(replicateServerIP)) {
-				server.sendToAllExceptTheSender(assignment, socket
-						.getInetAddress().toString());
+				list = db.getAllFromDB(new Assignment());
+				if (list.size() > 0) {
+					for (ModelInterface m : list) {
+						Assignment ass = (Assignment) m;
+						if (assignmentFromJson.getGlobalID().equals(
+								ass.getGlobalID())) {
+							alreadyExists = true;
+							db.updateModel(assignmentFromJson);
+							server.sendToAllExceptTheSender(assignment, socket
+									.getInetAddress().toString());
+						}
+					}
+					if (!alreadyExists) {
+						db.addToDB(assignmentFromJson);
+						server.sendToAllExceptTheSender(assignment, socket
+								.getInetAddress().toString());
+					}
+				} else {
+					db.addToDB(assignmentFromJson);
+					server.sendToAllExceptTheSender(assignment, socket
+							.getInetAddress().toString());
+				}
 			}
-
-			// Lägger in kontakten i databasen
-			db.addToDB(assignmentFromJson);
 			Calendar cal = Calendar.getInstance();
 			cal.getTime();
 			SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
@@ -199,20 +220,27 @@ public class MultiServerThread extends Thread {
 			Contact contactFromJson = (new Gson()).fromJson(contact,
 					Contact.class);
 			// Lägger in uppdraget i databasen
-			db.addToDB(contactFromJson);
+			if (!socket.getInetAddress().toString().equals(replicateServerIP)) {
+				db.addToDB(contactFromJson);
+			}
 		} catch (Exception e) {
 			System.out.println(e);
 		}
 	}
 
 	/**
-	 * Hanterar json-strängen om det är en login-request och skickar ett svar om det är ett korrekt login
-	 * @param login		Json-strängen av inloggningsförfrågan
-	 * @return	true om kontakten stämmer överens med befintlig kontakt ur databasen, annars false 
+	 * Hanterar json-strängen om det är en login-request och skickar ett svar om
+	 * det är ett korrekt login
+	 * 
+	 * @param login
+	 *            Json-strängen av inloggningsförfrågan
+	 * @return true om kontakten stämmer överens med befintlig kontakt ur
+	 *         databasen, annars false
 	 */
 	private boolean handleLogin(String login) {
 		try {
-			System.out.println("Login request from: "+socket.getInetAddress().toString());
+			System.out.println("Login request from: "
+					+ socket.getInetAddress().toString());
 			list = db.getAllFromDB(new Contact());
 			AuthenticationModel loginFromJson = (new Gson().fromJson(login,
 					AuthenticationModel.class));
@@ -229,6 +257,11 @@ public class MultiServerThread extends Thread {
 											logMod.getPasswordHash())) {
 								cont.setInetAddress(socket.getInetAddress()
 										.toString());
+								cont.setGcmId(loginFromJson.getGcmId());
+								server.addGcmClient(
+										loginFromJson.getUserName(),
+										loginFromJson.getGcmId());
+
 								db.updateModel(cont);
 								loginFromJson.setIsAccessGranted(true);
 								String response = new Gson()
@@ -282,10 +315,17 @@ public class MultiServerThread extends Thread {
 			for (ModelInterface m : list) {
 				Contact cont = (Contact) m;
 				String contact = new Gson().toJson(cont);
+				System.out.println("@MST(316): sending contact " + cont.getContactName() + " to " + thisContact.getContactName());
 				server.send(contact, thisContact.getContactName());
 			}
 		} catch (Exception e) {
+			System.out.println("catch: handleContactRequest");
 			System.out.println(e);
 		}
+	}
+	
+	private void handleLogout(){
+		server.removeClient(socket.getInetAddress().toString());
+		server.removeGcmClient(thisContact.getContactName());
 	}
 }

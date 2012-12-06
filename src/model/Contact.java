@@ -11,12 +11,17 @@ public class Contact implements ModelInterface {
 	private String contactName;
 	// Kontaktens ip
 	private String inetAddress;
+	private String gcmId;
 
 	/**
 	 * Tom konstruktor for Contact
 	 */
 	public Contact() {
 
+	}
+	
+	public Contact(String contactName){
+		this.contactName = contactName;
 	}
 
 	/**
@@ -37,10 +42,11 @@ public class Contact implements ModelInterface {
 	 * @param contactName
 	 * @param inetAddress
 	 */
-	public Contact(long id, String contactName, String inetAddress) {
+	public Contact(long id, String contactName, String inetAddress, String gcmId) {
 		this.id = id;
 		this.contactName = contactName;
 		this.inetAddress = inetAddress;
+		this.gcmId = gcmId;
 	}
 
 	public String getContactName() {
@@ -65,6 +71,14 @@ public class Contact implements ModelInterface {
 
 	public void setInetAddress(String inetAddress) {
 		this.inetAddress = inetAddress;
+	}
+	
+	public void setGcmId(String id){
+		gcmId = id;
+	}
+	
+	public String getGcmId(){
+		return gcmId;
 	}
 	
 }

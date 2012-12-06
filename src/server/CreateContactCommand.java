@@ -37,6 +37,7 @@ public class CreateContactCommand implements CommandInterface {
 			newContact.setContactName(in.nextLine());
 			// System.out.print("Kontaktens IP: ");
 			 newContact.setInetAddress("");
+			 newContact.setGcmId("");
 			String pw = readPw();
 			System.out
 					.print("Är du nöjd med din nya insättning av kontakt? (y/n): ");
@@ -69,7 +70,7 @@ public class CreateContactCommand implements CommandInterface {
 	}
 
 	private void addToLogin(Contact c, String password) {
-		db.setReplicationStatus(true);
+//		db.setReplicationStatus(true);
 		db.addToDB(c);
 		list = db.getAllFromDB(new Contact());
 		for (ModelInterface m : list) {
@@ -78,7 +79,7 @@ public class CreateContactCommand implements CommandInterface {
 				db.addToDB(new AuthenticationModel(cont.getId(), cont.getContactName(), password));
 			}
 		}
-		db.setReplicationStatus(false);
+//		db.setReplicationStatus(false);
 	}
 	
 	private boolean checkIfContactAlreadyExist(String name){

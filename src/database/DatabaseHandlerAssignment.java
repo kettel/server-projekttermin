@@ -33,14 +33,15 @@ public class DatabaseHandlerAssignment extends DatabaseHandler {
 			pst = con
 					.prepareStatement("INSERT INTO "
 							+ m.getDatabaseRepresentation()
-							+ "(Name , Latitude , Longitude , Region , Agents , ExternalMission , Sender , Description , Timespan , Status , Cameraimage , Streetname , Sitename , Timestamp) "
+							+ "(Name , Latitude , Longitude , Region , Agents , ExternalMission , Sender , Description , Timespan , Status , Cameraimage , Streetname , Sitename , Timestamp, Global_ID) "
 							+ "VALUES (AES_ENCRYPT(?,?)," + "AES_ENCRYPT(?,?),"
 							+ "AES_ENCRYPT(?,?)," + "AES_ENCRYPT(?,?),"
 							+ "AES_ENCRYPT(?,?)," + "AES_ENCRYPT(?,?),"
 							+ "AES_ENCRYPT(?,?)," + "AES_ENCRYPT(?,?),"
 							+ "AES_ENCRYPT(?,?)," + "AES_ENCRYPT(?,?),"
 							+ "AES_ENCRYPT(?,?)," + "AES_ENCRYPT(?,?),"
-							+ "AES_ENCRYPT(?,?)," + "AES_ENCRYPT(?,?))");
+							+ "AES_ENCRYPT(?,?)," + "AES_ENCRYPT(?,?)," 
+							+ "AES_ENCRYPT(?,?))");
 
 			// Sätt in rätt värden till rätt plats i frågan
 			pst.setString(1, ass.getName());
@@ -71,6 +72,8 @@ public class DatabaseHandlerAssignment extends DatabaseHandler {
 			pst.setString(26, AES_PASSWORD);
 			pst.setString(27, Long.toString(ass.getTimeStamp()));
 			pst.setString(28, AES_PASSWORD);
+			pst.setString(29, ass.getGlobalID());
+			pst.setString(30, AES_PASSWORD);
 
 			// Utför frågan och lägg till objektet i databasen
 			pst.executeUpdate();
@@ -105,12 +108,13 @@ public class DatabaseHandlerAssignment extends DatabaseHandler {
 
 			// Sätt autocommit till falskt
 			con.setAutoCommit(false);
-
+			String safeRegion = ass.getRegion().replace('\"', '\'');
+			System.out.println("REGION: "+ass.getRegion());
 			String updateString = "UPDATE " + ass.getDatabaseRepresentation()
 					+ " SET Name = AES_ENCRYPT(\"" + ass.getName() + "\",\""+AES_PASSWORD+"\"), " +
-					"Latitude = AES_ENCRYPT(\"" + Double.toString(ass.getLat()) + "\",\""+AES_PASSWORD+"\")," +
+					" Latitude = AES_ENCRYPT(\"" + Double.toString(ass.getLat()) + "\",\""+AES_PASSWORD+"\")," +
 					" Longitude = AES_ENCRYPT(\"" + Double.toString(ass.getLon()) + "\",\""+AES_PASSWORD+"\")," +
-					" Region = AES_ENCRYPT(\"" + ass.getRegion() + "\",\""+AES_PASSWORD+"\")," +
+					" Region = AES_ENCRYPT(\"" + safeRegion + "\",\""+AES_PASSWORD+"\")," +
 					" Agents = AES_ENCRYPT(\"" + ass.getAgentsString() + "\",\""+AES_PASSWORD+"\")," +
 					" Sender = AES_ENCRYPT(\"" + ass.getSender() + "\",\""+AES_PASSWORD+"\")," +
 					" ExternalMission = AES_ENCRYPT(\""	+ Boolean.toString(ass.isExternalMission()) + "\",\""+AES_PASSWORD+"\")," +
@@ -120,8 +124,7 @@ public class DatabaseHandlerAssignment extends DatabaseHandler {
 					" Cameraimage = AES_ENCRYPT(\"" + ass.getCameraImage()+ "\",\""+AES_PASSWORD+"\")," +
 					" Streetname = AES_ENCRYPT(\"" + ass.getStreetName()+ "\",\""+AES_PASSWORD+"\")," +
 					" Sitename = AES_ENCRYPT(\"" + ass.getSiteName()+ "\",\""+AES_PASSWORD+"\")" +
-					" WHERE Id = " + ass.getId();
-			System.out.println("UpdateString: " + updateString);
+					" WHERE AES_DECRYPT(Global_ID,\""+AES_PASSWORD+"\") = \""+ass.getGlobalID()+"\"";
 			// Sätt in rätt värden till rätt plats i frågan och uppdatera dessa
 			st.executeUpdate(updateString);
 
@@ -161,9 +164,9 @@ public class DatabaseHandlerAssignment extends DatabaseHandler {
 					+ "AES_DECRYPT(Timespan,?)," + "AES_DECRYPT(Status,?),"
 					+ "AES_DECRYPT(Cameraimage,?),"
 					+ "AES_DECRYPT(Streetname,?)," + "AES_DECRYPT(Sitename,?),"
-					+ "AES_DECRYPT(Timestamp,?) FROM "
+					+ "AES_DECRYPT(Timestamp,?),AES_DECRYPT(Global_ID,?) FROM "
 					+ m.getDatabaseRepresentation());
-			for (int i = 1; i < 15; i++) {
+			for (int i = 1; i < 16; i++) {
 				pst.setString(i, AES_PASSWORD);
 			}
 			rs = pst.executeQuery();
@@ -186,7 +189,8 @@ public class DatabaseHandlerAssignment extends DatabaseHandler {
 				String strName = rs.getString(13);
 				String siteName = rs.getString(14);
 				Long timestamp = Long.valueOf(rs.getString(15));
-				returnList.add((ModelInterface) new Assignment(id,name,lat,lon,region,agents,sender,extMission,desc,timespan,astatus,camImg,strName,siteName,timestamp));
+				String globalID = rs.getString(16);
+				returnList.add((ModelInterface) new Assignment(id,name,lat,lon,region,agents,sender,extMission,desc,timespan,astatus,camImg,strName,siteName,timestamp,globalID));
 			}
 
 		} catch (SQLException ex) {
@@ -213,11 +217,10 @@ public class DatabaseHandlerAssignment extends DatabaseHandler {
 		// Gör om strängar med agenter på uppdrag till en lista
 		List<Contact> agents = new ArrayList<Contact>();
 		if (agentString.length() > 0) {
-			String[] agentArray = agentString.split("\\");
+			String[] agentArray = agentString.split("|");
 			for (String agent : agentArray) {
 				// Dela upp kontakten så man kommer åt namn och IP
-				String[] contactArray = agent.split(":");
-				agents.add(new Contact(contactArray[0], contactArray[1]));
+				agents.add(new Contact(agentArray[0]));
 			}
 		}
 		return agents;
