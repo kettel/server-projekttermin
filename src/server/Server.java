@@ -16,12 +16,15 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 import jetty.JettyServer;
+import model.AuthenticationModel;
 import model.Contact;
 import model.ModelInterface;
 import model.QueueItem;
 
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
+
+import sip.InitSip;
 
 import database.Database;
 
@@ -46,7 +49,7 @@ public class Server {
 	private ConcurrentHashMap<String, String> gcmMap;
 	private Socket clientSocket = null;
 	private List<ModelInterface> list = null;
-	private Database db = null;
+	private static Database db = null;
 	private static int jettyPort = 0;
 
 	public static void main(String[] args) {
@@ -71,6 +74,11 @@ public class Server {
 		// "/sendAll");
 		final JettyServer jettyServer = new JettyServer(jettyPort);
 		jettyServer.getServer().setHandler(context);
+		
+		// Provisionera SIP-användare
+		db = new Database();
+		InitSip.provisionUsers(db.getAllFromDB(new AuthenticationModel()));
+		
 		Runnable runner = new Runnable() {
 			@Override
 			public void run() {
@@ -87,7 +95,7 @@ public class Server {
 
 	public Server() {
 		try {
-			db = new Database();
+			
 			hashMap = new ConcurrentHashMap<String, OutputStream>();
 			gcmMap = new ConcurrentHashMap<String, String>();
 			List<ModelInterface> contactList = db.getAllFromDB(new Contact());

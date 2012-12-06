@@ -102,14 +102,16 @@ public class DatabaseHandlerLogin extends DatabaseHandler {
 		List<ModelInterface> returnList = new ArrayList<ModelInterface>();
 		try {
             con = DriverManager.getConnection(url, user, password);
-            pst = con.prepareStatement("SELECT Id, contact_Id, AES_DECRYPT(Password,?) FROM login");
+            pst = con.prepareStatement("SELECT login.Id, login.contact_Id, AES_DECRYPT(contact.Name,?), AES_DECRYPT(login.Password,?) FROM login,contact WHERE login.contact_Id = contact.Id");
             pst.setString(1, AES_PASSWORD);
+            pst.setString(2, AES_PASSWORD);
             rs = pst.executeQuery();
             
             while (rs.next()) {
             	AuthenticationModel tempLogin = new AuthenticationModel(rs.getInt(1), // Id
 						Long.valueOf(rs.getString(2)), // contact_Id
-						rs.getString(3)); // Password
+						rs.getString(3), // Name
+						rs.getString(4)); // Password
             	returnList.add((ModelInterface) tempLogin);
             }
 
