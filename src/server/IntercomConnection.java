@@ -126,7 +126,6 @@ public class IntercomConnection  extends Thread implements HandshakeCompletedLis
 				e.printStackTrace();
 				System.out.println("SSL socket creation failed due to: " + e.toString());
 				setConnected(false);
-				System.exit(0);
 			}
 			if(isConnected()){
 				// get stuff thread
@@ -225,6 +224,7 @@ public class IntercomConnection  extends Thread implements HandshakeCompletedLis
 			setConnected(false);
 			return;
 		}
+		System.out.println("now connected with intercomServer");
 		setConnected(true);
 	}
 

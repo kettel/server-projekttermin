@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 import jetty.JettyServer;
+import model.Assignment;
+import model.AssignmentStatus;
 import model.AuthenticationModel;
 import model.Contact;
 import model.ModelInterface;
@@ -51,6 +53,7 @@ public class Server {
 	private List<ModelInterface> list = null;
 	private static Database db = null;
 	private static int jettyPort = 0;
+	private static String wgspoint = "[{\"lat\":58.444139,\"lon\":15.365753},{\"lat\":58.502304,\"lon\":15.390472},{\"lat\":58.472875,\"lon\":15.555267}]";
 
 	public static void main(String[] args) {
 		int i = 0;
@@ -108,6 +111,8 @@ public class Server {
 			IntercomConnection intercom = new IntercomConnection(this);
 			intercom.start();
 			intercom.stayConnected();
+			// test ass
+			intercom.addIntercomAssignment(new Assignment("testass", wgspoint, "Forsvaret", true, "test", "test", AssignmentStatus.STARTED, "none", "none"));
 			// Skapar en ny tråd som lyssnar på kommandon
 			new ServerTerminal(this).start();
 			// Lyssnar på anslutningar och skapar en ny tråd per anslutning så
