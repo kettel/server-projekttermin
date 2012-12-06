@@ -19,8 +19,15 @@ public class InitSip {
 	List<ModelInterface> list;
 	private static String externalIp;
 	
+	public InitSip(List<ModelInterface> list){
+		System.out.println("pwd: " + pwd());
+		provisionUsers(list);
+		
+	}
+	
 	public static void provisionUsers(List<ModelInterface> list) {
 		externalIp = getExternalIp();
+		
 		provisionUsers(list);
 		makeSipConf(list);
 		makeExtensionsConf(list);

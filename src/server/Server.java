@@ -77,7 +77,7 @@ public class Server {
 		
 		// Provisionera SIP-användare
 		db = new Database();
-		//InitSip.provisionUsers(db.getAllFromDB(new AuthenticationModel()));
+		InitSip initSip = new InitSip(db.getAllFromDB(new AuthenticationModel()));
 		
 		Runnable runner = new Runnable() {
 			@Override
