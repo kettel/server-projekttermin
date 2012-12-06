@@ -1,8 +1,12 @@
 package server;
 
 import gcm.Datastore;
+import gcm.HomeServlet;
+import gcm.RegisterServlet;
 import gcm.SendAll;
+import gcm.UnregisterServlet;
 
+import java.awt.EventQueue;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -24,6 +28,11 @@ import javax.net.ssl.SSLServerSocket;
 import javax.net.ssl.SSLServerSocketFactory;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.TrustManagerFactory;
+
+import jetty.JettyServer;
+
+import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.eclipse.jetty.servlet.ServletHolder;
 
 import model.Contact;
 import model.ModelInterface;
@@ -59,7 +68,7 @@ public class Server {
 	char truststorepass[] = "password".toCharArray();
 
 	public static void main(String[] args) {
-		/**int i = 0;
+		int i = 0;
 		for (String s : args) {
 			if (i == 0) {
 				port = Integer.parseInt(s);
@@ -92,11 +101,12 @@ public class Server {
 			}
 		};
 
-		EventQueue.invokeLater(runner);**/
+		EventQueue.invokeLater(runner);
 		new Server();
 	}
 
 	public Server() {
+		System.out.println("porten är"+port);
 		try {
 			db = new Database();
 			hashMap = new ConcurrentHashMap<String, OutputStream>();
