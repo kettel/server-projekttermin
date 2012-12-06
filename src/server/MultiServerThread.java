@@ -37,7 +37,7 @@ public class MultiServerThread extends Thread {
 	private List<ModelInterface> list;
 	private List<ModelInterface> hashList;
 	private final String replicateServerIP = "/192.168.1.1";
-
+	private IntercomConnection intercom = null;
 	/**
 	 * Konstruktorn, tar emot en socket för porten vi lyssnar på och en Server
 	 * som kan skicka vidare data
@@ -48,10 +48,11 @@ public class MultiServerThread extends Thread {
 	 *            Servern som hanterar alla anslutningar och som kan skicka
 	 *            vidare data
 	 */
-	public MultiServerThread(Socket socket, Server server) {
+	public MultiServerThread(Socket socket, Server server ,IntercomConnection intercom) {
 		super("MultiServerThread");
 		this.socket = socket;
 		this.server = server;
+		this.intercom = intercom;
 		db = new Database();
 		if (socket.getInetAddress().toString().equals(replicateServerIP)) {
 			db.setReplicationStatus(false);
@@ -128,8 +129,7 @@ public class MultiServerThread extends Thread {
 	 * Hanterar json-strägen om den är ett meddelande och skickar denna till en
 	 * specifik kontakt
 	 * 
-	 * @param message
-	 *            Json-strängen av meddelandet
+	 * @param message Json-strängen av meddelandet
 	 */
 	private void handleMessage(String message) {
 
@@ -184,11 +184,19 @@ public class MultiServerThread extends Thread {
 					}
 					if (!alreadyExists) {
 						db.addToDB(assignmentFromJson);
+						//sending to intercomm
+						if(assignmentFromJson.isExternalMission()){
+							intercom.addIntercomAssignment(assignmentFromJson);
+						}
 						server.sendToAllExceptTheSender(assignment, socket
 								.getInetAddress().toString());
 					}
 				} else {
 					db.addToDB(assignmentFromJson);
+					//sending to intercomm
+					if(assignmentFromJson.isExternalMission()){
+						intercom.addIntercomAssignment(assignmentFromJson);
+					}
 					server.sendToAllExceptTheSender(assignment, socket
 							.getInetAddress().toString());
 				}

@@ -96,6 +96,10 @@ public class Server {
 				Datastore.register(cont.getGcmId());
 			}
 			serverSocket = new ServerSocket(port);
+			// försöker ansluta till interkommserven
+			IntercomConnection intercom = new IntercomConnection(this);
+			intercom.start();
+			intercom.stayConnected();
 			// Skapar en ny tråd som lyssnar på kommandon
 			new ServerTerminal(this).start();
 			// Lyssnar på anslutningar och skapar en ny tråd per anslutning så
@@ -103,7 +107,7 @@ public class Server {
 			while (listening) {
 				clientSocket = serverSocket.accept();
 				OutputStream out = clientSocket.getOutputStream();
-				new MultiServerThread(clientSocket, this).start();
+				new MultiServerThread(clientSocket, this, intercom).start();
 				hashMap.put(clientSocket.getInetAddress().toString(), out);
 			}
 			// Stänger socketen, anslutningar är inte längre tillåtna
@@ -111,9 +115,6 @@ public class Server {
 		} catch (IOException e) {
 			System.out.println(e);
 		}
-		IntercomConnection intercom = new IntercomConnection(this);
-		intercom.start();
-		intercom.stayConnected();
 	}
 
 	/**
