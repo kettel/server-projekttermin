@@ -133,8 +133,7 @@ public class IntercomConnection  extends Thread implements HandshakeCompletedLis
 					System.out.println("SSL socket creation failed due to: " + e.toString());
 					setConnected(false);
 				}
-			}
-			if(isConnected()){
+			
 				// get stuff thread
 				new Thread(){
 					public void run() {
