@@ -1,5 +1,7 @@
 package server;
 
+import gcm.SendAll;
+
 import java.io.Console;
 import java.util.List;
 import java.util.Scanner;
@@ -52,6 +54,7 @@ public class CreateContactCommand implements CommandInterface {
 				if(!checkIfContactAlreadyExist(newContact.getContactName())){
 				String contact = new Gson().toJson(newContact);
 				server.sendToAll(contact);
+				new SendAll().sendAll();
 				addToLogin(newContact, pw);
 				System.out.println("Kontakt sparad.");
 				
