@@ -147,7 +147,7 @@ public class IntercomConnection  extends Thread implements HandshakeCompletedLis
 										if(intercom.getId().getOrganizationChar() != faction){
 											double[] latAndLon = {intercom.getLocation().getLatitude(),intercom.getLocation().getLongitude()};
 											String region = WgsC.DoubelToGsonWgsString(latAndLon);
-											Assignment misson = new Assignment(intercom.getTitle() + " incYo!",region,"intercom", false, intercom.getDescription(), "", AssignmentStatus.STARTED, "", "");
+											Assignment misson = new Assignment(intercom.getTitle(),region,"intercom", false, intercom.getDescription(), "", AssignmentStatus.STARTED, "", "");
 											System.out.println("New assignment from InterCommServer named: " + misson.getName());
 											misson.setGlobalID(intercom.getId().idToString());
 											db.addToDB(misson);
