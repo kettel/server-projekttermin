@@ -144,17 +144,17 @@ public class IntercomConnection  extends Thread implements HandshakeCompletedLis
 								if(incomeing != null && incomeing != "&"){
 									if(incomeing.contains("\"identifier\":\"@Missonintergroup@\"")){
 										MissionIntergroup intercom = gson.fromJson(incomeing, MissionIntergroup.class);
-										if(intercom.getId().getOrganizationChar() != faction){
+//										if(intercom.getId().getOrganizationChar() != faction){
 											double[] latAndLon = {intercom.getLocation().getLatitude(),intercom.getLocation().getLongitude()};
 											String region = WgsC.DoubelToGsonWgsString(latAndLon);
-											Assignment misson = new Assignment(intercom.getTitle(),region,"intercom", false, intercom.getDescription(), "", AssignmentStatus.STARTED, "", "");
+											Assignment misson = new Assignment(intercom.getTitle() + " incYo!",region,"intercom", false, intercom.getDescription(), "", AssignmentStatus.STARTED, "", "");
 											System.out.println("New assignment from InterCommServer named: " + misson.getName());
 											misson.setGlobalID(intercom.getId().idToString());
 											db.addToDB(misson);
 											server.sendToAll(gson.toJson(misson));
-										}else{
-											System.out.println("A assgiment we created was confirmed by the intercomServer");
-										}
+//										}else{
+//											System.out.println("A assgiment we created was confirmed by the intercomServer");
+//										}
 									}else if(incomeing.contains("\"identifier\":\"@MissonUpdateInter@\"")){
 										System.out.println("Misson uppdate from InterCommServer");
 										MissionIntergroupUpdate update = gson.fromJson(incomeing, MissionIntergroupUpdate.class);

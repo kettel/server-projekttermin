@@ -111,8 +111,6 @@ public class Server {
 			IntercomConnection intercom = new IntercomConnection(this);
 			intercom.start();
 			intercom.stayConnected();
-			// test ass
-			intercom.addIntercomAssignment(new Assignment("testass", wgspoint, "Forsvaret", true, "test", "test", AssignmentStatus.STARTED, "none", "none"));
 			// Skapar en ny tråd som lyssnar på kommandon
 			new ServerTerminal(this).start();
 			// Lyssnar på anslutningar och skapar en ny tråd per anslutning så
