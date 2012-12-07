@@ -268,10 +268,6 @@ public class Server {
 						QueueItem qItem = (QueueItem) m;
 						pr.println(qItem.getJSON());
 						db.deleteFromDB(qItem);
-						System.out
-								.println("Sending " + qItem.getJSON()
-										+ " from queue to "
-										+ receiver.getContactName());
 					}
 				}
 			} catch (Exception e) {
