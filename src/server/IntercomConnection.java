@@ -66,7 +66,7 @@ public class IntercomConnection  extends Thread implements HandshakeCompletedLis
 				sslContext.init(keyMangamentFactory.getKeyManagers(), trustManagerFactory.getTrustManagers(), null);
 				sslSocketFactory = sslContext.getSocketFactory();
 			} catch (Exception e) {
-				System.out.println("SSL initiation failed due to " + e.toString());
+				System.out.println("|intercom| SSL initiation failed due to " + e.toString());
 			}
 	}
 	
@@ -78,7 +78,6 @@ public class IntercomConnection  extends Thread implements HandshakeCompletedLis
 	
 	public synchronized void stayConnected(){
 		this.stayConnected = true;
-//		setConnected(true);
 	}
 	
 	private synchronized boolean isStayConnected(){
@@ -94,7 +93,7 @@ public class IntercomConnection  extends Thread implements HandshakeCompletedLis
 	}
 	
 	public synchronized void addIntercomAssignment(Assignment assigmentToSend){
-		System.out.println("assigment added to interkomm queue");
+		System.out.println("|intercom| assigment added to interkomm queue");
 		String region = assigmentToSend.getRegion();
 		double lon = 0;
 		double lat = 0;
@@ -113,10 +112,9 @@ public class IntercomConnection  extends Thread implements HandshakeCompletedLis
 	private synchronized void syncWait (int time) {
 	   try {
 		this.wait(time);
-	} catch (InterruptedException e) {
-		System.out.println("waitfail");
+	   } catch (InterruptedException e) {
 		e.printStackTrace();
-	}
+	   }
 	}
 	
 	public void run(){
@@ -131,14 +129,14 @@ public class IntercomConnection  extends Thread implements HandshakeCompletedLis
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
-					System.out.println("SSL socket creation failed due to: " + e.toString());
+					System.out.println("|intercom| SSL socket creation failed due to: " + e.toString());
 					setConnected(false);
 				}
 			
 				// get stuff thread
 				new Thread(){
 					public void run() {
-						System.out.println("get stuff thread started anew");
+						System.out.println("|intercom| input thread started");
 						while(isConnected()){
 							try {
 								String incomeing = input.readLine();
@@ -149,22 +147,21 @@ public class IntercomConnection  extends Thread implements HandshakeCompletedLis
 											double[] latAndLon = {intercom.getLocation().getLatitude(),intercom.getLocation().getLongitude()};
 											String region = WgsC.DoubelToGsonWgsString(latAndLon);
 											Assignment misson = new Assignment(intercom.getTitle(),region,"intercom", false, intercom.getDescription(), "", AssignmentStatus.STARTED, "", "");
-											System.out.println("New assignment from InterCommServer named: " + misson.getName());
+											System.out.println("|intercom| New assignment from InterCommServer named: " + misson.getName() + " has arrived");
 											misson.setGlobalID(intercom.getId().idToString());
 											db.addToDB(misson);
 											server.sendToAll(gson.toJson(misson));
 										}else{
-											System.out.println("A assgiment we created was confirmed by the intercomServer");
+											System.out.println("|intercom| A assgiment we created was confirmed by the intercomServer");
 										}
 									}else if(incomeing.contains("\"identifier\":\"@MissonUpdateInter@\"")){
-										System.out.println("Misson uppdate from InterCommServer");
+										System.out.println("|intercom| Misson uppdate from InterCommServer");
 										MissionIntergroupUpdate update = gson.fromJson(incomeing, MissionIntergroupUpdate.class);
 										list = db.getAllFromDB(new Assignment());
 										if (list.size() > 0) {
 											for (ModelInterface m : list) {
 												Assignment ass = (Assignment) m;
 												if (update.getMissionId().idToString().equals(ass.getGlobalID())) {
-													System.out.println("==============================UPPPDATE=======================");
 													if(update.getContent().equals(MissionIntergroupUpdate.UpdateContent.DESCRIPTION)){
 														ass.setAssigmentDescripton((String)update.getNewValue());
 													}else if (update.getContent().equals(MissionIntergroupUpdate.UpdateContent.TITLE)) {
@@ -184,7 +181,7 @@ public class IntercomConnection  extends Thread implements HandshakeCompletedLis
 								}
 							} catch (Exception e) {
 								e.printStackTrace();
-								System.out.println("Crash in intercom input thread, due to " + e.toString() + System.getProperty("line.separator") + "Dissconnecting from intercom server");
+								System.out.println("|intercom| Crash in intercom input thread, due to " + e.toString() + System.getProperty("line.separator") + "Dissconnecting from intercom server");
 								setConnected(false);
 							}
 						}
@@ -193,23 +190,22 @@ public class IntercomConnection  extends Thread implements HandshakeCompletedLis
 				//send stuff
 				new Thread(){
 					public void run(){
-						System.out.println("send stuff thread started anew");
+						System.out.println("|intercom| output thread started");
 						while(isConnected()){
 						try {
 							 Queue <String> q = getQueue();
 							if(!q.isEmpty()){
 								output.println(q.peek());
-								System.out.println("sending");
 								if(output.checkError()){
 									setConnected(false);
-									System.out.println("Dissconnecting from intercom server");
+									System.out.println("|intercom| Dissconnecting from intercom server");
 								}else{
 									q.poll();
 								}
 							}
 							syncWait(50);
 						} catch (Exception e) {
-							System.out.println("Crash in output thread due to: " + e.toString() + System.getProperty("line.separator") + "Dissconnecting from intercom server");
+							System.out.println("|intercom| Crash in output thread due to: " + e.toString() + System.getProperty("line.separator") + "Dissconnecting from intercom server");
 							setConnected(false);
 						}
 						}
@@ -224,17 +220,17 @@ public class IntercomConnection  extends Thread implements HandshakeCompletedLis
 		if(isConnected()){
 			return;
 		}
-		System.out.println("SSL handshake with intercom server compleated");
+		System.out.println("|intercom| SSL handshake with intercom server compleated");
 		try {
 			input = new BufferedReader(new InputStreamReader(sslSocket.getInputStream()));
 			output = new PrintWriter(sslSocket.getOutputStream(), true);
 			output.println(gson.toJson(new LoginObject(faction)));
 		} catch (Exception e) {
-			System.out.println("input and output streamcreation  failed due to:" + e.toString() + System.getProperty("line.separator") + "Dissconnecting from intercom server");
+			System.out.println("|intercom| input and output streamcreation  failed due to:" + e.toString() + System.getProperty("line.separator") + "Dissconnecting from intercom server");
 			setConnected(false);
 			return;
 		}
-		System.out.println("now connected with intercomServer");
+		System.out.println("|intercom| now connected with intercomServer");
 		setConnected(true);
 	}
 
