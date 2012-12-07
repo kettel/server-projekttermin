@@ -94,9 +94,14 @@ public class IntercomConnection  extends Thread implements HandshakeCompletedLis
 	}
 	
 	public synchronized void addIntercomAssignment(Assignment assigmentToSend){
+		System.out.println("assigment added to interkomm queue");
 		String region = assigmentToSend.getRegion();
-		double lon = WgsC.WgsStringToDoubels(region)[0];
-		double lat = WgsC.WgsStringToDoubels(region)[1];
+		double lon = 0;
+		double lat = 0;
+		if(region != null){
+			lon = WgsC.WgsStringToDoubels(region)[0];
+			lat = WgsC.WgsStringToDoubels(region)[1];
+		}
 		MissionIntergroup conveted = new MissionIntergroup(new MissionID(faction, id), new GPSCoordinate(lon, lat), assigmentToSend.getName(), assigmentToSend.getAssignmentDescription(), new Date(assigmentToSend.getTimeStamp()));
 		String outgoing = gson.toJson(conveted);
 		intercomQueue.add(outgoing);
