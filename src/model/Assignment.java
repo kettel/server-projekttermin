@@ -44,7 +44,7 @@ public class Assignment implements ModelInterface {
 	// Platsnamn där uppdraget utspelas
 	private String siteName;
 	private String globalID;
-
+	private AssignmentPriority assignmentPrio = AssignmentPriority.PRIO_NORMAL;
 	/**
 	 * Tom konstruktor. Används bland annat för att hämta från databasen.
 	 */
@@ -76,6 +76,7 @@ public class Assignment implements ModelInterface {
 		this.assignmentStatus = assignmentStatus;
 		this.streetName = streetName;
 		this.assignmentTimeStamp = Calendar.getInstance().getTimeInMillis();
+		
 	}
 
 	/**
