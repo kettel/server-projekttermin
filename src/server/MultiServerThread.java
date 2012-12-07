@@ -107,13 +107,14 @@ public class MultiServerThread extends Thread {
 				connected = false;
 			}
 		} else if (input.equals("logout")) {
-			System.out.println("<" + socket.getInetAddress() + "> logout");
+			System.out.println("<" + thisContact.getContactName() + "> logout");
 			handleLogout();
 		} else if (input.equals("pull")) {
-			System.out.println("<" + socket.getInetAddress() + "> pull");
+			System.out.println("<" + thisContact.getContactName() + "> pull");
 			server.sendUnsentItems(thisContact);
 			// Vid förfrågan skickas alla kontakter från databasen
 		} else if (input.equals("getAllContacts")) {
+			System.out.println("<" + thisContact.getContactName() + "> getAllContacts");
 			handleContactRequest();
 		} else {
 			System.out.println("<" + socket.getInetAddress()
