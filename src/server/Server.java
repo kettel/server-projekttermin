@@ -139,7 +139,6 @@ public class Server {
 			// länge servern lyssnar efter anslutningar
 			while (listening) {
 				clientSocket = (SSLSocket) serverSocket.accept();
-				clientSocket.startHandshake();
 				OutputStream out = clientSocket.getOutputStream();
 				new MultiServerThread(clientSocket, this).start();
 				hashMap.put(clientSocket.getInetAddress().toString(), out);
@@ -153,6 +152,7 @@ public class Server {
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
 		} catch (CertificateException e) {
+			
 			e.printStackTrace();
 		} catch (UnrecoverableKeyException e) {
 			e.printStackTrace();
