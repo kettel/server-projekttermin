@@ -120,17 +120,19 @@ public class IntercomConnection  extends Thread implements HandshakeCompletedLis
 	
 	public void run(){
 		while(isStayConnected()){
-			try {
-				sslSocket = (SSLSocket) sslSocketFactory.createSocket(serverIP,serverPort);
-				sslSocket.addHandshakeCompletedListener(this);
-				sslSocket.startHandshake();
-				if(!isConnected() && isStayConnected()){
-					syncWait(500);	
+			if(!isConnected()){
+				try {
+					sslSocket = (SSLSocket) sslSocketFactory.createSocket(serverIP,serverPort);
+					sslSocket.addHandshakeCompletedListener(this);
+					sslSocket.startHandshake();
+					if(!isConnected() && isStayConnected()){
+						syncWait(500);	
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+					System.out.println("SSL socket creation failed due to: " + e.toString());
+					setConnected(false);
 				}
-			} catch (Exception e) {
-				e.printStackTrace();
-				System.out.println("SSL socket creation failed due to: " + e.toString());
-				setConnected(false);
 			}
 			if(isConnected()){
 				// get stuff thread
