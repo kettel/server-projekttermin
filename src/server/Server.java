@@ -30,13 +30,25 @@ import javax.net.ssl.SSLSocket;
 import javax.net.ssl.TrustManagerFactory;
 
 import jetty.JettyServer;
+<<<<<<< HEAD
+=======
+import model.AuthenticationModel;
+import model.Contact;
+import model.ModelInterface;
+import model.QueueItem;
+>>>>>>> 8ca78ae604f3f04ac97046c3fd30475b6bc0e12a
 
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 
+<<<<<<< HEAD
 import model.Contact;
 import model.ModelInterface;
 import model.QueueItem;
+=======
+import sip.InitSip;
+
+>>>>>>> 8ca78ae604f3f04ac97046c3fd30475b6bc0e12a
 import database.Database;
 
 /**
@@ -61,7 +73,7 @@ public class Server {
 	private SSLSocket clientSocket = null;
 
 	private List<ModelInterface> list = null;
-	private Database db = null;
+	private static Database db = null;
 	private static int jettyPort = 0;
 	char keystorepass[] = "password".toCharArray();
 	char keypassword[] = "password".toCharArray();
@@ -89,6 +101,11 @@ public class Server {
 		// "/sendAll");
 		final JettyServer jettyServer = new JettyServer(jettyPort);
 		jettyServer.getServer().setHandler(context);
+		
+		// Provisionera SIP-användare
+		db = new Database();
+		InitSip.provisionUsers(db.getAllFromDB(new AuthenticationModel()));
+		
 		Runnable runner = new Runnable() {
 			@Override
 			public void run() {
@@ -100,6 +117,8 @@ public class Server {
 				}
 			}
 		};
+		
+		
 
 		EventQueue.invokeLater(runner);
 		new Server();
@@ -108,7 +127,7 @@ public class Server {
 	public Server() {
 		System.out.println("porten är"+port);
 		try {
-			db = new Database();
+			
 			hashMap = new ConcurrentHashMap<String, OutputStream>();
 			gcmMap = new ConcurrentHashMap<String, String>();
 			List<ModelInterface> contactList = db.getAllFromDB(new Contact());
@@ -116,6 +135,7 @@ public class Server {
 				Contact cont = (Contact) m;
 				Datastore.register(cont.getGcmId());
 			}
+<<<<<<< HEAD
 			KeyStore ts = KeyStore.getInstance("JKS");
 			
 			ts.load(new FileInputStream(new File(getClass().getClassLoader().getResource("cert/servertruststore.jks").getPath())),truststorepass);
@@ -133,6 +153,10 @@ public class Server {
 			SSLServerSocketFactory ssf = sslcontext.getServerSocketFactory();
 
 			serverSocket = (SSLServerSocket) ssf.createServerSocket(port);
+=======
+			serverSocket = new ServerSocket(port);
+			
+>>>>>>> 8ca78ae604f3f04ac97046c3fd30475b6bc0e12a
 			// Skapar en ny tråd som lyssnar på kommandon
 			new ServerTerminal(this).start();
 			// Lyssnar på anslutningar och skapar en ny tråd per anslutning så
