@@ -53,11 +53,6 @@ public class MultiServerThread extends Thread {
 		this.socket = socket;
 		this.server = server;
 		db = new Database();
-		if (socket.getInetAddress().toString().equals(replicateServerIP)) {
-			db.setReplicationStatus(false);
-		} else {
-			db.setReplicationStatus(true);
-		}
 	}
 
 	/**
@@ -73,9 +68,9 @@ public class MultiServerThread extends Thread {
 				// Läser den buffrade strängen
 				while ((inputLine = input.readLine()) != null
 						&& !inputLine.equals("close")) {
-					System.out.println("<input from "
-							+ socket.getInetAddress().toString() + ":"
-							+ socket.getPort() + "> " + inputLine);
+//					System.out.println("<input from "
+//							+ socket.getInetAddress().toString() + ":"
+//							+ socket.getPort() + "> " + inputLine);
 					handleTypeOfInput(inputLine);
 				}
 				connected = false;
@@ -112,8 +107,10 @@ public class MultiServerThread extends Thread {
 				connected = false;
 			}
 		} else if (input.equals("logout")) {
+			System.out.println("<" + socket.getInetAddress() + "> logout");
 			handleLogout();
 		} else if (input.equals("pull")) {
+			System.out.println("<" + socket.getInetAddress() + "> pull");
 			server.sendUnsentItems(thisContact);
 			// Vid förfrågan skickas alla kontakter från databasen
 		} else if (input.equals("getAllContacts")) {

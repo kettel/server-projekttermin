@@ -54,7 +54,6 @@ public class CreateContactCommand implements CommandInterface {
 				if(!checkIfContactAlreadyExist(newContact.getContactName())){
 				String contact = new Gson().toJson(newContact);
 				server.sendToAll(contact);
-				new SendAll().sendAll();
 				addToLogin(newContact, pw);
 				System.out.println("Kontakt sparad.");
 				
