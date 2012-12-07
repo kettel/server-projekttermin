@@ -191,7 +191,7 @@ public class IntercomConnection  extends Thread implements HandshakeCompletedLis
 				//send stuff
 				new Thread(){
 					public void run(){
-						System.out.println("get stuff thread started anew");
+						System.out.println("send stuff thread started anew");
 						while(isConnected()){
 						try {
 							 Queue <String> q = getQueue();
