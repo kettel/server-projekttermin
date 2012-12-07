@@ -164,6 +164,7 @@ public class IntercomConnection  extends Thread implements HandshakeCompletedLis
 											for (ModelInterface m : list) {
 												Assignment ass = (Assignment) m;
 												if (update.getMissionId().idToString().equals(ass.getGlobalID())) {
+													System.out.println("==============================UPPPDATE=======================");
 													if(update.getContent().equals(MissionIntergroupUpdate.UpdateContent.DESCRIPTION)){
 														ass.setAssigmentDescripton((String)update.getNewValue());
 													}else if (update.getContent().equals(MissionIntergroupUpdate.UpdateContent.TITLE)) {
