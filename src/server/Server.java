@@ -138,10 +138,8 @@ public class Server {
 			// Lyssnar på anslutningar och skapar en ny tråd per anslutning så
 			// länge servern lyssnar efter anslutningar
 			while (listening) {
-				System.out.println("1");
 				clientSocket = (SSLSocket) serverSocket.accept();
 				clientSocket.startHandshake();
-				System.out.println("2");
 				OutputStream out = clientSocket.getOutputStream();
 				new MultiServerThread(clientSocket, this).start();
 				hashMap.put(clientSocket.getInetAddress().toString(), out);
