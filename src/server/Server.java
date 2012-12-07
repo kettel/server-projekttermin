@@ -31,7 +31,6 @@ import javax.net.ssl.TrustManagerFactory;
 
 import jetty.JettyServer;
 
-
 import model.AuthenticationModel;
 import model.Contact;
 import model.ModelInterface;
@@ -43,9 +42,7 @@ import org.eclipse.jetty.servlet.ServletHolder;
 import model.Contact;
 import model.ModelInterface;
 import model.QueueItem;
-
 import sip.InitSip;
-
 
 import database.Database;
 
@@ -133,6 +130,7 @@ public class Server {
 				Contact cont = (Contact) m;
 				Datastore.register(cont.getGcmId());
 			}
+
 			KeyStore ts = KeyStore.getInstance("JKS");
 			
 			ts.load(new FileInputStream(new File(getClass().getClassLoader().getResource("cert/servertruststore.jks").getPath())),truststorepass);
