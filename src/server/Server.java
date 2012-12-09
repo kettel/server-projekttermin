@@ -194,8 +194,6 @@ public class Server {
 				if (hashMap.keySet().contains(cont.getInetAddress())) {
 					PrintWriter pr = new PrintWriter(hashMap.get(cont
 							.getInetAddress()), true);
-					System.out.println("Skickar enbart till " + receiver);
-					System.out.println("hashMap: " + hashMap.keySet());
 					pr.println(stringToBeSent);
 				} else {
 					if (!stringToBeSent
@@ -203,10 +201,8 @@ public class Server {
 						QueueItem qItem = new QueueItem(cont.getId(),
 								stringToBeSent);
 						db.addToDB(qItem);
-						System.out.println("kollar gcmMap för skickning av notifikation");
 						if (gcmMap.get(cont.getContactName()) != null) {
 							System.out.println("Skickar en notifikation till " + cont.getContactName());
-							System.out.println("gcmMap: " + gcmMap.keySet());
 							new SendAll().singleSend(gcmMap.get(cont
 									.getContactName()));
 						}
@@ -314,28 +310,15 @@ public class Server {
 	 */
 	public void sendUnsentItems(Contact receiver) {
 		if (receiver != null) {
-			System.out.println("@Server(255)");
 			try {
-				System.out.println("@Server(257)");
 				list = db.getAllFromDB(new QueueItem(receiver.getId()));
-				System.out.println("@Server(259)");
 				if (!list.isEmpty()) {
-					System.out.println("@Server(261)");
-					System.out.println("keySet: " + hashMap.keySet() + " values: " + hashMap.values());
 					PrintWriter pr = new PrintWriter(hashMap.get(receiver
 							.getInetAddress()), true);
-					System.out.println("@Server(264)");
 					for (ModelInterface m : list) {
-						System.out.println("@Server(266)");
 						QueueItem qItem = (QueueItem) m;
-						System.out.println("@Server(268)");
 						pr.println(qItem.getJSON());
-						System.out.println("@Server(270)");
 						db.deleteFromDB(qItem);
-						System.out
-								.println("Sending " + qItem.getJSON()
-										+ " from queue to "
-										+ receiver.getContactName());
 					}
 				}
 			} catch (Exception e) {
