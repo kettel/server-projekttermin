@@ -16,6 +16,6 @@ else
 	v=$(echo ../lib/*.jar | tr ' ' ':../')
 	javac -cp .:../$v  database/*.java model/*.java server/*.java jetty/*.java
 	echo "Kompilerat färdigt. Nu ska servern 1 startas!"
-	java -cp .:../$v server.Server $port $jetty
+	java -cp .:../$v -Djava.awt.headless=true server.Server $port $jetty
 fi
 
