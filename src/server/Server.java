@@ -255,13 +255,6 @@ public class Server {
 					QueueItem qItem = new QueueItem(cont.getId(),
 							stringToBeSent);
 					db.addToDB(qItem);
-//					try {
-//						new SendAll().sendAll();
-//					} catch (IOException e) {
-//						// TODO Auto-generated catch block
-//						System.out.println("fel med GCM doPost");
-//						e.printStackTrace();
-//					}
 				}
 			}
 		}
