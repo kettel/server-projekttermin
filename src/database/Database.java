@@ -149,6 +149,7 @@ public class Database {
 			DatabaseHandlerAssignment dha = new DatabaseHandlerAssignment();
 			dha.updateModel(m);
 			try {
+				System.out.println("@DB(152): skickar notifikation om uppdatering av assignment");
 				all.sendAll();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
