@@ -159,13 +159,6 @@ public class Database {
 		} else if (dbRep.equalsIgnoreCase("contact")) {
 			DatabaseHandlerContacts dhc = new DatabaseHandlerContacts();
 			dhc.updateModel(m);
-			try {
-				all.sendAll();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				System.out.println("fel med GCM doPost");
-				e.printStackTrace();
-			}
 		} else if (dbRep.equalsIgnoreCase("message")) {
 			DatabaseHandlerMessages dhm = new DatabaseHandlerMessages();
 			dhm.updateModel(m);
