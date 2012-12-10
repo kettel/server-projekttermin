@@ -148,14 +148,6 @@ public class Database {
 		if (dbRep.equalsIgnoreCase("assignment")) {
 			DatabaseHandlerAssignment dha = new DatabaseHandlerAssignment();
 			dha.updateModel(m);
-			try {
-				System.out.println("@DB(152): skickar notifikation om uppdatering av assignment");
-				all.sendAll();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				System.out.println("fel med GCM doPost");
-				e.printStackTrace();
-			}
 		} else if (dbRep.equalsIgnoreCase("contact")) {
 			DatabaseHandlerContacts dhc = new DatabaseHandlerContacts();
 			dhc.updateModel(m);
