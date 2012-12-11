@@ -1,13 +1,17 @@
 package server;
 
 import java.io.BufferedReader;
+
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.Socket;
+
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
+
+import javax.net.ssl.SSLSocket;
 
 import model.Assignment;
 import model.AuthenticationModel;
@@ -27,7 +31,7 @@ import database.Database;
  */
 public class MultiServerThread extends Thread {
 
-	private Socket socket = null;
+	private SSLSocket socket = null;
 	private BufferedReader input = null;
 	private String inputLine;
 	private Database db = null;
@@ -38,6 +42,8 @@ public class MultiServerThread extends Thread {
 	private List<ModelInterface> hashList;
 	private final String replicateServerIP = "/192.168.1.1";
 	private IntercomConnection intercom = null;
+
+
 	/**
 	 * Konstruktorn, tar emot en socket för porten vi lyssnar på och en Server
 	 * som kan skicka vidare data
@@ -48,7 +54,7 @@ public class MultiServerThread extends Thread {
 	 *            Servern som hanterar alla anslutningar och som kan skicka
 	 *            vidare data
 	 */
-	public MultiServerThread(Socket socket, Server server ,IntercomConnection intercom) {
+	public MultiServerThread(SSLSocket socket, Server server ,IntercomConnection intercom) {
 		super("MultiServerThread");
 		this.socket = socket;
 		this.server = server;
@@ -329,8 +335,8 @@ public class MultiServerThread extends Thread {
 			System.out.println(e);
 		}
 	}
-	
-	private void handleLogout(){
+
+	private void handleLogout() {
 		server.removeClient(socket.getInetAddress().toString());
 		server.removeGcmClient(thisContact.getContactName());
 	}
