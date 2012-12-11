@@ -60,7 +60,6 @@ public class MultiServerThread extends Thread {
 		this.server = server;
 		this.intercom = intercom;
 		db = new Database();
-		System.out.println("Multiserver skapades");
 	}
 
 	/**
