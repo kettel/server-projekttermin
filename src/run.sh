@@ -2,7 +2,7 @@
 ip=$(ifconfig eth0 | awk '/inet addr/ {split ($2,A,":"); print A[2]}')
 server2=`echo $ip | cut -d\. -f4`
 
-if [ $server2 -eq 128 ]
+if [ $server2 -eq 139 ]
 	then 
 	port=18234
 	jetty=17783
