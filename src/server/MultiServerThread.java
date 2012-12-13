@@ -40,7 +40,7 @@ public class MultiServerThread extends Thread {
 	private Contact thisContact = null;
 	private List<ModelInterface> list;
 	private List<ModelInterface> hashList;
-	private final String replicateServerIP = "/192.168.1.1";
+//	private final String replicateServerIP = "/192.168.1.1";
 
 	/**
 	 * Konstruktorn, tar emot en socket för porten vi lyssnar på och en Server
@@ -151,9 +151,9 @@ public class MultiServerThread extends Thread {
 		// Gson konverterar json-strängen till MessageModel-objektet igen
 		try {
 			msg = (new Gson()).fromJson(message, MessageModel.class);
-			if (!socket.getInetAddress().toString().equals(replicateServerIP)) {
+//			if (!socket.getInetAddress().toString().equals(replicateServerIP)) {
 				server.send(message, msg.getReciever().toString());
-			}
+//			}
 			// Lägger in meddelandet i databasen
 			db.addToDB(msg);
 			Calendar cal = Calendar.getInstance();
@@ -183,7 +183,7 @@ public class MultiServerThread extends Thread {
 			Assignment assignmentFromJson = (new Gson()).fromJson(assignment,
 					Assignment.class);
 			boolean alreadyExists = false;
-			if (!socket.getInetAddress().toString().equals(replicateServerIP)) {
+//			if (!socket.getInetAddress().toString().equals(replicateServerIP)) {
 				list = db.getAllFromDB(new Assignment());
 				if (list.size() > 0) {
 					for (ModelInterface m : list) {
@@ -206,7 +206,7 @@ public class MultiServerThread extends Thread {
 					server.sendToAllExceptTheSender(assignment, socket
 							.getInetAddress().toString());
 				}
-			}
+//			}
 			Calendar cal = Calendar.getInstance();
 			cal.getTime();
 			SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
@@ -234,9 +234,9 @@ public class MultiServerThread extends Thread {
 			Contact contactFromJson = (new Gson()).fromJson(contact,
 					Contact.class);
 			// Lägger in uppdraget i databasen
-			if (!socket.getInetAddress().toString().equals(replicateServerIP)) {
+//			if (!socket.getInetAddress().toString().equals(replicateServerIP)) {
 				db.addToDB(contactFromJson);
-			}
+//			}
 		} catch (Exception e) {
 			System.out.println(e);
 		}
@@ -258,7 +258,7 @@ public class MultiServerThread extends Thread {
 			list = db.getAllFromDB(new Contact());
 			AuthenticationModel loginFromJson = (new Gson().fromJson(login,
 					AuthenticationModel.class));
-			if (!socket.getInetAddress().toString().equals(replicateServerIP)) {
+//			if (!socket.getInetAddress().toString().equals(replicateServerIP)) {
 				hashList = db.getAllFromDB(new AuthenticationModel());
 				for (ModelInterface m : list) {
 					Contact cont = (Contact) m;
@@ -301,17 +301,17 @@ public class MultiServerThread extends Thread {
 				} catch (Exception e) {
 					System.out.println(e);
 				}
-			} else {
-				for (ModelInterface m : list) {
-					Contact cont = (Contact) m;
-					if (loginFromJson.getUserName().equals(
-							cont.getContactName())) {
-						db.addToDB(new AuthenticationModel(cont.getId(),
-								loginFromJson.getPasswordHash()));
-					}
-				}
-
-			}
+//			} else {
+//				for (ModelInterface m : list) {
+//					Contact cont = (Contact) m;
+//					if (loginFromJson.getUserName().equals(
+//							cont.getContactName())) {
+//						db.addToDB(new AuthenticationModel(cont.getId(),
+//								loginFromJson.getPasswordHash()));
+//					}
+//				}
+//
+//			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
