@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
@@ -14,6 +13,7 @@ import java.util.List;
 import javax.net.ssl.SSLSocket;
 
 import model.Assignment;
+import model.AssignmentStatus;
 import model.AuthenticationModel;
 import model.Contact;
 import model.MessageModel;
@@ -41,7 +41,6 @@ public class MultiServerThread extends Thread {
 	private List<ModelInterface> list;
 	private List<ModelInterface> hashList;
 	private final String replicateServerIP = "/192.168.1.1";
-
 
 	/**
 	 * Konstruktorn, tar emot en socket för porten vi lyssnar på och en Server
@@ -73,9 +72,9 @@ public class MultiServerThread extends Thread {
 				// Läser den buffrade strängen
 				while ((inputLine = input.readLine()) != null
 						&& !inputLine.equals("close")) {
-//					System.out.println("<input from "
-//							+ socket.getInetAddress().toString() + ":"
-//							+ socket.getPort() + "> " + inputLine);
+					 System.out.println("<input from "
+					 + socket.getInetAddress().toString() + ":"
+					 + socket.getPort() + "> " + inputLine);
 					handleTypeOfInput(inputLine);
 				}
 				connected = false;
@@ -119,8 +118,20 @@ public class MultiServerThread extends Thread {
 			server.sendUnsentItems(thisContact);
 			// Vid förfrågan skickas alla kontakter från databasen
 		} else if (input.equals("getAllContacts")) {
-			System.out.println("<" + thisContact.getContactName() + "> getAllContacts");
+			System.out.println("<" + thisContact.getContactName()
+					+ "> getAllContacts");
 			handleContactRequest();
+			// Vid förfrågan skickas alla uppdrag från databasen
+		} else if (input.equals("getAllAssignment")) {
+			System.out.println("<" + thisContact.getContactName()
+					+ "> getAllAssignments");
+			handleAssignmentRequest();
+			// Vid förfrågan skickas alla meddelanden kopplade till kontakten
+			// från databasen
+		} else if (input.equals("getAllMessages")) {
+			System.out.println("<" + thisContact.getContactName()
+					+ "> getAllContacts");
+			handleMessageRequest();
 		} else {
 			System.out.println("<" + socket.getInetAddress()
 					+ "> Did not recognise inputtype.	" + inputLine);
@@ -318,11 +329,46 @@ public class MultiServerThread extends Thread {
 			for (ModelInterface m : list) {
 				Contact cont = (Contact) m;
 				String contact = new Gson().toJson(cont);
-				System.out.println("Sending contact " + cont.getContactName() + " to " + thisContact.getContactName());
+				System.out.println("Sending contact " + cont.getContactName()
+						+ " to " + thisContact.getContactName());
 				server.send(contact, thisContact.getContactName());
 			}
 		} catch (Exception e) {
 			System.out.println("catch: handleContactRequest");
+			System.out.println(e);
+		}
+	}
+
+	private void handleAssignmentRequest() {
+		try {
+			list = db.getAllFromDB(new Assignment());
+			for (ModelInterface m : list) {
+				Assignment ass = (Assignment) m;
+				if (ass.getAssignmentStatus() != AssignmentStatus.FINISHED) {
+					String assignment = new Gson().toJson(ass);
+					System.out.println("Sending assignment " + ass.getName()
+							+ " to " + thisContact.getContactName());
+					server.send(assignment, thisContact.getContactName());
+				}
+			}
+		} catch (Exception e) {
+			System.out.println("catch: handleAssignmentRequest");
+			System.out.println(e);
+		}
+	}
+
+	private void handleMessageRequest() {
+		try {
+			list = db.getAllFromDB(new MessageModel());
+			for (ModelInterface m : list) {
+				MessageModel msg = (MessageModel) m;
+				if (thisContact.getContactName().equals(msg.getReciever())) {
+					String message = new Gson().toJson(msg);
+					server.send(message, thisContact.getContactName());
+				}
+			}
+		} catch (Exception e) {
+			System.out.println("catch: handleMessageRequest");
 			System.out.println(e);
 		}
 	}
