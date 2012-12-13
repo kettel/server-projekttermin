@@ -72,9 +72,9 @@ public class MultiServerThread extends Thread {
 				// Läser den buffrade strängen
 				while ((inputLine = input.readLine()) != null
 						&& !inputLine.equals("close")) {
-					 System.out.println("<input from "
-					 + socket.getInetAddress().toString() + ":"
-					 + socket.getPort() + "> " + inputLine);
+//					 System.out.println("<input from "
+//					 + socket.getInetAddress().toString() + ":"
+//					 + socket.getPort() + "> " + inputLine);
 					handleTypeOfInput(inputLine);
 				}
 				connected = false;
@@ -253,8 +253,6 @@ public class MultiServerThread extends Thread {
 	 */
 	private boolean handleLogin(String login) {
 		try {
-			System.out.println("Login request from: "
-					+ socket.getInetAddress().toString());
 			list = db.getAllFromDB(new Contact());
 			AuthenticationModel loginFromJson = (new Gson().fromJson(login,
 					AuthenticationModel.class));
