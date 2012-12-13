@@ -122,7 +122,7 @@ public class MultiServerThread extends Thread {
 					+ "> getAllContacts");
 			handleContactRequest();
 			// Vid förfrågan skickas alla uppdrag från databasen
-		} else if (input.equals("getAllAssignment")) {
+		} else if (input.equals("getAllAssignments")) {
 			System.out.println("<" + thisContact.getContactName()
 					+ "> getAllAssignments");
 			handleAssignmentRequest();
