@@ -44,7 +44,8 @@ public class Assignment implements ModelInterface {
 	// Platsnamn där uppdraget utspelas
 	private String siteName;
 	private String globalID;
-
+	private AssignmentPriority assignmentPrio;
+	
 	/**
 	 * Tom konstruktor. Används bland annat för att hämta från databasen.
 	 */
@@ -284,7 +285,7 @@ public class Assignment implements ModelInterface {
 			boolean externalMission, String assignmentDescription,
 			String timeSpan, AssignmentStatus assignmentStatus,
 			byte[] cameraImage, String streetName, String siteName,
-			Long timeStamp, String globalID) {
+			Long timeStamp, String globalID, AssignmentPriority assignmentPrio) {
 		this.id = id; // 1
 		this.name = name; // 2
 		this.lat = lat; // 3
@@ -301,6 +302,7 @@ public class Assignment implements ModelInterface {
 		this.siteName = siteName; // 14
 		this.assignmentTimeStamp = timeStamp; // 15
 		this.globalID = globalID; // 16
+		this.assignmentPrio = assignmentPrio; // 17
 	}
 
 	public String getRegion() {
@@ -383,6 +385,10 @@ public class Assignment implements ModelInterface {
 
 	public long getId() {
 		return id;
+	}
+	
+	public AssignmentPriority getAssignmentPriority(){
+		return assignmentPrio;
 	}
 
 	/**

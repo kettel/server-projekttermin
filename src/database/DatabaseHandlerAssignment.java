@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import model.Assignment;
+import model.AssignmentPriority;
 import model.ModelInterface;
 import model.Contact;
 import model.AssignmentStatus;
@@ -33,7 +34,7 @@ public class DatabaseHandlerAssignment extends DatabaseHandler {
 			pst = con
 					.prepareStatement("INSERT INTO "
 							+ m.getDatabaseRepresentation()
-							+ "(Name , Latitude , Longitude , Region , Agents , ExternalMission , Sender , Description , Timespan , Status , Cameraimage , Streetname , Sitename , Timestamp, Global_ID) "
+							+ "(Name , Latitude , Longitude , Region , Agents , ExternalMission , Sender , Description , Timespan , Status , Cameraimage , Streetname , Sitename , Timestamp, Global_ID, Priority) "
 							+ "VALUES (AES_ENCRYPT(?,?)," + "AES_ENCRYPT(?,?),"
 							+ "AES_ENCRYPT(?,?)," + "AES_ENCRYPT(?,?),"
 							+ "AES_ENCRYPT(?,?)," + "AES_ENCRYPT(?,?),"
@@ -41,7 +42,7 @@ public class DatabaseHandlerAssignment extends DatabaseHandler {
 							+ "AES_ENCRYPT(?,?)," + "AES_ENCRYPT(?,?),"
 							+ "AES_ENCRYPT(?,?)," + "AES_ENCRYPT(?,?),"
 							+ "AES_ENCRYPT(?,?)," + "AES_ENCRYPT(?,?)," 
-							+ "AES_ENCRYPT(?,?))");
+							+ "AES_ENCRYPT(?,?)," + "AES_ENCRYPT(?,?))");
 
 			// Sätt in rätt värden till rätt plats i frågan
 			pst.setString(1, ass.getName());
@@ -74,6 +75,8 @@ public class DatabaseHandlerAssignment extends DatabaseHandler {
 			pst.setString(28, AES_PASSWORD);
 			pst.setString(29, ass.getGlobalID());
 			pst.setString(30, AES_PASSWORD);
+			pst.setString(31, ass.getAssignmentPriority().toString());
+			pst.setString(32, AES_PASSWORD);
 
 			// Utför frågan och lägg till objektet i databasen
 			pst.executeUpdate();
@@ -123,7 +126,8 @@ public class DatabaseHandlerAssignment extends DatabaseHandler {
 					" Status = AES_ENCRYPT(\"" + ass.getAssignmentStatus().toString()+ "\",\""+AES_PASSWORD+"\")," +
 					" Cameraimage = AES_ENCRYPT(\"" + ass.getCameraImage()+ "\",\""+AES_PASSWORD+"\")," +
 					" Streetname = AES_ENCRYPT(\"" + ass.getStreetName()+ "\",\""+AES_PASSWORD+"\")," +
-					" Sitename = AES_ENCRYPT(\"" + ass.getSiteName()+ "\",\""+AES_PASSWORD+"\")" +
+					" Sitename = AES_ENCRYPT(\"" + ass.getSiteName()+ "\",\""+AES_PASSWORD+"\")," +
+					" Priority = AES_ENCRYPT(\"" + ass.getAssignmentPriority().toString()+ "\",\""+AES_PASSWORD+"\")" +
 					" WHERE AES_DECRYPT(Global_ID,\""+AES_PASSWORD+"\") = \""+ass.getGlobalID()+"\"";
 			// Sätt in rätt värden till rätt plats i frågan och uppdatera dessa
 			st.executeUpdate(updateString);
@@ -164,9 +168,10 @@ public class DatabaseHandlerAssignment extends DatabaseHandler {
 					+ "AES_DECRYPT(Timespan,?)," + "AES_DECRYPT(Status,?),"
 					+ "AES_DECRYPT(Cameraimage,?),"
 					+ "AES_DECRYPT(Streetname,?)," + "AES_DECRYPT(Sitename,?),"
-					+ "AES_DECRYPT(Timestamp,?),AES_DECRYPT(Global_ID,?) FROM "
+					+ "AES_DECRYPT(Timestamp,?),AES_DECRYPT(Global_ID,?)," 
+					+ "AES_DECRYPT(Priority,?) FROM "
 					+ m.getDatabaseRepresentation());
-			for (int i = 1; i < 16; i++) {
+			for (int i = 1; i < 17; i++) {
 				pst.setString(i, AES_PASSWORD);
 			}
 			rs = pst.executeQuery();
@@ -190,7 +195,8 @@ public class DatabaseHandlerAssignment extends DatabaseHandler {
 				String siteName = rs.getString(14);
 				Long timestamp = Long.valueOf(rs.getString(15));
 				String globalID = rs.getString(16);
-				returnList.add((ModelInterface) new Assignment(id,name,lat,lon,region,agents,sender,extMission,desc,timespan,astatus,camImg,strName,siteName,timestamp,globalID));
+				AssignmentPriority assPrio = AssignmentPriority.valueOf(rs.getString(17));
+				returnList.add((ModelInterface) new Assignment(id,name,lat,lon,region,agents,sender,extMission,desc,timespan,astatus,camImg,strName,siteName,timestamp,globalID,assPrio));
 			}
 
 		} catch (SQLException ex) {
