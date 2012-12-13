@@ -122,7 +122,7 @@ public class Server {
 	public Server() {
 		System.out.println("porten är"+port);
 		try {
-			
+			System.setProperty("file.encoding", "UTF8");
 			hashMap = new ConcurrentHashMap<String, OutputStream>();
 			gcmMap = new ConcurrentHashMap<String, String>();
 			List<ModelInterface> contactList = db.getAllFromDB(new Contact());
@@ -193,7 +193,7 @@ public class Server {
 				// Om mottagaren är ansluten så skickas strängen
 				if (hashMap.keySet().contains(cont.getInetAddress())) {
 					PrintWriter pr = new PrintWriter(hashMap.get(cont
-							.getInetAddress()), true);
+							.getInetAddress()),true);
 					pr.println(stringToBeSent);
 				} else {
 					if (!stringToBeSent
