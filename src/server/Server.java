@@ -159,8 +159,9 @@ public class Server {
 				clientSocket = (SSLSocket) serverSocket.accept();
 				OutputStream out = clientSocket.getOutputStream();
 				OutputStreamWriter outStream = new OutputStreamWriter(out, "UTF-8");
-				new MultiServerThread(clientSocket, this).start();
+				new MultiServerThread(clientSocket, this, intercom).start();
 				hashMap.put(clientSocket.getInetAddress().toString(), outStream);
+				
 			}
 			// Stänger socketen, anslutningar är inte längre tillåtna
 			serverSocket.close();

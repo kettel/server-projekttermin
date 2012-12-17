@@ -52,16 +52,15 @@ public class MultiServerThread extends Thread {
 	 *            Servern som hanterar alla anslutningar och som kan skicka
 	 *            vidare data
 	 */
-	public MultiServerThread(SSLSocket socket, Server server ) {
+	public MultiServerThread(SSLSocket socket, Server server,IntercomConnection intercom ) {
 		super("MultiServerThread");
 		this.socket = socket;
 		this.server = server;
 		db = new Database();
-	}
-	
-	public void setIntercom(IntercomConnection intercom){
 		this.intercom = intercom;
 	}
+	
+	
 
 	/**
 	 * Koden för den tråd som skapas för en ny anslutning.
