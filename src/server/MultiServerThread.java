@@ -269,7 +269,9 @@ public class MultiServerThread extends Thread {
 											logMod.getPasswordHash())) {
 								cont.setInetAddress(socket.getInetAddress()
 										.toString());
-								cont.setGcmId(loginFromJson.getGcmId());
+								if(loginFromJson.getGcmId().length() > 0){
+									cont.setGcmId(loginFromJson.getGcmId());	
+								}								
 								server.addGcmClient(
 										loginFromJson.getUserName(),
 										loginFromJson.getGcmId());
