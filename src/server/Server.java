@@ -129,7 +129,7 @@ public class Server {
 			}
 
 			// försöker ansluta till interkommserven
-//			IntercomConnection intercom = new IntercomConnection(this);
+			IntercomConnection intercom = new IntercomConnection(this);
 //			intercom.start();
 //			intercom.stayConnected();
 
@@ -152,14 +152,14 @@ public class Server {
 			serverSocket = (SSLServerSocket) ssf.createServerSocket(port);
 
 			// Skapar en ny tråd som lyssnar på kommandon
-			new ServerTerminal(this).start();
+			new ServerTerminal(this,intercom).start();
 			// Lyssnar på anslutningar och skapar en ny tråd per anslutning så
 			// länge servern lyssnar efter anslutningar
 			while (listening) {
 				clientSocket = (SSLSocket) serverSocket.accept();
 				OutputStream out = clientSocket.getOutputStream();
 				OutputStreamWriter outStream = new OutputStreamWriter(out, "UTF-8");
-				new MultiServerThread(clientSocket, this, intercom).start();
+				new MultiServerThread(clientSocket, this).start();
 				hashMap.put(clientSocket.getInetAddress().toString(), outStream);
 			}
 			// Stänger socketen, anslutningar är inte längre tillåtna

@@ -19,14 +19,14 @@ public class ServerTerminal extends Thread {
 	private intercomCommand interComCommand = null;
 	Server server;
 
-	public ServerTerminal(Server server) {
-		IntercomConnection intercomConnection = new IntercomConnection(server);
+	public ServerTerminal(Server server, IntercomConnection intercomConnection) {
 		in = new Scanner(System.in);
 		this.server = server;
 		createContactCommand = new CreateContactCommand(server);
 		getAllContacts = new GetAllContactsCommand();
 		removeContact = new RemoveContactCommand();
 		interComCommand = new intercomCommand(intercomConnection);
+		
 	}
 
 	/**

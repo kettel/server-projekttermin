@@ -52,12 +52,15 @@ public class MultiServerThread extends Thread {
 	 *            Servern som hanterar alla anslutningar och som kan skicka
 	 *            vidare data
 	 */
-	public MultiServerThread(SSLSocket socket, Server server ,IntercomConnection intercom) {
+	public MultiServerThread(SSLSocket socket, Server server ) {
 		super("MultiServerThread");
 		this.socket = socket;
 		this.server = server;
-		this.intercom = intercom;
 		db = new Database();
+	}
+	
+	public void setIntercom(IntercomConnection intercom){
+		this.intercom = intercom;
 	}
 
 	/**
@@ -199,7 +202,7 @@ public class MultiServerThread extends Thread {
 					if (!alreadyExists) {
 						db.addToDB(assignmentFromJson);
 						//sending to intercomm
-						if(assignmentFromJson.isExternalMission()){
+						if(assignmentFromJson.isExternalMission() && intercom != null){
 							intercom.addIntercomAssignment(assignmentFromJson);
 						}
 						server.sendToAllExceptTheSender(assignment, socket
@@ -208,7 +211,7 @@ public class MultiServerThread extends Thread {
 				} else {
 					db.addToDB(assignmentFromJson);
 					//sending to intercomm
-					if(assignmentFromJson.isExternalMission()){
+					if(assignmentFromJson.isExternalMission() && intercom != null){
 						intercom.addIntercomAssignment(assignmentFromJson);
 					}
 					server.sendToAllExceptTheSender(assignment, socket
