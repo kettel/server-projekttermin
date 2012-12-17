@@ -129,9 +129,9 @@ public class Server {
 			}
 
 			// försöker ansluta till interkommserven
-			IntercomConnection intercom = new IntercomConnection(this);
-			intercom.start();
-			intercom.stayConnected();
+//			IntercomConnection intercom = new IntercomConnection(this);
+//			intercom.start();
+//			intercom.stayConnected();
 
 			KeyStore ts = KeyStore.getInstance("JKS");
 			
