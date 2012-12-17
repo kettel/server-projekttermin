@@ -101,7 +101,7 @@ public class IntercomConnection  extends Thread implements HandshakeCompletedLis
 			lon = WgsC.WgsStringToDoubels(region)[0];
 			lat = WgsC.WgsStringToDoubels(region)[1];
 		}
-		MissionIntergroup conveted = new MissionIntergroup(new MissionID(faction, id), new GPSCoordinate(lon, lat), assigmentToSend.getName(), assigmentToSend.getAssignmentDescription(), new Date(assigmentToSend.getTimeStamp()));
+		MissionIntergroup conveted = new MissionIntergroup(new MissionID(faction, id), new GPSCoordinate(lon, lat), assigmentToSend.getName(), assigmentToSend.getAssignmentDescription(), assigmentToSend.getTimeStamp());
 		id++;
 		String outgoing = gson.toJson(conveted);
 		intercomQueue.add(outgoing);

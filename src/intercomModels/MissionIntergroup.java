@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedList;
 
+import intercomModels.MissionIntergroupUpdate;
 import intercomModels.MissionIntergroupUpdate.UpdateContent;
 
 /**
@@ -24,21 +25,21 @@ public class MissionIntergroup implements Serializable{
 	private final MissionID id;
 	private GPSCoordinate location;
 	private String title, description;
-	private Date creationTime;
+	private Long creationTime;
 	private LinkedList<MissionIntergroupUpdate> missionLog;
 	private HashSet<MissionIntergroupListener> listeners;
 	private int[] numberOfUnits;
 
 	/**
 	 * Mission object used for communication between the different organization's servers.
-	 * @param id M�STE DEFINIERAS!!!!!!!!! UNIK F�R VARJE ELLER DELAD?
+	 * @param id M�STE DEFINIERAS!!!!!!!!! UNIK F�R VARJE ORGANISATION
 	 * @param location describes the location of the mission as a GPSCoordinate
 	 * @param title short description of the mission
 	 * @param description more detailed description of the mission
 	 * @param creationTime time when the mission is created
 	 */
 	public MissionIntergroup(MissionID id, GPSCoordinate location,
-			String title, String description, Date creationTime) {
+			String title, String description, Long creationTime) {
 		this.id = id;
 		this.location = location;
 		this.title = title;
@@ -166,7 +167,7 @@ public class MissionIntergroup implements Serializable{
 		this.title = title;
 	}
 
-	public Date getCreationTime() {
+	public Long getCreationTime() {
 		return creationTime;
 	}
 
@@ -188,12 +189,7 @@ public class MissionIntergroup implements Serializable{
 
 	/**
 	 * 
-<<<<<<< HEAD
-	 * @return the current log of the mission as a HashSet <-? is this the vettigaste sol�sning?
-=======
-	 * @return the current log of the mission as a HashSet <-? is this the
-	 *         vettigaste sol�sning?
->>>>>>> b87e493422b0a0ac7bf0d086406a1b0e2af8f711
+	 * @return the current log of the mission as a HashSet
 	 */
 	public LinkedList<MissionIntergroupUpdate> getMissionLog() {
 		return missionLog;

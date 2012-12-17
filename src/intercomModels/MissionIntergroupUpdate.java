@@ -17,7 +17,7 @@ public class MissionIntergroupUpdate implements Serializable{
 	private MissionID missionId;
 	private Object newValue;
 	private UpdateContent content;
-	private Time timestamp;
+	private Long timestamp;
 
 	/**
 	 * Constructor used for updating all missi
@@ -36,7 +36,7 @@ public class MissionIntergroupUpdate implements Serializable{
 			System.out.println("THIS IS " + content.toString());
 			this.newValue = "ERROR WRONG CONSTRUCTOR USED! Location was not updated! Value of the failed update was: " + newValue;
 		}
-		timestamp = new Time(System.currentTimeMillis());
+		timestamp = new Time(System.currentTimeMillis()).getTime();
 	}
 
 	/**
@@ -70,7 +70,7 @@ public class MissionIntergroupUpdate implements Serializable{
 	 * 
 	 * @return the time when the update was created
 	 */
-	public Time getTimestamp() {
+	public Long getTimestamp() {
 		return timestamp;
 	}
 

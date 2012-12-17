@@ -30,7 +30,7 @@ public class Assignment implements ModelInterface {
 	// Textbeskrivning av uppdraget
 	private String assignmentDescription;
 	// Tidsbeskrivning av hur lång tid uppdraget kommer ta (1 timme, 20
-	// minuter...)
+	// minuter...) 
 	private String timeSpan;
 	// Tidsstämpel när uppdraget skapades
 	private Long assignmentTimeStamp;
