@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.security.KeyManagementException;
 import java.security.KeyStore;
@@ -64,7 +65,7 @@ public class Server {
 	// En boolean som avgör om servern lyssnar på anslutningar
 	private static boolean listening = true;
 	// En ConcurrentHashMap som länkar ett IP till en OutputStream
-	private ConcurrentHashMap<String, OutputStream> hashMap;
+	private ConcurrentHashMap<String, OutputStreamWriter> hashMap;
 	private ConcurrentHashMap<String, String> gcmMap;
 	private SSLSocket clientSocket = null;
 
@@ -119,8 +120,7 @@ public class Server {
 	public Server() {
 		System.out.println("porten är"+port);
 		try {
-			
-			hashMap = new ConcurrentHashMap<String, OutputStream>();
+			hashMap = new ConcurrentHashMap<String, OutputStreamWriter>();
 			gcmMap = new ConcurrentHashMap<String, String>();
 			List<ModelInterface> contactList = db.getAllFromDB(new Contact());
 			for (ModelInterface m : contactList) {
@@ -158,8 +158,9 @@ public class Server {
 			while (listening) {
 				clientSocket = (SSLSocket) serverSocket.accept();
 				OutputStream out = clientSocket.getOutputStream();
+				OutputStreamWriter outStream = new OutputStreamWriter(out, "UTF-8");
 				new MultiServerThread(clientSocket, this, intercom).start();
-				hashMap.put(clientSocket.getInetAddress().toString(), out);
+				hashMap.put(clientSocket.getInetAddress().toString(), outStream);
 			}
 			// Stänger socketen, anslutningar är inte längre tillåtna
 			serverSocket.close();
@@ -196,8 +197,6 @@ public class Server {
 				if (hashMap.keySet().contains(cont.getInetAddress())) {
 					PrintWriter pr = new PrintWriter(hashMap.get(cont
 							.getInetAddress()), true);
-					System.out.println("Skickar enbart till " + receiver);
-					System.out.println("hashMap: " + hashMap.keySet());
 					pr.println(stringToBeSent);
 				} else {
 					if (!stringToBeSent

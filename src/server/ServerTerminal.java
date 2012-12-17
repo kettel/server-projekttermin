@@ -16,14 +16,17 @@ public class ServerTerminal extends Thread {
 	private CreateContactCommand createContactCommand = null;
 	private GetAllContactsCommand getAllContacts = null;
 	private RemoveContactCommand removeContact = null;
+	private intercomCommand interComCommand = null;
 	Server server;
 
 	public ServerTerminal(Server server) {
+		IntercomConnection intercomConnection = new IntercomConnection(server);
 		in = new Scanner(System.in);
 		this.server = server;
 		createContactCommand = new CreateContactCommand(server);
 		getAllContacts = new GetAllContactsCommand();
 		removeContact = new RemoveContactCommand();
+		interComCommand = new intercomCommand(intercomConnection);
 	}
 
 	/**
@@ -39,6 +42,8 @@ public class ServerTerminal extends Thread {
 				getAllContacts.commandTask();
 			} else if(command.equals(removeContact.commandLine())){
 				removeContact.commandTask();
+			}else if (command.equals(interComCommand.commandLine())) {
+				interComCommand.commandTask();
 			}else {
 				System.out.println("Kommandot existerar inte.");
 			}

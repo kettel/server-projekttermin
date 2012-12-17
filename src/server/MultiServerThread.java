@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
@@ -14,6 +13,7 @@ import java.util.List;
 import javax.net.ssl.SSLSocket;
 
 import model.Assignment;
+import model.AssignmentStatus;
 import model.AuthenticationModel;
 import model.Contact;
 import model.MessageModel;
@@ -40,9 +40,7 @@ public class MultiServerThread extends Thread {
 	private Contact thisContact = null;
 	private List<ModelInterface> list;
 	private List<ModelInterface> hashList;
-	private final String replicateServerIP = "/192.168.1.1";
 	private IntercomConnection intercom = null;
-
 
 	/**
 	 * Konstruktorn, tar emot en socket för porten vi lyssnar på och en Server
@@ -75,9 +73,9 @@ public class MultiServerThread extends Thread {
 				// Läser den buffrade strängen
 				while ((inputLine = input.readLine()) != null
 						&& !inputLine.equals("close")) {
-//					System.out.println("<input from "
-//							+ socket.getInetAddress().toString() + ":"
-//							+ socket.getPort() + "> " + inputLine);
+//					 System.out.println("<input from "
+//					 + socket.getInetAddress().toString() + ":"
+//					 + socket.getPort() + "> " + inputLine);
 					handleTypeOfInput(inputLine);
 				}
 				connected = false;
@@ -121,8 +119,20 @@ public class MultiServerThread extends Thread {
 			server.sendUnsentItems(thisContact);
 			// Vid förfrågan skickas alla kontakter från databasen
 		} else if (input.equals("getAllContacts")) {
-			System.out.println("<" + thisContact.getContactName() + "> getAllContacts");
+			System.out.println("<" + thisContact.getContactName()
+					+ "> getAllContacts");
 			handleContactRequest();
+			// Vid förfrågan skickas alla uppdrag från databasen
+		} else if (input.equals("getAllAssignments")) {
+			System.out.println("<" + thisContact.getContactName()
+					+ "> getAllAssignments");
+			handleAssignmentRequest();
+			// Vid förfrågan skickas alla meddelanden kopplade till kontakten
+			// från databasen
+		} else if (input.equals("getAllMessages")) {
+			System.out.println("<" + thisContact.getContactName()
+					+ "> getAllContacts");
+			handleMessageRequest();
 		} else {
 			System.out.println("<" + socket.getInetAddress()
 					+ "> Did not recognise inputtype.	" + inputLine);
@@ -141,9 +151,9 @@ public class MultiServerThread extends Thread {
 		// Gson konverterar json-strängen till MessageModel-objektet igen
 		try {
 			msg = (new Gson()).fromJson(message, MessageModel.class);
-			if (!socket.getInetAddress().toString().equals(replicateServerIP)) {
+//			if (!socket.getInetAddress().toString().equals(replicateServerIP)) {
 				server.send(message, msg.getReciever().toString());
-			}
+//			}
 			// Lägger in meddelandet i databasen
 			db.addToDB(msg);
 			Calendar cal = Calendar.getInstance();
@@ -173,7 +183,7 @@ public class MultiServerThread extends Thread {
 			Assignment assignmentFromJson = (new Gson()).fromJson(assignment,
 					Assignment.class);
 			boolean alreadyExists = false;
-			if (!socket.getInetAddress().toString().equals(replicateServerIP)) {
+//			if (!socket.getInetAddress().toString().equals(replicateServerIP)) {
 				list = db.getAllFromDB(new Assignment());
 				if (list.size() > 0) {
 					for (ModelInterface m : list) {
@@ -204,7 +214,7 @@ public class MultiServerThread extends Thread {
 					server.sendToAllExceptTheSender(assignment, socket
 							.getInetAddress().toString());
 				}
-			}
+//			}
 			Calendar cal = Calendar.getInstance();
 			cal.getTime();
 			SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
@@ -232,9 +242,9 @@ public class MultiServerThread extends Thread {
 			Contact contactFromJson = (new Gson()).fromJson(contact,
 					Contact.class);
 			// Lägger in uppdraget i databasen
-			if (!socket.getInetAddress().toString().equals(replicateServerIP)) {
+//			if (!socket.getInetAddress().toString().equals(replicateServerIP)) {
 				db.addToDB(contactFromJson);
-			}
+//			}
 		} catch (Exception e) {
 			System.out.println(e);
 		}
@@ -251,12 +261,10 @@ public class MultiServerThread extends Thread {
 	 */
 	private boolean handleLogin(String login) {
 		try {
-			System.out.println("Login request from: "
-					+ socket.getInetAddress().toString());
 			list = db.getAllFromDB(new Contact());
 			AuthenticationModel loginFromJson = (new Gson().fromJson(login,
 					AuthenticationModel.class));
-			if (!socket.getInetAddress().toString().equals(replicateServerIP)) {
+//			if (!socket.getInetAddress().toString().equals(replicateServerIP)) {
 				hashList = db.getAllFromDB(new AuthenticationModel());
 				for (ModelInterface m : list) {
 					Contact cont = (Contact) m;
@@ -299,17 +307,17 @@ public class MultiServerThread extends Thread {
 				} catch (Exception e) {
 					System.out.println(e);
 				}
-			} else {
-				for (ModelInterface m : list) {
-					Contact cont = (Contact) m;
-					if (loginFromJson.getUserName().equals(
-							cont.getContactName())) {
-						db.addToDB(new AuthenticationModel(cont.getId(),
-								loginFromJson.getPasswordHash()));
-					}
-				}
-
-			}
+//			} else {
+//				for (ModelInterface m : list) {
+//					Contact cont = (Contact) m;
+//					if (loginFromJson.getUserName().equals(
+//							cont.getContactName())) {
+//						db.addToDB(new AuthenticationModel(cont.getId(),
+//								loginFromJson.getPasswordHash()));
+//					}
+//				}
+//
+//			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -327,11 +335,46 @@ public class MultiServerThread extends Thread {
 			for (ModelInterface m : list) {
 				Contact cont = (Contact) m;
 				String contact = new Gson().toJson(cont);
-				System.out.println("Sending contact " + cont.getContactName() + " to " + thisContact.getContactName());
+				System.out.println("Sending contact " + cont.getContactName()
+						+ " to " + thisContact.getContactName());
 				server.send(contact, thisContact.getContactName());
 			}
 		} catch (Exception e) {
 			System.out.println("catch: handleContactRequest");
+			System.out.println(e);
+		}
+	}
+
+	private void handleAssignmentRequest() {
+		try {
+			list = db.getAllFromDB(new Assignment());
+			for (ModelInterface m : list) {
+				Assignment ass = (Assignment) m;
+				if (ass.getAssignmentStatus() != AssignmentStatus.FINISHED) {
+					String assignment = new Gson().toJson(ass);
+					System.out.println("Sending assignment " + ass.getName()
+							+ " to " + thisContact.getContactName());
+					server.send(assignment, thisContact.getContactName());
+				}
+			}
+		} catch (Exception e) {
+			System.out.println("catch: handleAssignmentRequest");
+			System.out.println(e);
+		}
+	}
+
+	private void handleMessageRequest() {
+		try {
+			list = db.getAllFromDB(new MessageModel());
+			for (ModelInterface m : list) {
+				MessageModel msg = (MessageModel) m;
+				if (thisContact.getContactName().equals(msg.getReciever())) {
+					String message = new Gson().toJson(msg);
+					server.send(message, thisContact.getContactName());
+				}
+			}
+		} catch (Exception e) {
+			System.out.println("catch: handleMessageRequest");
 			System.out.println(e);
 		}
 	}

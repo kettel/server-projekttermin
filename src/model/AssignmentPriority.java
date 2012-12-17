@@ -12,3 +12,4 @@ public enum AssignmentPriority {
 		PRIO_LOW, PRIO_NORMAL, PRIO_HIGH
 
 }
+
