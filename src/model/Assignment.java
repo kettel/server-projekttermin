@@ -50,6 +50,9 @@ public class Assignment implements ModelInterface {
 	 */
 	public Assignment() {
 	}
+	public void setNormalPrio(){
+		this.assignmentPrio = AssignmentPriority.PRIO_NORMAL;
+	}
 
 	/**
 	 * Konstruktor för att skapa ett uppdrag utan kartmarkering utan bild med

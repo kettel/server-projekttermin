@@ -151,7 +151,7 @@ public class IntercomConnection  extends Thread implements HandshakeCompletedLis
 											Assignment misson = new Assignment(intercom.getTitle(),region,"intercom", false, intercom.getDescription(), "", AssignmentStatus.STARTED, "", "");
 											System.out.println("|intercom| New assignment from InterCommServer named: " + misson.getName() + " has arrived");
 											misson.setGlobalID(intercom.getId().idToString());
-											
+											misson.setNormalPrio();
 											db.addToDB(misson);	
 											
 											server.sendToAll(gson.toJson(misson));
