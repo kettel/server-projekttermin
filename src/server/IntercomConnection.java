@@ -140,42 +140,49 @@ public class IntercomConnection  extends Thread implements HandshakeCompletedLis
 						while(isConnected()){
 							try {
 								String incomeing = input.readLine();
+								System.out.println(incomeing);
 								if(incomeing != null && incomeing != "&"){
 									if(incomeing.contains("\"identifier\":\"@Missonintergroup@\"")){
 										MissionIntergroup intercom = gson.fromJson(incomeing, MissionIntergroup.class);
 										if(intercom.getId().getOrganizationChar() != faction){
 											double[] latAndLon = {intercom.getLocation().getLatitude(),intercom.getLocation().getLongitude()};
 											String region = WgsC.DoubelToGsonWgsString(latAndLon);
+											System.out.println("|Intercom| region is " + region);
 											Assignment misson = new Assignment(intercom.getTitle(),region,"intercom", false, intercom.getDescription(), "", AssignmentStatus.STARTED, "", "");
 											System.out.println("|intercom| New assignment from InterCommServer named: " + misson.getName() + " has arrived");
 											misson.setGlobalID(intercom.getId().idToString());
-											db.addToDB(misson);
+											try {
+												db.addToDB(misson);	
+											} catch (Exception e) {
+												System.out.println("DB FAIL");
+											}
+											
 											server.sendToAll(gson.toJson(misson));
 										}else{
 											System.out.println("|intercom| A assgiment we created was confirmed by the intercomServer");
 										}
 									}else if(incomeing.contains("\"identifier\":\"@MissonUpdateInter@\"")){
 										System.out.println("|intercom| Misson uppdate from InterCommServer");
-										MissionIntergroupUpdate update = gson.fromJson(incomeing, MissionIntergroupUpdate.class);
-										list = db.getAllFromDB(new Assignment());
-										if (list.size() > 0) {
-											for (ModelInterface m : list) {
-												Assignment ass = (Assignment) m;
-												if (update.getMissionId().idToString().equals(ass.getGlobalID())) {
-													if(update.getContent().equals(MissionIntergroupUpdate.UpdateContent.DESCRIPTION)){
-														ass.setAssigmentDescripton((String)update.getNewValue());
-													}else if (update.getContent().equals(MissionIntergroupUpdate.UpdateContent.TITLE)) {
-														ass.SetName((String)update.getNewValue());
-													}else if (update.getContent().equals(MissionIntergroupUpdate.UpdateContent.LOCATION)) {
-														GPSCoordinate GPS = gson.fromJson((String)update.getNewValue(), GPSCoordinate.class);
-														double[] array = {GPS.getLongitude(),GPS.getLatitude()};
-														ass.setRegion(WgsC.DoubelToGsonWgsString(array));
-													}	
-													db.updateModel(ass);
-													server.sendToAll(gson.toJson(ass));
-												}
-											}
-										}
+//										MissionIntergroupUpdate update = gson.fromJson(incomeing, MissionIntergroupUpdate.class);
+//										list = db.getAllFromDB(new Assignment());
+//										if (list.size() > 0) {
+//											for (ModelInterface m : list) {
+//												Assignment ass = (Assignment) m;
+//												if (update.getMissionId().idToString().equals(ass.getGlobalID())) {
+//													if(update.getContent().equals(MissionIntergroupUpdate.UpdateContent.DESCRIPTION)){
+//														ass.setAssigmentDescripton((String)update.getNewValue());
+//													}else if (update.getContent().equals(MissionIntergroupUpdate.UpdateContent.TITLE)) {
+//														ass.SetName((String)update.getNewValue());
+//													}else if (update.getContent().equals(MissionIntergroupUpdate.UpdateContent.LOCATION)) {
+//														GPSCoordinate GPS = gson.fromJson((String)update.getNewValue(), GPSCoordinate.class);
+//														double[] array = {GPS.getLongitude(),GPS.getLatitude()};
+//														ass.setRegion(WgsC.DoubelToGsonWgsString(array));
+//													}	
+//													db.updateModel(ass);
+//													server.sendToAll(gson.toJson(ass));
+//												}
+//											}
+//										}
 										
 									}
 								}
