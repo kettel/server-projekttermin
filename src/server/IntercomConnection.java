@@ -185,6 +185,7 @@ public class IntercomConnection  extends Thread implements HandshakeCompletedLis
 								setConnected(false);
 							}
 						}
+						System.out.println("|intercom| exiting stay connected GET STUFF THREAD");
 					};
 				}.start();
 				//send stuff
@@ -209,6 +210,7 @@ public class IntercomConnection  extends Thread implements HandshakeCompletedLis
 							setConnected(false);
 						}
 						}
+						System.out.println("|intercom| exiting stay isconnceted GET STUFF THREAD");
 					}
 				}.start();
 			}
